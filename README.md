@@ -1,6 +1,8 @@
 # sanderdejong.github.io
 
-[![Workflow Status](https://img.shields.io/github/actions/workflow/status/sanderdejong/sanderdejong.github.io/astro.yml?style=for-the-badge&logo=astro&logoColor=white)](https://github.com/sanderdejong/sanderdejong.github.io/actions/workflows/astro.yml)
+[![Workflow Status](https://img.shields.io/github/actions/workflow/status/sanderdejong/sanderdejong.github.io/astro.yml?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/sanderdejong/sanderdejong.github.io/actions/workflows/astro.yml)
+
+Personal website built with [Astro](https://astro.build).
 
 ## 🚀 Development
 
@@ -29,4 +31,11 @@ Preview the production build:
 ```bash
 yarn preview
 ```
+
+## 📝 License
+
+Copyright (c) 2025, Sander de Jong.
+
+The source code is licensed under the [MIT License](LICENSE.md).
+
 
