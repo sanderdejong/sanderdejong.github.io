@@ -1,0 +1,47 @@
+/* === CSS Reset === */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue",
+    Arial, sans-serif;
+}
+
+/* === Layout === */
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9fafb; /* soft off-white */
+    color: #111827; /* near-black */
+}
+
+main {
+    text-align: center;
+    padding: 2rem;
+}
+
+h1 {
+    font-size: 2.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+p {
+    margin-top: 0.75rem;
+    font-size: 1.05rem;
+    color: #9ca3af; /* gray-400 */
+}

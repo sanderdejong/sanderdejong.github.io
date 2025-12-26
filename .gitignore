@@ -1,0 +1,28 @@
+
+# === IntelliJ IDEA ===
+.idea/
+*.iml
+out/
+
+# === Operating System ===
+.DS_Store
+Thumbs.db
+
+# === Logs & Temporary Files ===
+*.log
+*.tmp
+*.swp
+*.swo
+# === Node.js Dependencies ===
+node_modules/
+
+# === Build Output ===
+dist/
+
+# === Generated Files ===
+.astro/
+
+# === Environment Variables ===
+.env
+.env.*.local
+.env.production

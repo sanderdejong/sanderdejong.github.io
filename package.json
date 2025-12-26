@@ -1,0 +1,19 @@
+{
+  "name": "sanderdejong.github.io",
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "repository": "git@github.com:sanderdejong/sanderdejong.github.io.git",
+  "author": "Sander de Jong",
+
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+
+  "dependencies": {
+    "astro": "^5.16.6"
+  }
+}
