@@ -1,9 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
     /* Fonts */
-    --font-body: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-heading: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-body: 'DM Sans Variable', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-heading: 'Space Grotesk Variable', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
     /* Colors */
     --color-bg: #f9fafb;
@@ -16,8 +15,11 @@
     --spacing-sm: 0.75rem;
 
     /* Typography Scale */
-    --text-base: 1.2rem;
-    --text-2xl: 2.25rem;
+    --text-base: clamp(0.9rem, 0.3vw + 0.8rem, 1.1rem);
+    --text-lg: clamp(1.05rem, 0.4vw + 0.9rem, 1.25rem);
+    --text-xl: clamp(1.25rem, 0.6vw + 1rem, 1.6rem);
+    --text-2xl: clamp(1.5rem, 1vw + 1.1rem, 2.2rem);
+    --text-3xl: clamp(1.8rem, 1.5vw + 1.2rem, 3rem);
 }
 
 /* === CSS Reset === */
@@ -67,7 +69,6 @@ main {
     text-align: center;
     max-width: 100%;
     height: 100%;
-    overflow: hidden;
 }
 
 /* === Links === */
