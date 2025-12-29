@@ -1,0 +1,56 @@
+---
+// No props needed - all content comes through the slot
+---
+<section class="content-block">
+    <slot/>
+</section>
+
+<style>
+    .content-block {
+        margin-block: auto;
+        width: 100%;
+        max-width: 40rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .content-block :global(h1) {
+        margin-bottom: 1.2rem;
+        text-align: left;
+        width: 100%;
+        font-size: 2.7rem;
+        font-weight: 900;
+        color: #374151;
+        font-family: var(--font-heading);
+        text-shadow: 0 0.15rem 1rem #37415122, 0 0.1rem 0.5rem #37415122;
+        transition: color 0.3s;
+        line-height: 1.2;
+    }
+
+    .content-block :global(p) {
+        font-size: var(--text-base);
+        line-height: 1.6;
+        text-align: left;
+        width: 100%;
+        word-break: break-word;
+        margin-top: var(--spacing-sm);
+        color: var(--color-text-secondary);
+    }
+
+    .content-block :global(p:first-of-type) {
+        margin-top: 0;
+    }
+
+    .content-block :global(.text-emphasis) {
+        background: linear-gradient(110deg, #ea8c3a, #e67e22, #d97706);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 0.1rem 1rem rgba(245, 158, 66, 0.3);
+    }
+
+    .content-block :global(a) {
+        display: inline;
+    }
+</style>

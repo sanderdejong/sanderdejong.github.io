@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContentWithHeading from '../components/ContentWithHeading.astro';
+
+Astro.response.status = 404;
+
+---
+<BaseLayout>
+    <ContentWithHeading contentTitle="404">
+     <p>
+        The page you're looking for doesn't exist.
+     </p>
+    </ContentWithHeading>
+</BaseLayout>
+
