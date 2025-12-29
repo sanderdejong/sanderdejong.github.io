@@ -1,0 +1,183 @@
+---
+import "../styles/global.css";
+import {ClientRouter} from 'astro:transitions';
+import {Picture} from 'astro:assets';
+import profilePic from '../assets/profile.png';
+
+interface Props {
+    pageTitle?: string;
+    pageDescription?: string;
+}
+
+const {
+    pageTitle = "Sander de Jong - Developer & Cloud Architect",
+    pageDescription = "Software developer passionate about cloud-native solutions, Java, and AWS. Building scalable, secure, and performance-driven web experiences."
+} = Astro.props;
+---
+
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="description" content={pageDescription}/>
+
+    <title>{pageTitle}</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+    <ClientRouter/>
+</head>
+
+<body>
+<div class="bg-artifacts">
+    <div class="artifact artifact-1"></div>
+    <div class="artifact artifact-2"></div>
+    <div class="artifact artifact-3"></div>
+</div>
+<main class="layout">
+    <section class="layout-wrapper">
+        <aside class="profile">
+            <div class="profile-wrapper">
+                <Picture src={profilePic}
+                         loading="lazy"
+                         format="webp"
+                         alt="Profile picture of Sander de Jong"
+                         class="profile-image"
+                         width={460}
+                         height={460}
+                />
+            </div>
+        </aside>
+
+        <div class="divider">
+            <div class="divider-line" role="presentation"></div>
+        </div>
+
+        <article class="content">
+            <slot/>
+        </article>
+    </section>
+</main>
+</body>
+</html>
+
+<style>
+    .layout {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        width: 100%;
+    }
+
+    .layout-wrapper {
+        display: flex;
+        flex-direction: row;
+        gap: 2rem;
+        align-items: stretch;
+        width: 100%;
+        max-width: 1400px;
+    }
+
+    .profile {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        position: sticky;
+        top: 0;
+        min-height: 100vh;
+        align-self: flex-start;
+    }
+
+    .profile-wrapper {
+        position: relative;
+    }
+
+    .profile-image {
+        width: 337.5px;
+        height: 337.5px;
+        object-fit: cover;
+        border-radius: 50%;
+        padding: 4px;
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.5), rgba(245, 158, 66, 0.5));
+        box-shadow: -6px 12px 32px -4px rgba(37, 99, 235, 0.25),
+        6px 12px 32px -4px rgba(245, 158, 66, 0.25);
+        transition: box-shadow 0.3s, transform 0.3s;
+        filter: saturate(1.09) contrast(1.07);
+        transform: scale(1.02);
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 2rem;
+        position: sticky;
+        top: 0;
+        min-height: 100vh;
+        align-self: flex-start;
+    }
+
+    .divider-line {
+        width: 2px;
+        height: 350px;
+        background: #e5e7eb;
+        border-radius: 1px;
+    }
+
+    .content {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        padding: 4rem 2rem;
+        min-height: 100vh;
+    }
+
+    .bg-artifacts {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+    }
+
+    .artifact {
+        position: absolute;
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        opacity: 0.08;
+        filter: blur(60px);
+    }
+
+    .artifact-1 {
+        width: 500px;
+        height: 500px;
+        background: linear-gradient(135deg, #f59e42, #ea580c);
+        top: 5%;
+        left: 10%;
+    }
+
+    .artifact-2 {
+        width: 450px;
+        height: 450px;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        top: 50%;
+        right: 5%;
+    }
+
+    .artifact-3 {
+        width: 400px;
+        height: 400px;
+        background: linear-gradient(135deg, #8b5cf6, #6366f1);
+        bottom: 15%;
+        left: 20%;
+    }
+
+    main {
+        position: relative;
+        z-index: 1;
+    }
+</style>
+

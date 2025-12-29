@@ -1,20 +1,39 @@
 ---
-import "../styles/global.css";
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContentWithHeading from '../components/ContentWithHeading.astro';
 ---
-<html lang="en">
-<head>
-    <title>sanderdejong.dev</title>
+<BaseLayout>
+    <ContentWithHeading>
+        <h1>Hi, I am Sander de Jong</h1>
+        <p>
+            I’m a software engineer with over six years of professional experience, working in both small teams and
+            large organizations. I specialize in cloud-native development, primarily using <span class="text-emphasis">Java</span>
+            and <span class="text-emphasis">AWS</span>.
+        </p>
 
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
+        <p>
+            My background includes designing and implementing distributed systems, building serverless and
+            container-based architectures, and working with infrastructure-as-code to support reliable deployments. I
+            focus on clean architecture, observability, and performance, with an emphasis on maintainability and
+            long-term sustainability.
+        </p>
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-</head>
+        <p>
+            I enjoy working closely with product managers, designers, and fellow engineers to turn ideas into
+            well-aligned technical solutions. I’m comfortable taking ownership, giving and receiving feedback, and
+            adapting to changing requirements.
+        </p>
 
-<body>
-<main>
-    <h1>👋</h1>
-</main>
-</body>
-</html>
+        <p>
+            Outside of work, I enjoy bouldering and badminton, and I like to unwind by reading fantasy. I am naturally
+            curious and motivated by continuous improvement, both professionally and personally.
+        </p>
+
+        <p>
+            For more details on my work and experience, feel free to visit my
+            <a href="https://github.com/sanderdejong" target="_blank" rel="noopener noreferrer">GitHub</a> or connect
+            with me on
+            <a href="https://linkedin.com/in/sanderdejong-" target="_blank" rel="noopener noreferrer">LinkedIn</a>.
+        </p>
+    </ContentWithHeading>
+</BaseLayout>
