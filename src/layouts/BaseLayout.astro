@@ -7,25 +7,51 @@ import {Picture} from 'astro:assets';
 import profilePic from '../assets/profile.png';
 
 interface Props {
+    pageAuthor?: string;
     pageTitle?: string;
     pageDescription?: string;
 }
 
 const {
+    pageAuthor = "Sander de Jong",
     pageTitle = "Sander de Jong - Software & AWS Cloud Engineer",
     pageDescription = "Software developer passionate about cloud-native, Java, and AWS. Building scalable, secure, and performance-driven solutions."
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
+const socialImageURL = new URL('/favicon.svg', Astro.url);
 ---
 
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width"/>
-    <meta name="description" content={pageDescription}/>
-
     <title>{pageTitle}</title>
 
+    <link rel="canonical" href={canonicalURL}/>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+    <link rel="sitemap" href="/sitemap-index.xml"/>
+
+    <meta charset="utf-8"/>
+    <meta name="author" content={pageAuthor}/>
+    <meta name="description" content={pageDescription}/>
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="generator" content={Astro.generator}/>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content={Astro.url}/>
+    <meta property="og:title" content={pageTitle}/>
+    <meta property="og:description" content={pageDescription}/>
+    <meta property="og:image" content={socialImageURL}/>
+
+    <!-- X -->
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:url" content={Astro.url}/>
+    <meta name="twitter:title" content={pageTitle}/>
+    <meta name="twitter:description" content={pageDescription}/>
+    <meta name="twitter:image" content={socialImageURL}/>
+
+    <meta name="robots" content="index, follow"/>
+
     <ClientRouter/>
 </head>
 
