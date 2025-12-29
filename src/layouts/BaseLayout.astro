@@ -1,5 +1,7 @@
 ---
 import "../styles/global.css";
+import '@fontsource-variable/dm-sans';
+import '@fontsource-variable/space-grotesk';
 import {ClientRouter} from 'astro:transitions';
 import {Picture} from 'astro:assets';
 import profilePic from '../assets/profile.png';
@@ -48,9 +50,7 @@ const {
             </div>
         </aside>
 
-        <div class="divider">
-            <div class="divider-line" role="presentation"></div>
-        </div>
+        <div class="divider" role="presentation"></div>
 
         <article class="content">
             <slot/>
@@ -75,7 +75,7 @@ const {
         gap: 2rem;
         align-items: stretch;
         width: 100%;
-        max-width: 1400px;
+        max-width: 1600px;
     }
 
     .profile {
@@ -85,7 +85,7 @@ const {
         justify-content: flex-end;
         position: sticky;
         top: 0;
-        min-height: 100vh;
+        height: 100vh;
         align-self: flex-start;
     }
 
@@ -94,8 +94,8 @@ const {
     }
 
     .profile-image {
-        width: 337.5px;
-        height: 337.5px;
+        width: clamp(200px, 20vw, 450px);
+        height: clamp(200px, 20vw, 450px);
         object-fit: cover;
         border-radius: 50%;
         padding: 4px;
@@ -108,28 +108,22 @@ const {
     }
 
     .divider {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0 2rem;
-        position: sticky;
-        top: 0;
-        min-height: 100vh;
-        align-self: flex-start;
-    }
-
-    .divider-line {
         width: 2px;
         height: 350px;
         background: #e5e7eb;
         border-radius: 1px;
+        position: sticky;
+        top: calc(50vh - 175px);
+        align-self: flex-start;
+        margin: 0 2rem;
     }
 
     .content {
         flex: 2;
         display: flex;
         flex-direction: column;
-        padding: 4rem 2rem;
+        justify-content: center;
+        padding: clamp(2rem, 4vh, 4rem) clamp(2rem, 5vw, 5rem) clamp(2rem, 4vh, 4rem) 0;
         min-height: 100vh;
     }
 
@@ -152,24 +146,24 @@ const {
     }
 
     .artifact-1 {
-        width: 500px;
-        height: 500px;
+        width: clamp(200px, 30vw, 450px);
+        height: clamp(200px, 30vw, 450px);
         background: linear-gradient(135deg, #f59e42, #ea580c);
         top: 5%;
         left: 10%;
     }
 
     .artifact-2 {
-        width: 450px;
-        height: 450px;
+        width: clamp(180px, 25vw, 400px);
+        height: clamp(180px, 25vw, 400px);
         background: linear-gradient(135deg, #3b82f6, #2563eb);
         top: 50%;
         right: 5%;
     }
 
     .artifact-3 {
-        width: 400px;
-        height: 400px;
+        width: clamp(150px, 20vw, 350px);
+        height: clamp(150px, 20vw, 350px);
         background: linear-gradient(135deg, #8b5cf6, #6366f1);
         bottom: 15%;
         left: 20%;
@@ -178,6 +172,40 @@ const {
     main {
         position: relative;
         z-index: 1;
+    }
+
+    @media (max-width: 1024px) {
+        .layout-wrapper {
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+
+        .profile {
+            position: relative;
+            height: auto;
+            min-height: auto;
+            padding: 3rem 1rem 1rem;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .divider {
+            width: 80%;
+            max-width: 300px;
+            height: 2px;
+            position: relative;
+            top: auto;
+            margin: 1rem 0;
+            align-self: center;
+        }
+
+        .content {
+            padding: 2rem 1.5rem 4rem;
+            min-height: auto;
+            width: 100%;
+            align-items: center;
+        }
     }
 </style>
 
