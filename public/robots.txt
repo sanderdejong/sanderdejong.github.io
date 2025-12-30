@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sanderdejong.dev/sitemap-index.xml
+
