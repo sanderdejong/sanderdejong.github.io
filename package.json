@@ -14,7 +14,9 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",
     "@fontsource-variable/dm-sans": "^5.2.8",
+    "@fontsource-variable/geist-mono": "^5.2.7",
     "@fontsource-variable/space-grotesk": "^5.2.10",
+    "@fontsource/material-icons": "^5.2.7",
     "astro": "^5.16.6"
   }
 }

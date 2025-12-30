@@ -1,0 +1,226 @@
+---
+---
+
+<div class="settings-overlay" id="settings-overlay"></div>
+<div class="settings-modal" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="settings-modal-header">
+        <h2 id="settings-title">settings<span class="text-emphasis-blue">.</span></h2>
+        <button class="settings-close-btn" id="settings-close-btn" aria-label="Close settings">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+    </div>
+    <div class="settings-modal-content">
+        <div class="settings-option">
+            <label for="dark-theme-toggle">Dark theme</label>
+            <label class="toggle-switch">
+                <input type="checkbox" id="dark-theme-toggle" />
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const settingsModal = document.getElementById('settings-modal');
+        const settingsOverlay = document.getElementById('settings-overlay');
+        const settingsCloseBtn = document.getElementById('settings-close-btn');
+        const settingsBtn = document.getElementById('settings-btn');
+        const darkThemeToggle = document.getElementById('dark-theme-toggle') as HTMLInputElement;
+
+        function closeModal() {
+            settingsModal?.classList.remove('open');
+            settingsOverlay?.classList.remove('open');
+            settingsBtn?.setAttribute('aria-expanded', 'false');
+        }
+
+        settingsCloseBtn?.addEventListener('click', closeModal);
+        settingsOverlay?.addEventListener('click', closeModal);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && settingsModal?.classList.contains('open')) {
+                closeModal();
+            }
+        });
+
+        // Dark theme toggle functionality
+        function applyTheme(isDark: boolean) {
+            document.documentElement.classList.toggle('dark', isDark);
+            if (darkThemeToggle) {
+                darkThemeToggle.checked = isDark;
+            }
+        }
+
+        // Initialize toggle state from localStorage
+        const savedTheme = localStorage.getItem('theme');
+        const isDarkMode = savedTheme === 'dark';
+        applyTheme(isDarkMode);
+
+        // Handle toggle change
+        darkThemeToggle?.addEventListener('change', () => {
+            const isDark = darkThemeToggle.checked;
+            applyTheme(isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+    });
+</script>
+
+<style>
+    .settings-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--color-overlay);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        z-index: 998;
+    }
+
+    .settings-overlay.open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .settings-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.95);
+        background: var(--color-bg-surface);
+        border-radius: 12px;
+        padding: 0;
+        min-width: 320px;
+        max-width: 90vw;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, background 0.3s ease;
+        z-index: 999;
+    }
+
+    .settings-modal.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    .settings-modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--color-border-light);
+    }
+
+    .settings-modal-header h2 {
+        font-family: var(--font-heading-secondary), monospace;
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--color-text-primary);
+        margin: 0;
+        text-transform: lowercase;
+    }
+
+    .settings-modal-header h2 .text-emphasis-blue {
+        background: linear-gradient(110deg, #3b82f6, #2563eb, #1d4ed8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 0.1rem 1rem rgba(59, 130, 246, 0.3);
+    }
+
+    .settings-close-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        color: var(--color-text-secondary);
+        transition: color 0.2s ease;
+        border-radius: 4px;
+    }
+
+    .settings-close-btn:hover,
+    .settings-close-btn:focus-visible {
+        color: var(--color-text-primary);
+    }
+
+
+    .settings-modal-content {
+        padding: 1.25rem;
+    }
+
+    .settings-option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .settings-option label {
+        font-family: var(--font-heading-secondary), monospace;
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        white-space: nowrap;
+    }
+
+    .settings-option input[type="checkbox"] {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        position: absolute;
+    }
+
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+        cursor: pointer;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--color-toggle-bg);
+        border-radius: 24px;
+        transition: background-color 0.3s ease;
+    }
+
+    .toggle-slider::before {
+        content: '';
+        position: absolute;
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: #ffffff;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+        background-color: #3b82f6;
+    }
+
+    .toggle-switch input:checked + .toggle-slider::before {
+        transform: translateX(20px);
+    }
+
+    .toggle-switch input:focus-visible + .toggle-slider {
+        outline: 2px solid #3b82f6;
+        outline-offset: 2px;
+    }
+</style>
+
