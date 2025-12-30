@@ -33,6 +33,12 @@ const socialImageURL = new URL('/favicon.svg', Astro.url);
             if (savedTheme === 'dark') {
                 document.documentElement.classList.add('dark');
             }
+            
+            // Set initial theme color
+            const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+            if (metaThemeColor) {
+               metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#111827' : '#f9fafb');
+            }
         })();
     </script>
     <title>{pageTitle}</title>
@@ -62,6 +68,7 @@ const socialImageURL = new URL('/favicon.svg', Astro.url);
     <meta name="twitter:image" content={socialImageURL}/>
 
     <meta name="robots" content="index, follow"/>
+    <meta name="theme-color" content="#f9fafb"/>
     <ClientRouter/>
 </head>
 

@@ -49,6 +49,12 @@
             if (darkThemeToggle) {
                 darkThemeToggle.checked = isDark;
             }
+            
+            // Update theme color meta tag
+            const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+            if (metaThemeColor) {
+               metaThemeColor.setAttribute('content', isDark ? '#111827' : '#f9fafb');
+            }
         }
 
         // Initialize toggle state from localStorage

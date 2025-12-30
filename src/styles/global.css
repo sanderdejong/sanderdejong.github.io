@@ -68,8 +68,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     font-family: var(--font-heading-secondary);
     font-size: var(--text-base);
-    background: linear-gradient(135deg, var(--color-bg-primary), var(--color-bg-secondary), var(--color-bg-primary), var(--color-bg-accent));
-    background-size: 400% 400%;
+    background: var(--color-bg-primary);
     color: var(--color-text-primary);
     overflow-x: hidden;
     transition: background 0.3s ease, color 0.3s ease;
