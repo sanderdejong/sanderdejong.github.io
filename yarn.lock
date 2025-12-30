@@ -242,10 +242,20 @@
   resolved "https://registry.yarnpkg.com/@fontsource-variable/dm-sans/-/dm-sans-5.2.8.tgz#5a7e91bb7b2a37ef7c06b0c2c4ce262eb7a9a6fe"
   integrity sha512-AxkvMTvNWgfrmlyjiV05vlHYJa+nRQCf1EfvIrQAPBpFJW0O9VTz7oAFr9S3lvbWdmnFoBk7yFqQL86u64nl2g==
 
+"@fontsource-variable/geist-mono@^5.2.7":
+  version "5.2.7"
+  resolved "https://registry.yarnpkg.com/@fontsource-variable/geist-mono/-/geist-mono-5.2.7.tgz#c5b05ebfd133b33ac6e0812d6ec8f8ca1dc627ca"
+  integrity sha512-ZKlZ5sjtalb2TwXKs400mAGDlt/+2ENLNySPx0wTz3bP3mWARCsUW+rpxzZc7e05d2qGch70pItt3K4qttbIYA==
+
 "@fontsource-variable/space-grotesk@^5.2.10":
   version "5.2.10"
   resolved "https://registry.yarnpkg.com/@fontsource-variable/space-grotesk/-/space-grotesk-5.2.10.tgz#174496651e7bec48c91f5fb86164c0f53d6364bb"
   integrity sha512-yJQO/o35/hAP3CFnpdFTwQku2yzJOae2HIpBmqkOVoxhhXJaQP3g+b6Jrz7u+eI7A5ZdCIf88uMWpBJdFiGr5w==
+
+"@fontsource/material-icons@^5.2.7":
+  version "5.2.7"
+  resolved "https://registry.yarnpkg.com/@fontsource/material-icons/-/material-icons-5.2.7.tgz#d408ee5677fca128c058c9ab77af0808a2179693"
+  integrity sha512-crPmK0L34lPGmS5GSGLasKpRGQzl95SxMsLM+QhBHPgR9uxSsyI5CUTb0cgoMpjtR+Bf1bC9QOe6pavoybbBwg==
 
 "@img/colour@^1.0.0":
   version "1.0.0"

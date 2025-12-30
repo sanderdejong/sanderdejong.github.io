@@ -1,15 +1,22 @@
-
 :root {
     /* Fonts */
     --font-body: 'DM Sans Variable', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-heading: 'Space Grotesk Variable', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-heading-secondary: 'Geist Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 
-    /* Colors */
-    --color-bg: #f9fafb;
+    /* Colors - Light Theme */
     --color-text-primary: #111827;
     --color-text-secondary: #9ca3af;
     --color-link: #2563eb;
     --color-link-hover: #1d4ed8;
+    --color-bg-primary: #f9fafb;
+    --color-bg-secondary: #f3f4f6;
+    --color-bg-accent: #fef3e8;
+    --color-bg-surface: #ffffff;
+    --color-border: #e5e7eb;
+    --color-border-light: rgba(0, 0, 0, 0.1);
+    --color-overlay: rgba(0, 0, 0, 0.4);
+    --color-toggle-bg: rgba(0, 0, 0, 0.2);
 
     /* Spacing */
     --spacing-sm: 0.75rem;
@@ -20,6 +27,22 @@
     --text-xl: clamp(1.25rem, 0.6vw + 1rem, 1.6rem);
     --text-2xl: clamp(1.5rem, 1vw + 1.1rem, 2.2rem);
     --text-3xl: clamp(1.8rem, 1.5vw + 1.2rem, 3rem);
+}
+
+/* Dark Theme */
+:root.dark {
+    --color-text-primary: #f9fafb;
+    --color-text-secondary: #9ca3af;
+    --color-link: #60a5fa;
+    --color-link-hover: #93c5fd;
+    --color-bg-primary: #111827;
+    --color-bg-secondary: #1f2937;
+    --color-bg-accent: #1e1b18;
+    --color-bg-surface: #1f2937;
+    --color-border: #374151;
+    --color-border-light: rgba(255, 255, 255, 0.1);
+    --color-overlay: rgba(0, 0, 0, 0.6);
+    --color-toggle-bg: rgba(255, 255, 255, 0.2);
 }
 
 /* === CSS Reset === */
@@ -37,15 +60,19 @@ html {
 }
 
 body {
-    height: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-family: var(--font-body);
-    background: linear-gradient(135deg, #f9fafb, #f3f4f6, #f9fafb, #fef3e8);
+    font-family: var(--font-heading-secondary);
+    font-size: var(--text-base);
+    background: linear-gradient(135deg, var(--color-bg-primary), var(--color-bg-secondary), var(--color-bg-primary), var(--color-bg-accent));
     background-size: 400% 400%;
     color: var(--color-text-primary);
     overflow-x: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 img,
@@ -68,7 +95,9 @@ select {
 main {
     text-align: center;
     max-width: 100%;
-    height: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
 }
 
 /* === Links === */
@@ -144,7 +173,24 @@ a:focus-visible::after {
     transform-origin: bottom left;
 }
 
+/*
+ * Disable view transitions for persisted elements on mobile.
+ * This prevents the divider and sidebar from flickering/changing color
+ * during page transitions caused by Astro's default cross-fade animation.
+ */
+@media (max-width: 1024px) {
+    .sidebar-inner {
+        view-transition-name: none !important;
+        isolation: isolate;
+    }
 
+    ::view-transition-old(sidebar),
+    ::view-transition-new(sidebar) {
+        animation: none !important;
+        mix-blend-mode: normal !important;
+        opacity: 1 !important;
+    }
+}
 
 
 
