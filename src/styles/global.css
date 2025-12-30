@@ -31,6 +31,7 @@
 
 /* Dark Theme */
 :root.dark {
+    color-scheme: dark;
     --color-text-primary: #f9fafb;
     --color-text-secondary: #9ca3af;
     --color-link: #60a5fa;
@@ -57,6 +58,8 @@
 html {
     height: 100%;
     scroll-behavior: smooth;
+    background-color: var(--color-bg-primary);
+    transition: background 0.3s ease;
 }
 
 body {
@@ -190,6 +193,3 @@ a:focus-visible::after {
         opacity: 1 !important;
     }
 }
-
-
-
