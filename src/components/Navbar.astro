@@ -1,26 +1,112 @@
 ---
-import SettingsModal from './SettingsModal.astro';
+import SettingsModal from "./SettingsModal.astro";
 const currentPath = Astro.url.pathname;
 ---
 
 <!-- Mobile menu button -->
-<button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu" aria-haspopup="true" aria-expanded="false" transition:persist="mobile-menu-btn">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="close-icon"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+<button
+    class="mobile-menu-btn"
+    id="mobile-menu-btn"
+    aria-label="Open menu"
+    aria-haspopup="true"
+    aria-expanded="false"
+    transition:persist="mobile-menu-btn"
+>
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="menu-icon"
+        ><line x1="4" x2="20" y1="12" y2="12"></line><line
+            x1="4"
+            x2="20"
+            y1="6"
+            y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg
+    >
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="close-icon"
+        ><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg
+    >
 </button>
 
 <!-- Mobile menu overlay -->
-<div class="mobile-menu-overlay" id="mobile-menu-overlay" transition:persist="mobile-menu-overlay"></div>
+<div
+    class="mobile-menu-overlay"
+    id="mobile-menu-overlay"
+    transition:persist="mobile-menu-overlay"
+>
+</div>
 
 <!-- Mobile menu drawer -->
 <div class="mobile-menu" id="mobile-menu" transition:persist="mobile-menu">
     <ul class="mobile-nav-list">
-        <li><a href="/" class:list={["mobile-nav-link", { active: currentPath === "/" }]}>Home</a></li>
-        <li><a href="/about" class:list={["mobile-nav-link", { active: currentPath === "/about" || currentPath === "/about/" }]}>About</a></li>
-        <li><a href="/contact" class:list={["mobile-nav-link", { active: currentPath === "/contact" || currentPath === "/contact/" }]}>Contact</a></li>
+        <li>
+            <a
+                href="/"
+                class:list={[
+                    "mobile-nav-link",
+                    { active: currentPath === "/" },
+                ]}>Home</a>
+        </li>
+        <li>
+            <a
+                href="/about"
+                class:list={[
+                    "mobile-nav-link",
+                    {
+                        active:
+                            currentPath === "/about" ||
+                            currentPath === "/about/",
+                    },
+                ]}>About</a>
+        </li>
+        <li>
+            <a
+                href="/contact"
+                class:list={[
+                    "mobile-nav-link",
+                    {
+                        active:
+                            currentPath === "/contact" ||
+                            currentPath === "/contact/",
+                    },
+                ]}>Contact</a>
+        </li>
     </ul>
-    <button class="mobile-settings-btn" id="mobile-settings-btn" aria-label="Settings">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+    <button
+        class="mobile-settings-btn"
+        id="mobile-settings-btn"
+        aria-label="Settings"
+    >
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path
+                d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+            ></path><circle cx="12" cy="12" r="3"></circle></svg
+        >
         <span>Settings</span>
     </button>
 </div>
@@ -28,12 +114,58 @@ const currentPath = Astro.url.pathname;
 <!-- Desktop navbar -->
 <nav class="navbar" transition:persist="navbar">
     <ul class="nav-list">
-        <li><a href="/" class:list={["nav-link", { active: currentPath === "/" }]}>Home</a></li>
-        <li><a href="/about" class:list={["nav-link", { active: currentPath === "/about" || currentPath === "/about/" }]}>About</a></li>
-        <li><a href="/contact" class:list={["nav-link", { active: currentPath === "/contact" || currentPath === "/contact/" }]}>Contact</a></li>
+        <li>
+            <a
+                href="/"
+                class:list={["nav-link", { active: currentPath === "/" }]}
+                >Home</a>
+        </li>
+        <li>
+            <a
+                href="/about"
+                class:list={[
+                    "nav-link",
+                    {
+                        active:
+                            currentPath === "/about" ||
+                            currentPath === "/about/",
+                    },
+                ]}>About</a>
+        </li>
+        <li>
+            <a
+                href="/contact"
+                class:list={[
+                    "nav-link",
+                    {
+                        active:
+                            currentPath === "/contact" ||
+                            currentPath === "/contact/",
+                    },
+                ]}>Contact</a>
+        </li>
         <li class="settings-container">
-            <button class="settings-btn" id="settings-btn" aria-label="Settings" aria-haspopup="true" aria-expanded="false">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            <button
+                class="settings-btn"
+                id="settings-btn"
+                aria-label="Settings"
+                aria-haspopup="true"
+                aria-expanded="false"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    ><path
+                        d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+                    ></path><circle cx="12" cy="12" r="3"></circle></svg
+                >
             </button>
         </li>
     </ul>
@@ -43,60 +175,105 @@ const currentPath = Astro.url.pathname;
 
 <script is:inline>
     function openSettingsModal() {
-        const settingsModal = document.getElementById('settings-modal');
-        const settingsOverlay = document.getElementById('settings-overlay');
-        const settingsBtn = document.getElementById('settings-btn');
+        const settingsModal = document.getElementById("settings-modal");
+        const settingsOverlay = document.getElementById("settings-overlay");
+        const settingsBtn = document.getElementById("settings-btn");
 
-        settingsModal?.classList.add('open');
-        settingsOverlay?.classList.add('open');
-        settingsBtn?.setAttribute('aria-expanded', 'true');
+        settingsModal?.classList.add("open");
+        settingsOverlay?.classList.add("open");
+        settingsBtn?.setAttribute("aria-expanded", "true");
         closeMobileMenu();
     }
 
-    function toggleMobileMenu() {
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    function updateThemeColor(isOpen) {
+        const metaThemeColor = document.querySelector(
+            'meta[name="theme-color"]',
+        );
+        if (!metaThemeColor) return;
 
-        const isOpen = mobileMenu?.classList.toggle('open');
-        mobileMenuOverlay?.classList.toggle('open');
-        mobileMenuBtn?.classList.toggle('open');
-        mobileMenuBtn?.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        const isDark = document.documentElement.classList.contains("dark");
+
+        if (isOpen) {
+            // Darkened colors to match rgba(0, 0, 0, 0.4) overlay
+            // Dark mode: #111827 -> #0a0e17
+            // Light mode: #f9fafb -> #959697
+            metaThemeColor.setAttribute(
+                "content",
+                isDark ? "#0a0e17" : "#959697",
+            );
+        } else {
+            // Original colors
+            metaThemeColor.setAttribute(
+                "content",
+                isDark ? "#111827" : "#f9fafb",
+            );
+        }
+    }
+
+    function toggleMobileMenu() {
+        const mobileMenu = document.getElementById("mobile-menu");
+        const mobileMenuOverlay = document.getElementById(
+            "mobile-menu-overlay",
+        );
+        const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+
+        const isOpen = mobileMenu?.classList.toggle("open");
+        mobileMenuOverlay?.classList.toggle("open");
+        mobileMenuBtn?.classList.toggle("open");
+        mobileMenuBtn?.setAttribute("aria-expanded", isOpen ? "true" : "false");
+
+        updateThemeColor(isOpen);
     }
 
     function closeMobileMenu() {
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById("mobile-menu");
+        const mobileMenuOverlay = document.getElementById(
+            "mobile-menu-overlay",
+        );
+        const mobileMenuBtn = document.getElementById("mobile-menu-btn");
 
-        mobileMenu?.classList.remove('open');
-        mobileMenuOverlay?.classList.remove('open');
-        mobileMenuBtn?.classList.remove('open');
-        mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+        if (mobileMenu?.classList.contains("open")) {
+            mobileMenu.classList.remove("open");
+            mobileMenuOverlay?.classList.remove("open");
+            mobileMenuBtn?.classList.remove("open");
+            mobileMenuBtn?.setAttribute("aria-expanded", "false");
+
+            updateThemeColor(false);
+        }
     }
 
     function initNavbar() {
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-        const settingsBtn = document.getElementById('settings-btn');
-        const mobileSettingsBtn = document.getElementById('mobile-settings-btn');
+        const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+        const mobileMenu = document.getElementById("mobile-menu");
+        const mobileMenuOverlay = document.getElementById(
+            "mobile-menu-overlay",
+        );
+        const settingsBtn = document.getElementById("settings-btn");
+        const mobileSettingsBtn = document.getElementById(
+            "mobile-settings-btn",
+        );
 
         // Update active state for nav links after page transition
         const currentPath = window.location.pathname;
 
         // Update desktop nav links
-        document.querySelectorAll('.nav-link').forEach(link => {
-            const href = link.getAttribute('href');
-            const isActive = href === currentPath || href + '/' === currentPath || currentPath + '/' === href;
-            link.classList.toggle('active', isActive);
+        document.querySelectorAll(".nav-link").forEach((link) => {
+            const href = link.getAttribute("href");
+            const isActive =
+                href === currentPath ||
+                href + "/" === currentPath ||
+                currentPath + "/" === href;
+            link.classList.toggle("active", isActive);
         });
 
         // Update mobile nav links
-        document.querySelectorAll('.mobile-nav-link').forEach(link => {
-            const href = link.getAttribute('href');
-            const isActive = href === currentPath || href + '/' === currentPath || currentPath + '/' === href;
-            link.classList.toggle('active', isActive);
+        document.querySelectorAll(".mobile-nav-link").forEach((link) => {
+            const href = link.getAttribute("href");
+            const isActive =
+                href === currentPath ||
+                href + "/" === currentPath ||
+                currentPath + "/" === href;
+            link.classList.toggle("active", isActive);
         });
 
         // Close mobile menu after navigation (in case it was open)
@@ -104,36 +281,36 @@ const currentPath = Astro.url.pathname;
 
         // Attach event listeners only once using data-initialized attribute
         if (mobileMenuBtn && !mobileMenuBtn.dataset.initialized) {
-            mobileMenuBtn.dataset.initialized = 'true';
-            mobileMenuBtn.addEventListener('click', (e) => {
+            mobileMenuBtn.dataset.initialized = "true";
+            mobileMenuBtn.addEventListener("click", (e) => {
                 e.stopPropagation();
                 toggleMobileMenu();
             });
         }
 
         if (mobileMenuOverlay && !mobileMenuOverlay.dataset.initialized) {
-            mobileMenuOverlay.dataset.initialized = 'true';
-            mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+            mobileMenuOverlay.dataset.initialized = "true";
+            mobileMenuOverlay.addEventListener("click", closeMobileMenu);
         }
 
         if (mobileMenu && !mobileMenu.dataset.initialized) {
-            mobileMenu.dataset.initialized = 'true';
-            mobileMenu.querySelectorAll('.mobile-nav-link').forEach(link => {
-                link.addEventListener('click', closeMobileMenu);
+            mobileMenu.dataset.initialized = "true";
+            mobileMenu.querySelectorAll(".mobile-nav-link").forEach((link) => {
+                link.addEventListener("click", closeMobileMenu);
             });
         }
 
         if (settingsBtn && !settingsBtn.dataset.initialized) {
-            settingsBtn.dataset.initialized = 'true';
-            settingsBtn.addEventListener('click', (e) => {
+            settingsBtn.dataset.initialized = "true";
+            settingsBtn.addEventListener("click", (e) => {
                 e.stopPropagation();
                 openSettingsModal();
             });
         }
 
         if (mobileSettingsBtn && !mobileSettingsBtn.dataset.initialized) {
-            mobileSettingsBtn.dataset.initialized = 'true';
-            mobileSettingsBtn.addEventListener('click', (e) => {
+            mobileSettingsBtn.dataset.initialized = "true";
+            mobileSettingsBtn.addEventListener("click", (e) => {
                 e.stopPropagation();
                 openSettingsModal();
             });
@@ -141,10 +318,10 @@ const currentPath = Astro.url.pathname;
     }
 
     // Run on initial load and after each page transition
-    document.addEventListener('astro:page-load', initNavbar);
+    document.addEventListener("astro:page-load", initNavbar);
 
     // Close mobile menu immediately when navigation starts (before transition)
-    document.addEventListener('astro:before-preparation', closeMobileMenu);
+    document.addEventListener("astro:before-preparation", closeMobileMenu);
 </script>
 
 <style>
@@ -189,17 +366,19 @@ const currentPath = Astro.url.pathname;
     }
 
     .nav-link::before {
-        content: './';
+        content: "./";
         position: absolute;
         right: 100%;
-        margin-right: -1.0rem;
+        margin-right: -1rem;
         top: 50%;
         transform: translateY(-50%) translateX(-5px);
         font-size: 1rem;
         color: #3b82f6;
         opacity: 0;
         white-space: nowrap;
-        transition: opacity 0.25s ease, transform 0.25s ease;
+        transition:
+            opacity 0.25s ease,
+            transform 0.25s ease;
     }
 
     .nav-link:hover,
@@ -209,7 +388,7 @@ const currentPath = Astro.url.pathname;
 
     .nav-link:not(.active):hover::before,
     .nav-link:not(.active):focus-visible::before {
-        content: 'cd ./';
+        content: "cd ./";
         opacity: 1;
         transform: translateY(-50%) translateX(0);
     }
@@ -255,7 +434,9 @@ const currentPath = Astro.url.pathname;
         padding: 0.6rem;
         cursor: pointer;
         color: var(--color-text-secondary);
-        transition: color 0.3s ease, border-color 0.3s ease;
+        transition:
+            color 0.3s ease,
+            border-color 0.3s ease;
     }
 
     .mobile-menu-btn:hover,
@@ -339,7 +520,9 @@ const currentPath = Astro.url.pathname;
         padding: 0.75rem 1rem;
         padding-left: 2.5rem;
         border-radius: 0.5rem;
-        transition: color 0.3s ease, background 0.3s ease;
+        transition:
+            color 0.3s ease,
+            background 0.3s ease;
         position: relative;
     }
 
@@ -349,7 +532,7 @@ const currentPath = Astro.url.pathname;
     }
 
     .mobile-nav-link::before {
-        content: './';
+        content: "./";
         position: absolute;
         left: 1rem;
         top: 50%;
@@ -382,7 +565,9 @@ const currentPath = Astro.url.pathname;
         color: var(--color-text-secondary);
         font-family: var(--font-heading-secondary), monospace;
         font-size: 1rem;
-        transition: color 0.3s ease, border-color 0.3s ease;
+        transition:
+            color 0.3s ease,
+            border-color 0.3s ease;
     }
 
     .mobile-settings-btn:hover,
@@ -439,4 +624,3 @@ const currentPath = Astro.url.pathname;
         transform: rotate(90deg);
     }
 </style>
-
