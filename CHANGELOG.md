@@ -1,3 +1,12 @@
+## [2.0.2] - 2025-12-31
+
+### 🚜 Refactor
+
+- Added theme color update logic and reformatted nav html attributes for readability
+
+### 📚 Documentation
+
+- Added CHANGELOG.md to track project changes
 ## [2.0.1] - 2025-12-30
 
 ### 🚀 Features
