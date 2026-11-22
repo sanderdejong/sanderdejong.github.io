@@ -1,3 +1,9 @@
+## [3.0.0] - 2026-11-22
+
+### 🚀 Features
+
+- Added social preview image for link previews
+- Redesigned site with new theme, typography, pixel-art portrait and route transitions
 ## [2.0.2] - 2025-12-31
 
 ### 🚜 Refactor
