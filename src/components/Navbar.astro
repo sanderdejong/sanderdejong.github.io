@@ -6,8 +6,8 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
 <nav class="navbar" aria-label="Main" transition:persist="navbar">
     <ul class="nav-list">
         <li><a href="/" class="nav-link" aria-current={current("/")}>Home<span class="nav-mark" aria-hidden="true"></span></a></li>
-        <li><a href="/about" class="nav-link" aria-current={current("/about")}>About<span class="nav-mark" aria-hidden="true"></span></a></li>
-        <li><a href="/contact" class="nav-link" aria-current={current("/contact")}>Contact<span class="nav-mark" aria-hidden="true"></span></a></li>
+        <li><a href="/about/" class="nav-link" aria-current={current("/about")}>About<span class="nav-mark" aria-hidden="true"></span></a></li>
+        <li><a href="/contact/" class="nav-link" aria-current={current("/contact")}>Contact<span class="nav-mark" aria-hidden="true"></span></a></li>
         <li class="theme-item">
             <button class="theme-btn" id="theme-btn" type="button" aria-pressed="false" hidden>
                 <span class="theme-swatch" aria-hidden="true"></span>
@@ -37,9 +37,10 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
         }
 
         function syncActiveLink() {
-            const path = window.location.pathname.replace(/\/$/, "") || "/";
+            const trim = (p) => p.replace(/\/$/, "") || "/";
+            const path = trim(window.location.pathname);
             document.querySelectorAll(".nav-link").forEach((link) => {
-                if (link.getAttribute("href") === path) {
+                if (trim(link.getAttribute("href")) === path) {
                     link.setAttribute("aria-current", "page");
                 } else {
                     link.removeAttribute("aria-current");
