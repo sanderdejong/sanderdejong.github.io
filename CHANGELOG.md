@@ -1,3 +1,9 @@
+## [3.3.1] - 2026-11-22
+
+### 🐛 Bug Fixes
+
+- Removed the falling-tile animation from the 404 page portrait
+
 ## [3.3.0] - 2026-11-22
 
 ### 🚀 Features
