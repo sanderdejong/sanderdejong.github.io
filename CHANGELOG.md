@@ -1,3 +1,10 @@
+## [3.2.1] - 2026-11-22
+
+### ⚙️ Miscellaneous Tasks
+
+- Removed the site-wide copyright footer
+- Removed displayed URLs from the GitHub and LinkedIn contact cards without changing their links
+
 ## [3.2.0] - 2026-11-22
 
 ### 🚀 Features
