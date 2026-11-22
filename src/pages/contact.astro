@@ -7,19 +7,17 @@ import ContentWithHeading from '../components/ContentWithHeading.astro';
         <h1>get in touch<span class="period">.</span></h1>
         <ul class="contact-list">
             <li>
-                <a class="contact-card contact-card--deep" href="https://github.com/sanderdejong" target="_blank" rel="noopener noreferrer" aria-labelledby="contact-github contact-github-tab" aria-describedby="contact-github-use contact-github-handle">
+                <a class="contact-card contact-card--deep" href="https://github.com/sanderdejong" target="_blank" rel="noopener noreferrer" aria-labelledby="contact-github contact-github-tab" aria-describedby="contact-github-use">
                     <span class="contact-name" id="contact-github">GitHub</span>
                     <span class="contact-use" id="contact-github-use">Code I’ve written.</span>
-                    <span class="contact-handle" id="contact-github-handle">github.com/sanderdejong</span>
                     <span class="visually-hidden" id="contact-github-tab"> (opens in a new tab)</span>
                     <svg aria-hidden="true" class="contact-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v8H3V6h8"/></svg>
                 </a>
             </li>
             <li>
-                <a class="contact-card contact-card--pop" href="https://linkedin.com/in/sanderdejong-" target="_blank" rel="noopener noreferrer" aria-labelledby="contact-linkedin contact-linkedin-tab" aria-describedby="contact-linkedin-use contact-linkedin-handle">
+                <a class="contact-card contact-card--pop" href="https://linkedin.com/in/sanderdejong-" target="_blank" rel="noopener noreferrer" aria-labelledby="contact-linkedin contact-linkedin-tab" aria-describedby="contact-linkedin-use">
                     <span class="contact-name" id="contact-linkedin">LinkedIn</span>
                     <span class="contact-use" id="contact-linkedin-use">My experience, and a way to connect.</span>
-                    <span class="contact-handle" id="contact-linkedin-handle">linkedin.com/in/sanderdejong-</span>
                     <span class="visually-hidden" id="contact-linkedin-tab"> (opens in a new tab)</span>
                     <svg aria-hidden="true" class="contact-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v8H3V6h8"/></svg>
                 </a>
@@ -55,7 +53,6 @@ import ContentWithHeading from '../components/ContentWithHeading.astro';
     /* GitHub is an aubergine plate standing on tangerine; LinkedIn is a tangerine plate standing on ink. */
     .contact-card--deep {
         --color-ink: var(--color-band-ink);
-        --color-muted: var(--color-band-muted);
         --color-mark: var(--color-pop);
         --color-shadow: var(--color-cast);
         --shadow-card: 6px 6px 0 var(--color-cast);
@@ -65,7 +62,6 @@ import ContentWithHeading from '../components/ContentWithHeading.astro';
 
     .contact-card--pop {
         --color-ink: var(--color-pop-ink);
-        --color-muted: var(--color-pop-ink);
         --color-mark: var(--color-pop-ink);
         background: var(--color-pop);
         border-color: var(--color-pop-ink);
@@ -107,13 +103,6 @@ import ContentWithHeading from '../components/ContentWithHeading.astro';
         grid-column: 1;
         font-size: var(--text-md);
         line-height: 1.35;
-    }
-
-    .contact-handle {
-        grid-column: 1;
-        font-size: var(--text-sm);
-        color: var(--color-muted);
-        overflow-wrap: anywhere;
     }
 
     .contact-icon {
