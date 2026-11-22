@@ -1,6 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ContentWithHeading from '../components/ContentWithHeading.astro';
+import AboutSection from '../components/AboutSection.astro';
+import ProjectsSection from '../components/ProjectsSection.astro';
+import ContactSection from '../components/ContactSection.astro';
 ---
 <BaseLayout>
     <ContentWithHeading>
@@ -10,7 +13,21 @@ import ContentWithHeading from '../components/ContentWithHeading.astro';
         </hgroup>
         <p>
             I have over six years of professional experience, in both small teams and large organizations. I specialize in
-            cloud-native development, primarily using Java and AWS. <a href="/about/">More about me</a>.
+            cloud-native development, primarily using Java and AWS. <a href="#about" data-astro-reload>More about me</a>, or <a href="#contact" data-astro-reload>get in touch</a>.
         </p>
     </ContentWithHeading>
+    <div class="portfolio-sections" slot="sections">
+        <AboutSection />
+        <ProjectsSection />
+        <ContactSection />
+    </div>
 </BaseLayout>
+
+<style>
+    .portfolio-sections {
+        display: grid;
+        gap: var(--section-gap-s);
+        grid-column: 1 / -1;
+        min-width: 0;
+    }
+</style>

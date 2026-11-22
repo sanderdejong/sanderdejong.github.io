@@ -1,15 +1,10 @@
----
-const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
-const current = (href: string) => (currentPath === href ? "page" : undefined);
----
-
-<nav class="navbar" aria-label="Main" transition:persist="navbar">
+<nav class="navbar card-surface" aria-label="Main" transition:persist="navbar">
     <div class="nav-bar container">
         <ul class="nav-list">
-            <li><a href="/" class="nav-link" aria-current={current("/")}>Home<span class="nav-mark" aria-hidden="true"></span></a></li>
-            <li><a href="/about/" class="nav-link" aria-current={current("/about")}>About<span class="nav-mark" aria-hidden="true"></span></a></li>
-            <li><a href="/projects/" class="nav-link" aria-current={current("/projects")}>Projects<span class="nav-mark" aria-hidden="true"></span></a></li>
-            <li><a href="/contact/" class="nav-link" aria-current={current("/contact")}>Contact<span class="nav-mark" aria-hidden="true"></span></a></li>
+            <li><a href="/#home" class="nav-link" data-astro-reload>Home<span class="nav-mark" aria-hidden="true"></span></a></li>
+            <li><a href="/#about" class="nav-link" data-astro-reload>About<span class="nav-mark" aria-hidden="true"></span></a></li>
+            <li><a href="/#projects" class="nav-link" data-astro-reload>Projects<span class="nav-mark" aria-hidden="true"></span></a></li>
+            <li><a href="/#contact" class="nav-link" data-astro-reload>Contact<span class="nav-mark" aria-hidden="true"></span></a></li>
         </ul>
         <button class="theme-btn" id="theme-btn" type="button" aria-label="Dark mode" aria-pressed="false" hidden>
             <svg class="theme-moon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
@@ -41,12 +36,25 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
             syncThemeButton();
         }
 
+        // The section under the nav (plus a third of the screen) is current; at the very bottom, the last one is.
+        function currentHash() {
+            const sections = ["about", "projects", "contact"].map((id) => document.getElementById(id)).filter(Boolean);
+            const line = (document.querySelector(".navbar")?.offsetHeight || 0) + window.innerHeight / 3;
+            let hash = "#home";
+            for (const section of sections) {
+                if (section.getBoundingClientRect().top <= line) hash = "#" + section.id;
+            }
+            const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+            if (atBottom && sections.length) hash = "#" + sections[sections.length - 1].id;
+            return hash;
+        }
+
         function syncActiveLink() {
-            const trim = (p) => p.replace(/\/$/, "") || "/";
-            const path = trim(window.location.pathname);
+            const { pathname } = window.location;
+            const hash = currentHash();
             document.querySelectorAll(".nav-link").forEach((link) => {
-                if (trim(link.getAttribute("href")) === path) {
-                    link.setAttribute("aria-current", "page");
+                if (link.pathname === pathname && link.hash === hash) {
+                    link.setAttribute("aria-current", "location");
                 } else {
                     link.removeAttribute("aria-current");
                 }
@@ -76,26 +84,31 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
         });
 
         document.addEventListener("astro:page-load", initNavbar);
-        // Mark the new link inside the swap, so the view transition sees the mark move.
         document.addEventListener("astro:after-swap", syncActiveLink);
+        window.addEventListener("hashchange", syncActiveLink);
+
+        let scrollFrame = 0;
+        window.addEventListener("scroll", () => {
+            if (scrollFrame) return;
+            scrollFrame = requestAnimationFrame(() => {
+                scrollFrame = 0;
+                syncActiveLink();
+            });
+        }, { passive: true });
+        window.addEventListener("resize", syncActiveLink, { passive: true });
     })();
-</script>
-
-<script>
-    import { prefetch } from "astro:prefetch";
-
-    // Warm the cache with fetch, not <link rel="prefetch">, which Firefox skips when network.prefetch-next is off.
-    document.addEventListener("astro:page-load", () => {
-        document.querySelectorAll<HTMLAnchorElement>(".nav-link").forEach((link) => prefetch(link.href, { with: "fetch" }));
-    });
 </script>
 
 <style>
     .navbar {
-        position: relative;
+        --grain: var(--grain-light-specks);
+        --color-focus: var(--color-pop);
+        position: sticky;
+        inset-block-start: 0;
         z-index: var(--z-sticky-nav);
-        border-top: var(--rule-bar) solid var(--color-ink);
-        border-bottom: var(--rule-hair) solid var(--color-rule);
+        background: var(--color-band);
+        border-bottom: 2px solid var(--color-cast);
+        color: var(--color-band-ink);
     }
 
     .nav-bar {
@@ -103,7 +116,7 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
         align-items: stretch;
         justify-content: space-between;
         gap: var(--space-md);
-        min-height: 64px;
+        min-height: 56px;
     }
 
     .nav-list {
@@ -129,14 +142,13 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
         padding-inline: var(--space-xs);
         font-size: var(--text-md);
         font-weight: 500;
-        color: var(--color-ink-2);
+        color: var(--color-band-muted);
         text-decoration: none;
         white-space: nowrap;
         position: relative;
         transition: color var(--dur-micro) var(--ease-out);
     }
 
-    /* The mark sits directly under the link text and glides between links on route change. */
     .nav-mark {
         position: absolute;
         inset-inline: var(--space-xs);
@@ -146,27 +158,24 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
         transition: background-color var(--dur-micro) var(--ease-out);
     }
 
-    .nav-link:hover {
-        color: var(--color-ink);
+    .nav-link:hover,
+    .nav-link[aria-current="location"] {
+        color: var(--color-band-ink);
     }
 
-    .nav-link[aria-current="page"] {
-        color: var(--color-ink);
-    }
-
-    .nav-link[aria-current="page"] .nav-mark {
-        background: var(--color-mark);
+    .nav-link[aria-current="location"] .nav-mark {
+        background: var(--color-pop);
         view-transition-name: nav-mark;
     }
 
     .nav-link:hover .nav-mark,
-    .nav-link[aria-current="page"]:hover .nav-mark {
-        background: var(--color-ink);
+    .nav-link[aria-current="location"]:hover .nav-mark {
+        background: var(--color-band-ink);
     }
 
     .nav-link:active .nav-mark,
-    .nav-link[aria-current="page"]:active .nav-mark {
-        background: var(--color-accent-deep);
+    .nav-link[aria-current="location"]:active .nav-mark {
+        background: var(--color-pop);
     }
 
     .nav-link:focus-visible {
@@ -184,7 +193,7 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
         border: none;
         border-radius: 0;
         background: transparent;
-        color: var(--color-ink);
+        color: var(--color-band-ink);
         cursor: pointer;
         transition: transform var(--dur-micro) var(--ease-out);
     }
@@ -232,7 +241,11 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
         }
     }
 
-    @media (max-width: 24rem) {
+    @media (max-width: 26rem) {
+        :global(html) {
+            scroll-padding-top: var(--space-4xl);
+        }
+
         .nav-bar {
             gap: var(--space-2xs);
         }
@@ -253,6 +266,12 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
 
         .nav-mark {
             inset-inline: var(--space-2xs);
+        }
+    }
+
+    @media (max-width: 22rem) {
+        .nav-link {
+            font-size: var(--text-sm);
         }
     }
 

@@ -1,6 +1,11 @@
 ---
+interface Props {
+    id?: string;
+}
+
+const { id } = Astro.props;
 ---
-<section class="content-block">
+<section class="content-block" id={id} aria-labelledby={id ? `${id}-heading` : undefined}>
     <slot/>
 </section>
 
@@ -22,6 +27,11 @@
         text-wrap: balance;
         margin-top: -0.1em;
         margin-bottom: var(--space-md);
+    }
+
+    .content-block > :global(h2) {
+        font-size: min(var(--text-section), 14cqi);
+        max-width: none;
     }
 
     /* A heading with its standfirst reads as one unit: tight inside, the full step to the letter. */
