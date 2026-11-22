@@ -2,14 +2,118 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ContentWithHeading from '../components/ContentWithHeading.astro';
 ---
-<BaseLayout>
+<BaseLayout pageTitle="Contact - Sander de Jong" portrait="small">
     <ContentWithHeading>
-<h1>get in touch<span class="text-emphasis-blue">.</span></h1>
-<p>
-    For more details on my work and experience, feel free to visit my
-    <a href="https://github.com/sanderdejong" target="_blank" rel="noopener noreferrer">GitHub<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-left:0.25rem;"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a> or connect
-    with me on
-    <a href="https://linkedin.com/in/sanderdejong-" target="_blank" rel="noopener noreferrer">LinkedIn<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-left:0.25rem;"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a>.
-</p>
+        <h1>get in touch<span class="period">.</span></h1>
+        <ul class="contact-list">
+            <li>
+                <a class="contact-card" href="https://github.com/sanderdejong" target="_blank" rel="noopener noreferrer" aria-labelledby="contact-github contact-github-tab" aria-describedby="contact-github-use contact-github-handle">
+                    <span class="contact-name" id="contact-github">GitHub</span>
+                    <span class="contact-use" id="contact-github-use">Code I’ve written.</span>
+                    <span class="contact-handle" id="contact-github-handle">github.com/sanderdejong</span>
+                    <span class="visually-hidden" id="contact-github-tab"> (opens in a new tab)</span>
+                    <svg aria-hidden="true" class="contact-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v8H3V6h8"/></svg>
+                </a>
+            </li>
+            <li>
+                <a class="contact-card" href="https://linkedin.com/in/sanderdejong-" target="_blank" rel="noopener noreferrer" aria-labelledby="contact-linkedin contact-linkedin-tab" aria-describedby="contact-linkedin-use contact-linkedin-handle">
+                    <span class="contact-name" id="contact-linkedin">LinkedIn</span>
+                    <span class="contact-use" id="contact-linkedin-use">My experience, and a way to connect.</span>
+                    <span class="contact-handle" id="contact-linkedin-handle">linkedin.com/in/sanderdejong-</span>
+                    <span class="visually-hidden" id="contact-linkedin-tab"> (opens in a new tab)</span>
+                    <svg aria-hidden="true" class="contact-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v8H3V6h8"/></svg>
+                </a>
+            </li>
+        </ul>
     </ContentWithHeading>
 </BaseLayout>
+
+<style>
+    .contact-list {
+        display: grid;
+        gap: var(--space-md);
+        width: min(100%, 60ch);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .contact-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        column-gap: var(--space-md);
+        row-gap: var(--space-2xs);
+        padding: var(--space-lg);
+        border: 2px solid var(--color-ink);
+        background: var(--color-paper-2);
+        color: var(--color-ink);
+        text-decoration: none;
+        box-shadow: 3px 3px 0 var(--color-shadow);
+        transition: box-shadow var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
+    }
+
+    .contact-card:hover {
+        box-shadow: var(--shadow-card);
+        transform: translate(-3px, -3px);
+    }
+
+    /* Rests on a 3px shadow; hover lifts onto 6px and press sinks flat, so the shadow's far corner never moves. */
+    .contact-card:active {
+        box-shadow: 0 0 0 var(--color-shadow);
+        transform: translate(3px, 3px);
+    }
+
+    .contact-card:focus-visible {
+        outline-offset: 4px;
+    }
+
+    .contact-name {
+        font-family: var(--font-display);
+        font-size: var(--text-2xl);
+        font-weight: var(--display-weight);
+        line-height: 1.05;
+        text-transform: uppercase;
+        text-decoration-line: underline;
+        text-decoration-color: transparent;
+        text-decoration-thickness: 3px;
+        text-underline-offset: 0.12em;
+        transition: text-decoration-color var(--dur-micro) var(--ease-out);
+    }
+
+    .contact-card:hover .contact-name {
+        text-decoration-color: var(--color-mark);
+    }
+
+    .contact-use {
+        grid-column: 1;
+        font-size: var(--text-lg);
+        line-height: 1.35;
+    }
+
+    .contact-handle {
+        grid-column: 1;
+        font-size: var(--text-sm);
+        color: var(--color-muted);
+        overflow-wrap: anywhere;
+    }
+
+    .contact-icon {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: center;
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .contact-card,
+        .contact-name {
+            transition: none;
+        }
+
+        .contact-card:hover,
+        .contact-card:active {
+            transform: none;
+        }
+    }
+</style>

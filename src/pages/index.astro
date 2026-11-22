@@ -4,11 +4,13 @@ import ContentWithHeading from '../components/ContentWithHeading.astro';
 ---
 <BaseLayout>
     <ContentWithHeading>
-        <h1>hi, I am Sander de Jong<span class="text-emphasis-blue">.</span></h1>
+        <hgroup>
+            <h1>hi, I am <span class="nowrap">Sander de Jong<span class="period">.</span></span></h1>
+            <p class="standfirst">Software &amp; AWS Cloud Engineer</p>
+        </hgroup>
         <p>
-            I’m a software engineer with over six years of professional experience, working in both small teams and
-            large organizations. I specialize in cloud-native development, primarily using <span class="text-emphasis-orange">Java</span>
-            and <span class="text-emphasis-orange">AWS</span>.
+            Over six years of professional experience, in both small teams and large organizations. I specialize in
+            cloud-native development, primarily using Java and AWS. <a href="/about">More about me</a>.
         </p>
     </ContentWithHeading>
 </BaseLayout>

@@ -2,23 +2,70 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ContentWithHeading from '../components/ContentWithHeading.astro';
 ---
-<BaseLayout>
+<BaseLayout pageTitle="About - Sander de Jong" portrait="small">
     <ContentWithHeading>
-        <h1>more about me<span class="text-emphasis-blue">.</span></h1>
-        <p>
-            My background includes designing and implementing distributed systems, building serverless and
-            container-based architectures, and working with infrastructure-as-code to support reliable deployments. I
-            focus on clean architecture, observability, and performance, with an emphasis on maintainability and
-            long-term sustainability.
-        </p>
-        <p>
-            I enjoy working closely with product managers, designers, and fellow engineers to turn ideas into
-            well-aligned technical solutions. I’m comfortable taking ownership, giving and receiving feedback, and
-            adapting to changing requirements.
-        </p>
-        <p>
-            Outside of work, I enjoy bouldering and badminton, and I like to unwind by reading fantasy. I am naturally
-            curious and motivated by continuous improvement, both professionally and personally.
-        </p>
+        <h1>more about me<span class="period">.</span></h1>
+        <div class="about-chunks">
+            <section class="about-chunk" aria-labelledby="about-build">
+                <h2 id="about-build">What I build</h2>
+                <p>
+                    My background includes designing and implementing distributed systems, building serverless and
+                    container-based architectures, and working with infrastructure-as-code to support reliable
+                    deployments. I focus on clean architecture, observability, and performance, with an emphasis on
+                    maintainability and <span class="nowrap">long-term</span> sustainability.
+                </p>
+            </section>
+            <section class="about-chunk" aria-labelledby="about-work">
+                <h2 id="about-work">How I work</h2>
+                <p>
+                    I enjoy working closely with product managers, designers, and fellow engineers to turn ideas into
+                    well-aligned technical solutions. I’m comfortable taking ownership, giving and receiving feedback,
+                    and adapting to changing requirements.
+                </p>
+            </section>
+            <section class="about-chunk" aria-labelledby="about-outside">
+                <h2 id="about-outside">Outside work</h2>
+                <p>
+                    I enjoy bouldering and badminton, and I like to unwind by reading fantasy. I am
+                    naturally curious and motivated by continuous improvement, both professionally and personally.
+                </p>
+            </section>
+        </div>
     </ContentWithHeading>
 </BaseLayout>
+
+<style>
+    .about-chunks {
+        display: grid;
+        gap: var(--space-md);
+        width: 100%;
+    }
+
+    .about-chunk {
+        display: grid;
+        grid-template-columns: 11rem minmax(0, 1fr);
+        column-gap: var(--space-lg);
+        padding-top: var(--space-sm);
+        border-top: var(--rule-hair) solid var(--color-rule);
+    }
+
+    .about-chunk h2 {
+        max-width: none;
+        font-size: var(--text-title);
+        line-height: 1.2;
+        text-wrap: balance;
+    }
+
+    .about-chunk p {
+        max-width: 56ch;
+        font-size: var(--text-lg);
+        line-height: 1.5;
+    }
+
+    @media (max-width: 40rem) {
+        .about-chunk {
+            grid-template-columns: minmax(0, 1fr);
+            row-gap: var(--space-xs);
+        }
+    }
+</style>

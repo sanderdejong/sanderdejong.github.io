@@ -1,34 +1,66 @@
 ---
 interface Props {
     author?: string;
+    showLinks?: boolean;
 }
 
-const { author = "Sander de Jong" } = Astro.props;
+const { author = "Sander de Jong", showLinks = true } = Astro.props;
 ---
 
-<footer class="footer" transition:persist>
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer-icon">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M14.83 14.83a4 4 0 1 1 0-5.66"/>
-    </svg>
-    <span>{new Date().getFullYear()} {author}</span>
+<footer class="signoff">
+    {showLinks && (
+        <ul class="signoff-links">
+            <li>
+                <a href="https://github.com/sanderdejong" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span><svg aria-hidden="true" class="external-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v8H3V6h8"/></svg></a>
+            </li>
+            <li>
+                <a href="https://linkedin.com/in/sanderdejong-" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span><svg aria-hidden="true" class="external-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v8H3V6h8"/></svg></a>
+            </li>
+        </ul>
+    )}
+    <p class="signoff-meta">© {new Date().getFullYear()} <span class="nowrap">{author},</span> <span class="nowrap">Software &amp; AWS Cloud Engineer</span></p>
 </footer>
 
 <style>
-    .footer {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 1rem;
-        font-size: 0.875rem;
-        color: var(--color-text-secondary);
-        position: relative;
-        z-index: 1;
+    .signoff {
+        display: grid;
+        gap: var(--space-xs);
+        margin-top: var(--space-xl);
+        padding-top: var(--space-sm);
+        border-top: var(--rule-hair) solid var(--color-rule);
     }
 
-    .footer-icon {
+    .signoff-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-lg);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .signoff-links a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        font-size: var(--text-lg);
+        font-weight: 500;
+    }
+
+    .external-icon {
+        width: 0.8em;
+        height: 0.8em;
+        margin-left: 0.25em;
         flex-shrink: 0;
     }
-</style>
 
+    .nowrap {
+        white-space: nowrap;
+    }
+
+    .signoff-meta {
+        margin: 0;
+        font-size: var(--text-sm);
+        color: var(--color-muted);
+    }
+</style>
