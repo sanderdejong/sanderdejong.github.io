@@ -29,7 +29,7 @@ const tileSource = missingTile
     ? await getImage({src: profilePic, format: 'webp', quality: 90, width: 460, height: 460})
     : null;
 
-const themeColor = {light: '#f4e9e2', dark: '#291527'};
+const themeColor = {light: '#f4e9e2', dark: '#3e223b'};
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
 const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
