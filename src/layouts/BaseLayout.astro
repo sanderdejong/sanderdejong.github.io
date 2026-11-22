@@ -151,15 +151,11 @@ const showSignoffLinks = routePath !== '/contact';
         outline: none;
     }
 
-    /* Between routes the portrait glides to its new size; the nav mark jumps across in four hard steps. Neither fades. */
-    ::view-transition-group(portrait) {
+    /* Between routes the portrait glides to its new size and the nav mark slides along the rule with it. Neither fades. */
+    ::view-transition-group(portrait),
+    ::view-transition-group(nav-mark) {
         animation-duration: var(--dur-long);
         animation-timing-function: var(--ease-out);
-    }
-
-    ::view-transition-group(nav-mark) {
-        animation-duration: 280ms;
-        animation-timing-function: steps(4, jump-end);
     }
 
     ::view-transition-old(portrait),
