@@ -1,12 +1,19 @@
-## [Unreleased]
+## [3.4.0] - 2026-11-22
 
-- Added a Projects section with a full-width current project and a responsive grid of sample cards.
-- Combined Home, About, Projects, and Contact into a scrolling homepage with sticky navigation and redirects from the old section URLs.
-- Restyled the sticky navigation as a slim plum band with linen links and a tangerine marker for the current section, finished with a tangerine bottom edge.
-- Restyled the 404 page to match the homepage intro, with an "Error 404" standfirst and no portrait.
-- Stopped project cards linking to pages that don't exist yet, and lightened the featured card in dark mode.
-- The navigation now marks the section you've scrolled to, and stays on one row on 320px screens.
-- Added a "get in touch" link to the intro and shown the email address on its contact card.
+### 🚀 Features
+
+- Added a Projects section with a full-width current project and a responsive grid of project cards
+- Combined Home, About, Projects, and Contact into one scrolling homepage, with redirects from the old page URLs
+- Restyled the sticky navigation as a plum band whose tangerine marker follows the section you've scrolled to
+- Let the portrait scale smoothly beside the intro on wider screens
+- Added a "get in touch" link to the intro and showed the email address on its contact card
+
+### 🐛 Bug Fixes
+
+- Restyled the 404 page to match the homepage intro, without the portrait
+- Stopped project cards linking to pages that don't exist yet
+- Lightened the featured project card in dark mode
+- Kept the navigation on one row on 320px screens
 
 ## [3.3.1] - 2026-11-22
 
