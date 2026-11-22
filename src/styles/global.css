@@ -37,18 +37,18 @@ h1, h2, h3 {
     text-transform: uppercase;
 }
 
-/* The orange is a signal, never a text colour: on the cast pour it sits under 2:1, so links keep their ink and the underline takes the darker mark orange. */
+/* Tangerine fills never carry text on linen (2:1), so links keep their ink and the underline takes the deeper mark tangerine. */
 a {
     color: var(--color-ink);
     text-decoration-line: underline;
     text-decoration-thickness: 2px;
-    text-decoration-color: currentColor;
+    text-decoration-color: var(--color-mark);
     text-underline-offset: 0.18em;
     transition: text-decoration-color var(--dur-micro) var(--ease-out);
 }
 
 a:hover {
-    text-decoration-color: var(--color-mark);
+    text-decoration-color: currentColor;
 }
 
 a:active {

@@ -7,7 +7,7 @@ import ContentWithHeading from '../components/ContentWithHeading.astro';
         <h1>get in touch<span class="period">.</span></h1>
         <ul class="contact-list">
             <li>
-                <a class="contact-card" href="https://github.com/sanderdejong" target="_blank" rel="noopener noreferrer" aria-labelledby="contact-github contact-github-tab" aria-describedby="contact-github-use contact-github-handle">
+                <a class="contact-card contact-card--deep" href="https://github.com/sanderdejong" target="_blank" rel="noopener noreferrer" aria-labelledby="contact-github contact-github-tab" aria-describedby="contact-github-use contact-github-handle">
                     <span class="contact-name" id="contact-github">GitHub</span>
                     <span class="contact-use" id="contact-github-use">Code I’ve written.</span>
                     <span class="contact-handle" id="contact-github-handle">github.com/sanderdejong</span>
@@ -16,7 +16,7 @@ import ContentWithHeading from '../components/ContentWithHeading.astro';
                 </a>
             </li>
             <li>
-                <a class="contact-card" href="https://linkedin.com/in/sanderdejong-" target="_blank" rel="noopener noreferrer" aria-labelledby="contact-linkedin contact-linkedin-tab" aria-describedby="contact-linkedin-use contact-linkedin-handle">
+                <a class="contact-card contact-card--pop" href="https://linkedin.com/in/sanderdejong-" target="_blank" rel="noopener noreferrer" aria-labelledby="contact-linkedin contact-linkedin-tab" aria-describedby="contact-linkedin-use contact-linkedin-handle">
                     <span class="contact-name" id="contact-linkedin">LinkedIn</span>
                     <span class="contact-use" id="contact-linkedin-use">My experience, and a way to connect.</span>
                     <span class="contact-handle" id="contact-linkedin-handle">linkedin.com/in/sanderdejong-</span>
@@ -50,6 +50,25 @@ import ContentWithHeading from '../components/ContentWithHeading.astro';
         text-decoration: none;
         box-shadow: 3px 3px 0 var(--color-shadow);
         transition: box-shadow var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
+    }
+
+    /* GitHub is an aubergine plate standing on tangerine; LinkedIn is a tangerine plate standing on ink. */
+    .contact-card--deep {
+        --color-ink: var(--color-band-ink);
+        --color-muted: var(--color-band-muted);
+        --color-mark: var(--color-pop);
+        --color-shadow: var(--color-cast);
+        --shadow-card: 6px 6px 0 var(--color-cast);
+        background: var(--color-card-deep);
+        border-color: var(--color-card-deep-edge);
+    }
+
+    .contact-card--pop {
+        --color-ink: var(--color-pop-ink);
+        --color-muted: var(--color-pop-ink);
+        --color-mark: var(--color-pop-ink);
+        background: var(--color-pop);
+        border-color: var(--color-pop-ink);
     }
 
     .contact-card:hover {
