@@ -1,3 +1,15 @@
+## [3.2.0] - 2026-11-22
+
+### 🚀 Features
+
+- Returned nav to linen with an aubergine top rule
+- Kept social links on the contact page only
+- Toned down contact cards
+
+### 🐛 Bug Fixes
+
+- Kept layout steady when the scrollbar appears
+- Prefetched nav pages with fetch so Firefox caches them
 ## [3.1.0] - 2026-11-22
 
 ### 🚀 Features
