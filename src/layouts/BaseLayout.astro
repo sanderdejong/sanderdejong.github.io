@@ -4,7 +4,7 @@ import '@fontsource/oswald/700.css';
 import '@fontsource/archivo/400.css';
 import '@fontsource/archivo/500.css';
 import {ClientRouter} from 'astro:transitions';
-import {Image, getImage} from 'astro:assets';
+import {Image} from 'astro:assets';
 import profilePic from '../assets/profile.png';
 import Navbar from '../components/Navbar.astro';
 
@@ -13,7 +13,6 @@ interface Props {
     pageTitle?: string;
     pageDescription?: string;
     portrait?: "full" | "small" | "none";
-    missingTile?: boolean;
 }
 
 const {
@@ -21,13 +20,7 @@ const {
     pageTitle = "Sander de Jong - Software & AWS Cloud Engineer",
     pageDescription = "Sander de Jong, Software & AWS Cloud Engineer with over six years of experience in cloud-native development with Java and AWS.",
     portrait = "full",
-    missingTile = false
 } = Astro.props;
-
-// Same options as the <Image> below, so the tile reuses the portrait's file instead of a second one.
-const tileSource = missingTile
-    ? await getImage({src: profilePic, format: 'webp', quality: 90, width: 460, height: 460})
-    : null;
 
 const themeColor = {light: '#f4e9e2', dark: '#3e223b'};
 
@@ -92,9 +85,7 @@ const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
 <a class="skip-link" href="#main">Skip to content</a>
 <Navbar />
 <main class="layout" id="main" tabindex="-1">
-    <section class="layout-wrapper container" data-portrait={portrait}
-             data-missing-tile={missingTile ? "" : undefined}
-             style={tileSource ? `--portrait-src: url(${tileSource.src})` : undefined}>
+    <section class="layout-wrapper container" data-portrait={portrait}>
         <div class="sidebar">
             <div class="sidebar-inner" transition:persist="sidebar">
                 <div class="profile">
@@ -206,11 +197,10 @@ const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
      * The portrait is pixel art from a 460px source. It fills its column; whenever that draws it
      * larger than the source it upscales with hard pixels, and downscales stay smooth so the
      * scanlines don't alias. It stands on a tangerine block that steps with it in whole pixels:
-     * 6px small, 10px mid, 14px from 400px (the fallen 404 tile casts 3, 4, 6px).
+     * 6px small, 10px mid, 14px from 400px.
      */
     .profile-wrapper {
         --cast: 6px;
-        --tile-cast: 3px;
         width: 100%;
         aspect-ratio: 1;
         background: var(--color-paper-2);
@@ -218,11 +208,11 @@ const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
     }
 
     @container portrait (min-width: 200px) {
-        .profile-wrapper { --cast: 10px; --tile-cast: 4px; }
+        .profile-wrapper { --cast: 10px; }
     }
 
     @container portrait (min-width: 400px) {
-        .profile-wrapper { --cast: 14px; --tile-cast: 6px; }
+        .profile-wrapper { --cast: 14px; }
     }
 
     @container portrait (min-width: 460px) {
@@ -242,51 +232,6 @@ const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
         filter: brightness(var(--portrait-brightness));
         outline: 2px solid var(--color-ink);
         outline-offset: -2px;
-    }
-
-    /*
-     * The 404: the page is missing, and so is one tile of the portrait. The top-right fifth of the
-     * grid drops out of its socket and lands on the floor beside the frame, in hard pixel steps.
-     */
-    .profile-wrapper { position: relative; }
-
-    [data-missing-tile] .profile-wrapper::after,
-    [data-missing-tile] .profile-wrapper::before {
-        content: "";
-        position: absolute;
-        width: 20%;
-        aspect-ratio: 1;
-        box-sizing: border-box;
-    }
-
-    [data-missing-tile] .profile-wrapper::after {
-        top: 0;
-        right: 0;
-        z-index: 1;
-        background: var(--color-paper-3);
-        border: 2px solid var(--color-ink);
-    }
-
-    [data-missing-tile] .profile-wrapper::before {
-        left: calc(100% + var(--space-sm));
-        bottom: 0;
-        z-index: 2;
-        background: var(--portrait-src) 100% 0 / 500% no-repeat;
-        filter: brightness(var(--portrait-brightness));
-        outline: 2px solid var(--color-ink);
-        outline-offset: -2px;
-        box-shadow: var(--tile-cast) var(--tile-cast) 0 var(--color-cast);
-        animation: tile-drop 720ms steps(6, jump-end) 600ms both;
-    }
-
-    @keyframes tile-drop {
-        0% { transform: translate(calc(-100% - var(--space-sm)), -400%); }
-        20% { transform: translate(calc(-100% - var(--space-sm) + 30%), -400%); }
-        100% { transform: translate(0, 0); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        [data-missing-tile] .profile-wrapper::before { animation: none; }
     }
 
     /* Home carries the full portrait; secondary pages keep a small mark of it. */
