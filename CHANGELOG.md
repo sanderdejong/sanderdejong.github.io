@@ -1,3 +1,7 @@
+## [Unreleased]
+
+- Added a Projects page with a full-width current project and a responsive grid of sample cards.
+
 ## [3.3.1] - 2026-11-22
 
 ### 🐛 Bug Fixes

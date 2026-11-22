@@ -1,0 +1,220 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContentWithHeading from '../components/ContentWithHeading.astro';
+
+const currentProject = {
+    slug: 'trail-notebook',
+    title: 'Trail notebook',
+    description: 'A notebook for planning hikes and remembering what the map leaves out. Save a route, mark useful waypoints, and jot down trail conditions, water stops, or the turn you missed. View past hikes by area when you want to go back.',
+    tags: ['Astro', 'TypeScript', 'Leaflet', 'OpenStreetMap', 'GPX', 'IndexedDB', 'CSS', 'Vitest'],
+};
+
+const otherProjects = [
+    {
+        slug: 'deploy-log',
+        title: 'Deploy log',
+        description: 'A searchable deployment history that brings together the commit, environment, and outcome for every release. Compare runs across environments and follow the record back to the change that shipped.',
+        tags: ['Java', 'Spring Boot', 'AWS Lambda', 'DynamoDB', 'EventBridge', 'GitHub Actions', 'Terraform', 'JUnit'],
+    },
+    {
+        slug: 'reading-shelf',
+        title: 'Reading shelf',
+        description: 'A personal reading log for keeping track of books, saving notes, and finding something to read next.',
+        tags: ['TypeScript', 'SQLite', 'HTML', 'CSS', 'Playwright'],
+    },
+];
+const projects = [currentProject, ...otherProjects];
+---
+
+<BaseLayout pageTitle="Projects - Sander de Jong"
+            pageDescription="A preview of how Sander de Jong's projects will be presented."
+            portrait="small">
+    <ContentWithHeading>
+        <h1>projects<span class="period">.</span></h1>
+        <ul class="project-grid" role="list">
+            {projects.map((project, index) => (
+                <li class:list={['project-card', { 'project-card--current': index === 0 }]}>
+                    <a class="card-surface project-face"
+                       href={`/projects/${project.slug}/`}
+                       aria-labelledby={project.slug}
+                       aria-describedby={index === 0 ? 'current-project-status' : undefined}>
+                        {index === 0 && <span class="project-status" id="current-project-status">Currently working on</span>}
+                        <h2 id={project.slug}>{project.title}</h2>
+                        <div class="project-description">{project.description}</div>
+                        <ul class="project-tags" aria-label="Technologies" role="list">
+                            {project.tags.map((tag, tagIndex) => (
+                                <li>{tag}{tagIndex < project.tags.length - 1 && <span aria-hidden="true">,</span>}</li>
+                            ))}
+                        </ul>
+                    </a>
+                </li>
+            ))}
+        </ul>
+    </ContentWithHeading>
+</BaseLayout>
+
+<style>
+    /* Hallmark · shape: project index · genre: editorial · theme: locked Plum & linen · signature: full-width current project card · v2.0.0 */
+    .project-grid,
+    .project-tags {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .project-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--gap-columns);
+        width: 100%;
+    }
+
+    .project-card {
+        display: grid;
+        min-width: 0;
+    }
+
+    .project-card--current {
+        grid-column: 1 / -1;
+    }
+
+    .project-face {
+        --project-shadow-size: 3px;
+        --project-shadow-color: var(--color-shadow);
+        --project-fill: var(--color-plate);
+        --project-ink: var(--color-plate-ink);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+        min-width: 0;
+        padding: var(--space-lg);
+        border: var(--rule-hair) solid var(--color-ink);
+        background: var(--project-fill);
+        color: var(--project-ink);
+        box-shadow: var(--project-shadow-size) var(--project-shadow-size) 0 var(--project-shadow-color);
+        overflow-wrap: break-word;
+        text-decoration: none;
+    }
+
+    .project-card--current .project-face {
+        --project-shadow-size: 8px;
+        --project-shadow-color: var(--color-cast);
+        --project-fill: var(--color-project-cover, var(--color-band));
+        --project-ink: var(--color-band-ink);
+        --grain: var(--grain-light-specks);
+        padding: clamp(var(--space-lg), 5vw, var(--space-xl));
+    }
+
+    .project-card:hover .project-face,
+    .project-face:focus-visible {
+        background: color-mix(in oklab, var(--project-fill) var(--project-hover-base, 75%), var(--color-pop));
+        color: var(--project-ink);
+        text-decoration: none;
+    }
+
+    .project-card--current {
+        --project-hover-base: 88%;
+    }
+
+    .project-face:focus-visible {
+        outline-offset: var(--space-2xs);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .project-face {
+            transition:
+                transform var(--dur-short) var(--ease-out),
+                box-shadow var(--dur-short) var(--ease-out),
+                background-color var(--dur-short) var(--ease-out);
+        }
+
+        .project-status::before {
+            animation: project-status-pulse 2.4s ease-out infinite;
+        }
+    }
+
+    @keyframes project-status-pulse {
+        0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-pop) 50%, transparent); }
+        65%, 100% { box-shadow: 0 0 0 5px transparent; }
+    }
+
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+        .project-card:hover .project-face {
+            /* Grow the shadow by the lift distance so its far corner stays in place. */
+            --project-shadow-raised: calc(var(--project-shadow-size) + 3px);
+            box-shadow: var(--project-shadow-raised) var(--project-shadow-raised) 0 var(--project-shadow-color);
+            transform: translate(-3px, -3px);
+        }
+
+        .project-card:hover .project-face:active {
+            box-shadow: var(--project-shadow-size) var(--project-shadow-size) 0 var(--project-shadow-color);
+            transform: none;
+        }
+    }
+
+    .project-face h2 {
+        min-width: 0;
+        font-size: var(--text-title);
+        line-height: 1.2;
+        text-wrap: balance;
+    }
+
+    .project-status {
+        align-self: flex-end;
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
+        color: var(--color-band-muted);
+        font-size: var(--text-sm);
+        font-weight: 500;
+    }
+
+    .project-status::before {
+        content: "";
+        flex: none;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--color-pop);
+    }
+
+    .project-card--current h2 {
+        color: inherit;
+        font-size: clamp(2.25rem, 5vw, 4.25rem);
+        line-height: 1.05;
+    }
+
+    .project-card--current .project-description {
+        max-width: 64ch;
+    }
+
+    .project-description {
+        font-size: var(--text-md);
+    }
+
+    .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2xs);
+        margin-block-start: auto;
+        padding-block-start: var(--space-md);
+        color: color-mix(in oklab, var(--color-accent-deep) 80%, var(--color-plate-ink));
+        font-family: var(--font-body);
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .project-tags li {
+        min-width: 0;
+    }
+
+    .project-card--current .project-tags {
+        color: color-mix(in oklab, var(--color-band-muted) 50%, var(--color-pop));
+    }
+
+    @media (max-width: 40rem) {
+        .project-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+</style>

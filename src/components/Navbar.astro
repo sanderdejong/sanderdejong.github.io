@@ -8,6 +8,7 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
         <ul class="nav-list">
             <li><a href="/" class="nav-link" aria-current={current("/")}>Home<span class="nav-mark" aria-hidden="true"></span></a></li>
             <li><a href="/about/" class="nav-link" aria-current={current("/about")}>About<span class="nav-mark" aria-hidden="true"></span></a></li>
+            <li><a href="/projects/" class="nav-link" aria-current={current("/projects")}>Projects<span class="nav-mark" aria-hidden="true"></span></a></li>
             <li><a href="/contact/" class="nav-link" aria-current={current("/contact")}>Contact<span class="nav-mark" aria-hidden="true"></span></a></li>
         </ul>
         <button class="theme-btn" id="theme-btn" type="button" aria-label="Dark mode" aria-pressed="false" hidden>
@@ -228,6 +229,30 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
 
         .nav-list {
             gap: 0 var(--space-2xs);
+        }
+    }
+
+    @media (max-width: 24rem) {
+        .nav-bar {
+            gap: var(--space-2xs);
+        }
+
+        .nav-list {
+            flex-wrap: wrap;
+            gap: 0;
+        }
+
+        .nav-link {
+            min-height: 44px;
+            padding-inline: var(--space-2xs);
+        }
+
+        .nav-list li:first-child .nav-link {
+            margin-left: calc(var(--space-2xs) * -1);
+        }
+
+        .nav-mark {
+            inset-inline: var(--space-2xs);
         }
     }
 
