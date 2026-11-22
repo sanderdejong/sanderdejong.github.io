@@ -1,3 +1,13 @@
+## [3.1.0] - 2026-11-22
+
+### 🚀 Features
+
+- Added plum and tangerine palette with full-colour portrait
+
+### 🐛 Bug Fixes
+
+- Sped up page switches with trailing-slash links and prefetching
+- Smoothed nav mark transition between pages
 ## [3.0.1] - 2026-11-22
 
 ### ⚙️ Miscellaneous Tasks
