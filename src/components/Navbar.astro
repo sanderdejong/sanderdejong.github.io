@@ -76,6 +76,15 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
     })();
 </script>
 
+<script>
+    import { prefetch } from "astro:prefetch";
+
+    // Warm the cache with fetch, not <link rel="prefetch">, which Firefox skips when network.prefetch-next is off.
+    document.addEventListener("astro:page-load", () => {
+        document.querySelectorAll<HTMLAnchorElement>(".nav-link").forEach((link) => prefetch(link.href, { with: "fetch" }));
+    });
+</script>
+
 <style>
     /* The nav is an aubergine band; inside it the ink flips to linen and the signals to tangerine. */
     .navbar {
