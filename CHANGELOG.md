@@ -1,3 +1,9 @@
+## [3.2.2] - 2026-11-22
+
+### ⚙️ Miscellaneous Tasks
+
+- Replaced the dark mode button text with moon and sun icons
+
 ## [3.2.1] - 2026-11-22
 
 ### ⚙️ Miscellaneous Tasks
