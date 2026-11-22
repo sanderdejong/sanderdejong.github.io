@@ -34,7 +34,7 @@ yarn preview
 
 ## 📝 License
 
-Copyright (c) 2025, Sander de Jong.
+Copyright (c) 2026, Sander de Jong.
 
 The source code is licensed under the [MIT License](LICENSE.md).
 
