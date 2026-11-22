@@ -9,9 +9,14 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
         <li><a href="/about/" class="nav-link" aria-current={current("/about")}>About<span class="nav-mark" aria-hidden="true"></span></a></li>
         <li><a href="/contact/" class="nav-link" aria-current={current("/contact")}>Contact<span class="nav-mark" aria-hidden="true"></span></a></li>
         <li class="theme-item">
-            <button class="theme-btn" id="theme-btn" type="button" aria-pressed="false" hidden>
-                <span class="theme-swatch" aria-hidden="true"></span>
-                <span>Dark<span class="theme-label-tail"> mode</span></span>
+            <button class="theme-btn" id="theme-btn" type="button" aria-label="Dark mode" aria-pressed="false" hidden>
+                <svg class="theme-moon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+                    <path d="M20.8 14.1A9 9 0 0 1 9.9 3.2 9 9 0 1 0 20.8 14.1Z"/>
+                </svg>
+                <svg class="theme-sun" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="4"/>
+                    <path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2"/>
+                </svg>
             </button>
         </li>
     </ul>
@@ -175,14 +180,14 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
     .theme-btn {
         display: inline-flex;
         align-items: center;
-        gap: var(--space-xs);
+        justify-content: center;
+        min-width: 44px;
         min-height: 44px;
-        padding: 0 var(--space-sm);
+        padding: 0;
         border: var(--rule-hair) solid transparent;
         border-radius: 0;
         background: transparent;
         color: var(--color-ink);
-        font: 500 var(--text-md) / 1 var(--font-body);
         cursor: pointer;
         transition: border-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
     }
@@ -208,45 +213,20 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
         outline-offset: 2px;
     }
 
-    .theme-swatch {
-        width: 14px;
-        height: 14px;
-        border: 2px solid var(--color-ink);
-        background: transparent;
-        transition: background-color var(--dur-micro) var(--ease-out);
-    }
-
-    .theme-btn[aria-pressed="true"] .theme-swatch {
-        background: var(--color-accent);
+    .theme-btn[aria-pressed="false"] .theme-sun,
+    .theme-btn[aria-pressed="true"] .theme-moon {
+        display: none;
     }
 
     @media (max-width: 40rem) {
         .nav-list {
             gap: 0;
         }
-
-        .theme-btn {
-            padding: 0 var(--space-xs);
-            margin-right: calc(var(--space-xs) * -1);
-        }
-    }
-
-    /* Under 24rem the four items would overflow; the tail stays in the accessible name. */
-    @media (max-width: 24rem) {
-        .theme-label-tail {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-            clip-path: inset(50%);
-            white-space: nowrap;
-        }
     }
 
     @media (prefers-reduced-motion: reduce) {
         .nav-link,
-        .theme-btn,
-        .theme-swatch {
+        .theme-btn {
             transition: none;
         }
     }
