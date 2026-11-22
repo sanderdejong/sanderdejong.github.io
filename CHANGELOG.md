@@ -1,3 +1,16 @@
+## [3.3.0] - 2026-11-22
+
+### 🚀 Features
+
+- Added email contact card and reordered contact cards to Email, LinkedIn, and GitHub
+- Added brand icons and brand-themed hover states to contact cards with paper grain texture
+- Left-aligned navbar route links with unified underline indicator and hover-filled theme icon
+- Lifted dark mode plum palette for clearer card depth and paper texture
+
+### 🐛 Bug Fixes
+
+- Restored full opening sentence on the home page and tuned mobile body size on the about page
+
 ## [3.2.2] - 2026-11-22
 
 ### ⚙️ Miscellaneous Tasks
