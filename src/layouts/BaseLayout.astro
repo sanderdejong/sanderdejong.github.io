@@ -1,9 +1,10 @@
 ---
 import "../styles/global.css";
-import '@fontsource-variable/dm-sans';
-import '@fontsource-variable/space-grotesk';
+import '@fontsource/oswald/700.css';
+import '@fontsource/archivo/400.css';
+import '@fontsource/archivo/500.css';
 import {ClientRouter} from 'astro:transitions';
-import {Picture} from 'astro:assets';
+import {Image, getImage} from 'astro:assets';
 import profilePic from '../assets/profile.png';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
@@ -12,43 +13,33 @@ interface Props {
     pageAuthor?: string;
     pageTitle?: string;
     pageDescription?: string;
+    portrait?: "full" | "small" | "none";
+    missingTile?: boolean;
 }
 
 const {
     pageAuthor = "Sander de Jong",
     pageTitle = "Sander de Jong - Software & AWS Cloud Engineer",
-    pageDescription = "Software developer passionate about cloud-native, Java, and AWS. Building scalable, secure, and performance-driven solutions."
+    pageDescription = "Sander de Jong, Software & AWS Cloud Engineer with over six years of experience in cloud-native development with Java and AWS.",
+    portrait = "full",
+    missingTile = false
 } = Astro.props;
+
+// Same options as the <Image> below, so the tile reuses the portrait's file instead of a second one.
+const tileSource = missingTile
+    ? await getImage({src: profilePic, format: 'webp', quality: 90, width: 460, height: 460})
+    : null;
+
+const themeColor = {light: '#c0bdb8', dark: '#1d1f23'};
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
 const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
+const routePath = Astro.url.pathname.replace(/\/$/, '');
+const showSignoffLinks = routePath !== '/contact';
 ---
 
 <html lang="en">
 <head>
-    <script is:inline>
-        // Apply theme immediately to prevent flash of unstyled content
-        (function() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.documentElement.classList.add('dark');
-            }
-            
-            // Set initial theme color
-            const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-            if (metaThemeColor) {
-               metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#111827' : '#f9fafb');
-            }
-        })();
-
-        // Persist theme class during Astro view transitions
-        document.addEventListener('astro:before-swap', (ev) => {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                ev.newDocument.documentElement.classList.add('dark');
-            }
-        });
-    </script>
     <title>{pageTitle}</title>
 
     <link rel="canonical" href={canonicalURL}/>
@@ -58,7 +49,7 @@ const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
     <meta charset="utf-8"/>
     <meta name="author" content={pageAuthor}/>
     <meta name="description" content={pageDescription}/>
-    <meta name="viewport" content="width=device-width"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="generator" content={Astro.generator}/>
 
     <!-- Open Graph / Facebook -->
@@ -79,292 +70,288 @@ const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
     <meta name="twitter:image" content={socialImageURL}/>
 
     <meta name="robots" content="index, follow"/>
-    <meta name="theme-color" content="#f9fafb"/>
+    <meta name="theme-color" content={themeColor.light} media="(prefers-color-scheme: light)"/>
+    <meta name="theme-color" content={themeColor.dark} media="(prefers-color-scheme: dark)"/>
+    <script is:inline define:vars={{themeColor}}>
+        // Runs after the theme-color metas so it can set them; still before first paint: a saved choice wins, otherwise follow the system.
+        // The Navbar toggle calls applyTheme too, so the colours live only in this layout.
+        window.applyTheme = (isDark, doc = document) => {
+            doc.documentElement.classList.toggle('dark', isDark);
+            doc.documentElement.classList.toggle('light', !isDark);
+            doc.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute('content', isDark ? themeColor.dark : themeColor.light));
+        };
+        const saved = localStorage.getItem('theme');
+        window.applyTheme(saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+        // Carry the theme across Astro view transitions.
+        document.addEventListener('astro:before-swap', (ev) => {
+            window.applyTheme(document.documentElement.classList.contains('dark'), ev.newDocument);
+        });
+    </script>
     <ClientRouter/>
 </head>
 
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <Navbar />
-<div class="bg-artifacts" transition:persist="bg">
-    <div class="artifact artifact-1"></div>
-    <div class="artifact artifact-2"></div>
-    <div class="artifact artifact-3"></div>
-</div>
-<main class="layout">
-    <section class="layout-wrapper">
+<main class="layout" id="main" tabindex="-1">
+    <section class="layout-wrapper container" data-portrait={portrait}
+             data-missing-tile={missingTile ? "" : undefined}
+             style={tileSource ? `--portrait-src: url(${tileSource.src})` : undefined}>
         <div class="sidebar">
-            <div class="sidebar-inner" transition:persist="sidebar" transition:animate="none">
-                <aside class="profile">
+            <div class="sidebar-inner" transition:persist="sidebar">
+                <div class="profile">
                     <div class="profile-wrapper">
-                        <Picture src={profilePic}
-                                 loading="eager"
-                                 format="webp"
-                                 alt="Profile picture of Sander de Jong"
-                                 class="profile-image"
-                                 width={460}
-                                 height={460}
+                        <Image src={profilePic}
+                               loading="eager"
+                               fetchpriority="high"
+                               format="webp"
+                               quality={90}
+                               alt="Pixel-art portrait of Sander de Jong"
+                               class="profile-image"
+                               width={460}
+                               height={460}
                         />
                     </div>
-                </aside>
-
-                <div class="divider" role="presentation"></div>
+                </div>
             </div>
         </div>
 
         <article class="content">
             <slot/>
+            <Footer author={pageAuthor} showLinks={showSignoffLinks} />
         </article>
     </section>
 </main>
-<Footer author={pageAuthor} />
 
-<script is:inline>
-    (function() {
-        const sidebar = document.querySelector('.sidebar-inner');
-        if (sidebar && !sidebar.hasAttribute('data-animated')) {
-            sidebar.addEventListener('animationend', () => {
-                sidebar.setAttribute('data-animated', 'true');
-            }, { once: true });
-        }
-    })();
-</script>
 </body>
 </html>
 
-<style>
-    .layout {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        flex: 1;
-        width: 100%;
-        padding-top: 5rem; /* Account for fixed navbar height */
-    }
+<style is:global>
+    html, body { overflow-x: clip; }
 
-    .layout-wrapper {
-        display: flex;
-        flex-direction: row;
-        gap: 4rem;
-        align-items: flex-start;
-        justify-content: center;
-        width: 100%;
-        max-width: 1800px;
-        margin: 0 auto;
-    }
-
-    .sidebar {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: center;
-        gap: 4rem;
-        position: relative;
-        width: calc(clamp(200px, 20vw, 450px) + 4rem + 2px); /* profile + gap + divider */
-    }
-
-    .sidebar-inner {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 4rem;
-        position: fixed;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    .sidebar-inner:not([data-animated]) {
-        opacity: 0;
-        animation: fadeInProfile 0.5s ease-out forwards;
-    }
-
-    @keyframes fadeInProfile {
-        from {
-            opacity: 0;
-            transform: translateY(calc(-50% + 10px));
-        }
-        to {
-            opacity: 1;
-            transform: translateY(-50%);
-        }
-    }
-
-    @keyframes fadeInProfileMobile {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes fadeInContent {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .profile {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-    }
-
-    .profile-wrapper {
-        position: relative;
-    }
-
-    .profile-image {
-        width: clamp(200px, 20vw, 450px);
-        height: clamp(200px, 20vw, 450px);
-        object-fit: cover;
-        border-radius: 50%;
-        padding: 4px;
-        background: linear-gradient(135deg, rgba(37, 99, 235, 0.5), rgba(245, 158, 66, 0.5));
-        box-shadow: -6px 12px 32px -4px rgba(37, 99, 235, 0.25),
-        6px 12px 32px -4px rgba(245, 158, 66, 0.25);
-        transition: box-shadow 0.3s, transform 0.3s;
-        filter: saturate(1.09) contrast(1.07);
-        transform: scale(1.02);
-    }
-
-    .divider {
-        width: 2px;
-        height: 350px;
-        background: var(--color-border);
-        border-radius: 1px;
-        flex-shrink: 0;
-    }
-
-    .content {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: clamp(2rem, 4vh, 4rem) clamp(2rem, 5vw, 5rem) clamp(2rem, 4vh, 4rem) 0;
-        max-width: 600px;
-        opacity: 0;
-        animation: fadeInContent 0.6s ease-out 0.2s forwards;
-    }
-
-    .bg-artifacts {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 0;
-        overflow: hidden;
-    }
-
-    .artifact {
+    .skip-link {
         position: absolute;
-        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-        opacity: 0.08;
-        filter: blur(60px);
+        top: var(--space-xs);
+        left: var(--space-xs);
+        z-index: calc(var(--z-sticky-nav) + 1);
+        padding: var(--space-xs) var(--space-sm);
+        background: var(--color-ink);
+        color: var(--color-paper);
+        font-weight: 500;
+        text-decoration: none;
+        transform: translateY(calc(-100% - var(--space-md)));
     }
 
-    .artifact-1 {
-        width: clamp(200px, 30vw, 450px);
-        height: clamp(200px, 30vw, 450px);
-        background: linear-gradient(135deg, #f59e42, #ea580c);
-        top: 5%;
-        left: 25%;
+    .skip-link:focus-visible {
+        transform: none;
     }
 
-    .artifact-2 {
-        width: clamp(180px, 25vw, 400px);
-        height: clamp(180px, 25vw, 400px);
-        background: linear-gradient(135deg, #3b82f6, #2563eb);
-        top: 50%;
-        right: 5%;
+    #main:focus {
+        outline: none;
     }
 
-    .artifact-3 {
-        width: clamp(150px, 20vw, 350px);
-        height: clamp(150px, 20vw, 350px);
-        background: linear-gradient(135deg, #8b5cf6, #6366f1);
-        bottom: 15%;
-        left: 20%;
+    /* Between routes the portrait glides to its new size; the nav mark jumps across in four hard steps. Neither fades. */
+    ::view-transition-group(portrait) {
+        animation-duration: var(--dur-long);
+        animation-timing-function: var(--ease-out);
     }
 
-    main {
-        position: relative;
-        z-index: 1;
+    ::view-transition-group(nav-mark) {
+        animation-duration: 280ms;
+        animation-timing-function: steps(4, jump-end);
     }
 
+    ::view-transition-old(portrait),
+    ::view-transition-old(nav-mark) {
+        animation: none;
+        opacity: 0;
+    }
 
-    @media (max-width: 1024px) {
-        .layout {
-            padding-top: 1rem;
-            justify-content: flex-start;
-        }
+    ::view-transition-new(portrait),
+    ::view-transition-new(nav-mark) {
+        animation: none;
+    }
 
-        .layout-wrapper {
-            flex-direction: column;
-            align-items: center;
-            gap: 0;
-        }
-
-        .sidebar {
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            top: 0;
-            height: auto;
-            width: 100%;
-        }
-
-        .sidebar-inner {
-            flex-direction: column;
-            position: relative;
-            top: 0;
-            transform: none;
-            width: 100%;
-            align-items: center;
-            gap: 0;
-        }
-
-        .sidebar-inner:not([data-animated]) {
-            animation: fadeInProfileMobile 0.5s ease-out forwards;
-        }
-
-        .profile {
-            position: relative;
-            height: auto;
-            min-height: auto;
-            padding: 1rem 1rem 0;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            top: 0;
-            transform: none;
-        }
-
-        .divider {
-            width: 80%;
-            max-width: 300px;
-            height: 2px;
-            position: relative;
-            top: auto;
-            margin: 2rem 0;
-            align-self: center;
-            transform: none;
-        }
-
-        .content {
-            padding: 0 1.5rem 4rem;
-            min-height: auto;
-            width: 100%;
-            align-items: center;
-        }
+    ::view-transition-new(nav-mark) {
+        height: 100%;
     }
 </style>
 
+<style>
+    .layout {
+        flex: 1;
+        display: grid;
+        align-content: start;
+        padding-block: var(--space-2xl) var(--space-3xl);
+    }
+
+    .layout-wrapper {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        column-gap: var(--gap-columns);
+        align-items: start;
+    }
+
+    .sidebar,
+    .sidebar-inner {
+        display: grid;
+        grid-template-columns: subgrid;
+        grid-column: 1 / span 5;
+    }
+
+    .sidebar-inner {
+        grid-column: 1 / -1;
+        view-transition-name: portrait;
+    }
+
+    .profile {
+        grid-column: 1 / -1;
+        container: portrait / inline-size;
+    }
+
+    /*
+     * The portrait is pixel art from a 460px source. It fills its column; whenever that draws it
+     * larger than the source it upscales with hard pixels, and downscales stay smooth so the
+     * scanlines don't alias. Its hard shadow steps with it in whole pixels: 3px small, 4px mid,
+     * the 6px card shadow from 400px (the fallen 404 tile casts 2, 3, 4px).
+     */
+    .profile-wrapper {
+        --cast: 3px;
+        --tile-cast: 2px;
+        width: 100%;
+        aspect-ratio: 1;
+        background: var(--color-paper-2);
+        box-shadow: var(--cast) var(--cast) 0 var(--color-shadow);
+    }
+
+    @container portrait (min-width: 200px) {
+        .profile-wrapper { --cast: 4px; --tile-cast: 3px; }
+    }
+
+    @container portrait (min-width: 400px) {
+        .profile-wrapper { --cast: 6px; --tile-cast: 4px; }
+    }
+
+    @container portrait (min-width: 460px) {
+        .profile-wrapper :global(img) { image-rendering: pixelated; }
+    }
+
+    @media (min-resolution: 2dppx) {
+        @container portrait (min-width: 230px) {
+            .profile-wrapper :global(img) { image-rendering: pixelated; }
+        }
+    }
+
+    .profile-wrapper :global(img) {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: saturate(0) brightness(var(--portrait-brightness));
+        outline: 2px solid var(--color-ink);
+        outline-offset: -2px;
+    }
+
+    /*
+     * The 404: the page is missing, and so is one tile of the portrait. The top-right fifth of the
+     * grid drops out of its socket and lands on the floor beside the frame, in hard pixel steps.
+     */
+    .profile-wrapper { position: relative; }
+
+    [data-missing-tile] .profile-wrapper::after,
+    [data-missing-tile] .profile-wrapper::before {
+        content: "";
+        position: absolute;
+        width: 20%;
+        aspect-ratio: 1;
+        box-sizing: border-box;
+    }
+
+    [data-missing-tile] .profile-wrapper::after {
+        top: 0;
+        right: 0;
+        z-index: 1;
+        background: var(--color-paper-3);
+        border: 2px solid var(--color-ink);
+    }
+
+    [data-missing-tile] .profile-wrapper::before {
+        left: calc(100% + var(--space-sm));
+        bottom: 0;
+        z-index: 2;
+        background: var(--portrait-src) 100% 0 / 500% no-repeat;
+        filter: saturate(0) brightness(var(--portrait-brightness));
+        outline: 2px solid var(--color-ink);
+        outline-offset: -2px;
+        box-shadow: var(--tile-cast) var(--tile-cast) 0 var(--color-shadow);
+        animation: tile-drop 720ms steps(6, jump-end) 600ms both;
+    }
+
+    @keyframes tile-drop {
+        0% { transform: translate(calc(-100% - var(--space-sm)), -400%); }
+        20% { transform: translate(calc(-100% - var(--space-sm) + 30%), -400%); }
+        100% { transform: translate(0, 0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        [data-missing-tile] .profile-wrapper::before { animation: none; }
+    }
+
+    /* Home carries the full portrait; secondary pages keep a small mark of it. */
+    [data-portrait="small"] .sidebar {
+        grid-column: 1 / span 3;
+    }
+
+    [data-portrait="small"] .content {
+        grid-column: 5 / -1;
+    }
+
+    [data-portrait="none"] .sidebar {
+        display: none;
+    }
+
+    [data-portrait="none"] .content {
+        grid-column: 1 / span 8;
+    }
+
+    .content {
+        grid-column: 7 / -1;
+        min-width: 0;
+    }
+
+    @media (max-width: 60rem) {
+        .layout {
+            padding-block: var(--space-xl) var(--space-2xl);
+        }
+
+        .layout-wrapper {
+            grid-template-columns: minmax(0, 1fr);
+            row-gap: var(--space-xl);
+        }
+
+        .sidebar,
+        .sidebar-inner,
+        .profile,
+        .content {
+            grid-column: 1 / -1;
+        }
+
+        .sidebar,
+        .sidebar-inner {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .profile {
+            width: 230px;
+        }
+
+        [data-portrait="small"] .profile {
+            width: 115px;
+        }
+
+        [data-portrait] .sidebar,
+        [data-portrait] .content {
+            grid-column: 1 / -1;
+        }
+    }
+</style>
