@@ -34,8 +34,6 @@ const themeColor = {light: '#f4e9e2', dark: '#291527'};
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
 const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
-const routePath = Astro.url.pathname.replace(/\/$/, '');
-const showSignoffLinks = routePath !== '/contact';
 ---
 
 <html lang="en">
@@ -119,7 +117,7 @@ const showSignoffLinks = routePath !== '/contact';
 
         <article class="content">
             <slot/>
-            <Footer author={pageAuthor} showLinks={showSignoffLinks} />
+            <Footer author={pageAuthor} />
         </article>
     </section>
 </main>
