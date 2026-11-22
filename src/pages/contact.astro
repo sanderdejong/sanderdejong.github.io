@@ -7,18 +7,28 @@ import ContentWithHeading from '../components/ContentWithHeading.astro';
         <h1>get in touch<span class="period">.</span></h1>
         <ul class="contact-list">
             <li>
-                <a class="contact-card contact-card--deep" href="https://github.com/sanderdejong" target="_blank" rel="noopener noreferrer" aria-labelledby="contact-github contact-github-tab" aria-describedby="contact-github-use">
-                    <span class="contact-name" id="contact-github">GitHub</span>
-                    <span class="contact-use" id="contact-github-use">Code I’ve written.</span>
-                    <span class="visually-hidden" id="contact-github-tab"> (opens in a new tab)</span>
+                <a class="contact-card contact-card--mail" href="mailto:hi@sanderdejong.dev" aria-labelledby="contact-mail" aria-describedby="contact-mail-use">
+                    <svg aria-hidden="true" class="contact-brand" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="2 2 20 20" fill="currentColor"><path d="M3 4h18v2.2l-9 5.62L3 6.2V4Zm0 4.56V20h18V8.56l-9 5.62-9-5.62Z"/></svg>
+                    <span class="contact-name" id="contact-mail">Email</span>
+                    <span class="contact-use" id="contact-mail-use">Write to me directly.</span>
+                    <svg aria-hidden="true" class="contact-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                </a>
+            </li>
+            <li>
+                <a class="contact-card contact-card--linkedin" href="https://linkedin.com/in/sanderdejong-" target="_blank" rel="noopener noreferrer" aria-labelledby="contact-linkedin contact-linkedin-tab" aria-describedby="contact-linkedin-use">
+                    <svg aria-hidden="true" class="contact-brand" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="2 2 20 20" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77Z"/></svg>
+                    <span class="contact-name" id="contact-linkedin">LinkedIn</span>
+                    <span class="contact-use" id="contact-linkedin-use">My experience, and a way to connect.</span>
+                    <span class="visually-hidden" id="contact-linkedin-tab"> (opens in a new tab)</span>
                     <svg aria-hidden="true" class="contact-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v8H3V6h8"/></svg>
                 </a>
             </li>
             <li>
-                <a class="contact-card contact-card--pop" href="https://linkedin.com/in/sanderdejong-" target="_blank" rel="noopener noreferrer" aria-labelledby="contact-linkedin contact-linkedin-tab" aria-describedby="contact-linkedin-use">
-                    <span class="contact-name" id="contact-linkedin">LinkedIn</span>
-                    <span class="contact-use" id="contact-linkedin-use">My experience, and a way to connect.</span>
-                    <span class="visually-hidden" id="contact-linkedin-tab"> (opens in a new tab)</span>
+                <a class="contact-card contact-card--deep" href="https://github.com/sanderdejong" target="_blank" rel="noopener noreferrer" aria-labelledby="contact-github contact-github-tab" aria-describedby="contact-github-use">
+                    <svg aria-hidden="true" class="contact-brand" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
+                    <span class="contact-name" id="contact-github">GitHub</span>
+                    <span class="contact-use" id="contact-github-use">Code I’ve written.</span>
+                    <span class="visually-hidden" id="contact-github-tab"> (opens in a new tab)</span>
                     <svg aria-hidden="true" class="contact-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v8H3V6h8"/></svg>
                 </a>
             </li>
@@ -37,37 +47,63 @@ import ContentWithHeading from '../components/ContentWithHeading.astro';
     }
 
     .contact-card {
+        position: relative;
+        isolation: isolate;
         display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-columns: auto minmax(0, 1fr) auto;
         column-gap: var(--space-md);
         row-gap: var(--space-3xs);
         padding: var(--space-sm) var(--space-md);
         border: 2px solid var(--color-ink);
-        background: var(--color-paper-2);
+        background: var(--color-plate);
         color: var(--color-ink);
         text-decoration: none;
         box-shadow: 3px 3px 0 var(--color-shadow);
-        transition: box-shadow var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
+        transition:
+            background-color var(--dur-short) var(--ease-out),
+            color var(--dur-short) var(--ease-out),
+            border-color var(--dur-short) var(--ease-out),
+            box-shadow var(--dur-short) var(--ease-out),
+            transform var(--dur-short) var(--ease-out);
     }
 
-    /* GitHub is an aubergine plate standing on tangerine; LinkedIn is a tangerine plate standing on ink. */
+    .contact-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        opacity: var(--texture-opacity);
+        background-size: 200px 200px;
+        background-image: var(--grain);
+    }
+
+    /* Cards rest on warm paper with brand-tinted icons and fill with their brand theme on hover. */
+    .contact-card--mail {
+        --brand-icon: var(--color-mark);
+        --brand-bg: var(--color-pop);
+        --brand-ink: var(--color-pop-ink);
+        --brand-edge: var(--color-ink);
+    }
+
+    .contact-card--linkedin {
+        --brand-icon: var(--color-linkedin-icon);
+        --brand-bg: var(--color-linkedin);
+        --brand-ink: var(--color-linkedin-ink);
+        --brand-edge: var(--color-ink);
+    }
+
     .contact-card--deep {
-        --color-ink: var(--color-band-ink);
-        --color-mark: var(--color-pop);
-        --color-shadow: var(--color-cast);
-        --shadow-card: 6px 6px 0 var(--color-cast);
-        background: var(--color-card-deep);
-        border-color: var(--color-card-deep-edge);
-    }
-
-    .contact-card--pop {
-        --color-ink: var(--color-pop-ink);
-        --color-mark: var(--color-pop-ink);
-        background: var(--color-pop);
-        border-color: var(--color-pop-ink);
+        --brand-icon: var(--color-github-icon);
+        --brand-bg: var(--color-github);
+        --brand-ink: var(--color-github-ink);
+        --brand-edge: var(--color-ink);
     }
 
     .contact-card:hover {
+        background: var(--brand-bg);
+        color: var(--brand-ink);
+        border-color: var(--brand-edge);
         box-shadow: var(--shadow-card);
         transform: translate(-3px, -3px);
     }
@@ -82,7 +118,22 @@ import ContentWithHeading from '../components/ContentWithHeading.astro';
         outline-offset: 4px;
     }
 
+    .contact-brand {
+        grid-column: 1;
+        grid-row: 1 / 3;
+        align-self: center;
+        width: 1.75rem;
+        height: 1.75rem;
+        color: var(--brand-icon);
+        transition: color var(--dur-short) var(--ease-out);
+    }
+
+    .contact-card:hover .contact-brand {
+        color: var(--brand-ink);
+    }
+
     .contact-name {
+        grid-column: 2;
         font-family: var(--font-display);
         font-size: var(--text-xl);
         font-weight: var(--display-weight);
@@ -96,18 +147,18 @@ import ContentWithHeading from '../components/ContentWithHeading.astro';
     }
 
     .contact-card:hover .contact-name {
-        text-decoration-color: var(--color-mark);
+        text-decoration-color: var(--brand-ink);
     }
 
     .contact-use {
-        grid-column: 1;
+        grid-column: 2;
         font-size: var(--text-md);
         line-height: 1.35;
     }
 
     .contact-icon {
-        grid-column: 2;
-        grid-row: 1;
+        grid-column: 3;
+        grid-row: 1 / 3;
         align-self: center;
         width: 1.25rem;
         height: 1.25rem;
@@ -115,6 +166,7 @@ import ContentWithHeading from '../components/ContentWithHeading.astro';
 
     @media (prefers-reduced-motion: reduce) {
         .contact-card,
+        .contact-brand,
         .contact-name {
             transition: none;
         }
