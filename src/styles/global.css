@@ -9,6 +9,12 @@
 @import url("./tokens.css");
 @import url("./base.css");
 
+@media (prefers-reduced-motion: no-preference) {
+    html:has(#home :target, #home:target) {
+        scroll-behavior: smooth;
+    }
+}
+
 body {
     min-height: 100dvh;
     display: flex;
@@ -17,19 +23,30 @@ body {
 }
 
 /* The pour's speck grain across the whole paper: dark specks on the cast pour, white specks screened on the night pour. */
-body {
+body,
+.card-surface {
     isolation: isolate;
 }
 
-body::before {
+.card-surface {
+    position: relative;
+    background: var(--color-plate);
+}
+
+body::before,
+.card-surface::before {
     content: "";
-    position: fixed;
+    position: absolute;
     inset: 0;
     z-index: -1;
     pointer-events: none;
     opacity: var(--texture-opacity);
     background-size: 200px 200px;
     background-image: var(--grain);
+}
+
+body::before {
+    position: fixed;
 }
 
 h1, h2, h3 {

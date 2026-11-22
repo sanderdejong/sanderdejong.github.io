@@ -4,12 +4,14 @@ import ContentWithHeading from '../components/ContentWithHeading.astro';
 
 Astro.response.status = 404;
 ---
-<BaseLayout pageTitle="Page not found - Sander de Jong" portrait="small">
+<BaseLayout pageTitle="Page not found - Sander de Jong" portrait={false}>
     <ContentWithHeading>
-        <h1>page not found<span class="period">.</span></h1>
+        <hgroup>
+            <h1>page not found<span class="period">.</span></h1>
+            <p class="standfirst">Error 404</p>
+        </hgroup>
         <p>
             The page you’re looking for doesn’t exist. Return to <a href="/">the home page</a>.
         </p>
     </ContentWithHeading>
 </BaseLayout>
-

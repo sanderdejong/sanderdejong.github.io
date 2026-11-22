@@ -7,5 +7,7 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://sanderdejong.dev',
   prefetch: true,
-  integrations: [sitemap()]
+  integrations: [sitemap({
+    filter: (page) => !/^\/(?:about|projects|contact)\/?$/.test(new URL(page).pathname)
+  })]
 });
