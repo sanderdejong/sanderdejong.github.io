@@ -86,17 +86,11 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
 </script>
 
 <style>
-    /* The nav is an aubergine band; inside it the ink flips to linen and the signals to tangerine. */
     .navbar {
-        --color-ink: var(--color-band-ink);
-        --color-ink-2: var(--color-band-muted);
-        --color-mark: var(--color-pop);
-        --color-accent-deep: var(--color-pop);
-        --color-focus: var(--color-pop);
         position: relative;
         z-index: var(--z-sticky-nav);
-        background: var(--color-band);
-        border-top: var(--rule-bar) solid var(--color-band);
+        border-top: var(--rule-bar) solid var(--color-ink);
+        border-bottom: var(--rule-hair) solid var(--color-rule);
     }
 
     .nav-list {
@@ -132,7 +126,7 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
         transition: color var(--dur-micro) var(--ease-out);
     }
 
-    /* The tangerine mark sits on the band's top edge, its own element so it can travel between links. */
+    /* The tangerine mark sits on the nav's top rule, its own element so it can travel between links. */
     .nav-mark {
         position: absolute;
         inset-inline: 0;
