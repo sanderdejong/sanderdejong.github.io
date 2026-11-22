@@ -30,7 +30,7 @@ const tileSource = missingTile
     ? await getImage({src: profilePic, format: 'webp', quality: 90, width: 460, height: 460})
     : null;
 
-const themeColor = {light: '#c0bdb8', dark: '#1d1f23'};
+const themeColor = {light: '#3b1a39', dark: '#160615'};
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
 const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
@@ -209,24 +209,24 @@ const showSignoffLinks = routePath !== '/contact';
     /*
      * The portrait is pixel art from a 460px source. It fills its column; whenever that draws it
      * larger than the source it upscales with hard pixels, and downscales stay smooth so the
-     * scanlines don't alias. Its hard shadow steps with it in whole pixels: 3px small, 4px mid,
-     * the 6px card shadow from 400px (the fallen 404 tile casts 2, 3, 4px).
+     * scanlines don't alias. It stands on a tangerine block that steps with it in whole pixels:
+     * 6px small, 10px mid, 14px from 400px (the fallen 404 tile casts 3, 4, 6px).
      */
     .profile-wrapper {
-        --cast: 3px;
-        --tile-cast: 2px;
+        --cast: 6px;
+        --tile-cast: 3px;
         width: 100%;
         aspect-ratio: 1;
         background: var(--color-paper-2);
-        box-shadow: var(--cast) var(--cast) 0 var(--color-shadow);
+        box-shadow: var(--cast) var(--cast) 0 var(--color-cast);
     }
 
     @container portrait (min-width: 200px) {
-        .profile-wrapper { --cast: 4px; --tile-cast: 3px; }
+        .profile-wrapper { --cast: 10px; --tile-cast: 4px; }
     }
 
     @container portrait (min-width: 400px) {
-        .profile-wrapper { --cast: 6px; --tile-cast: 4px; }
+        .profile-wrapper { --cast: 14px; --tile-cast: 6px; }
     }
 
     @container portrait (min-width: 460px) {
@@ -243,7 +243,7 @@ const showSignoffLinks = routePath !== '/contact';
         width: 100%;
         height: 100%;
         object-fit: cover;
-        filter: saturate(0) brightness(var(--portrait-brightness));
+        filter: brightness(var(--portrait-brightness));
         outline: 2px solid var(--color-ink);
         outline-offset: -2px;
     }
@@ -276,10 +276,10 @@ const showSignoffLinks = routePath !== '/contact';
         bottom: 0;
         z-index: 2;
         background: var(--portrait-src) 100% 0 / 500% no-repeat;
-        filter: saturate(0) brightness(var(--portrait-brightness));
+        filter: brightness(var(--portrait-brightness));
         outline: 2px solid var(--color-ink);
         outline-offset: -2px;
-        box-shadow: var(--tile-cast) var(--tile-cast) 0 var(--color-shadow);
+        box-shadow: var(--tile-cast) var(--tile-cast) 0 var(--color-cast);
         animation: tile-drop 720ms steps(6, jump-end) 600ms both;
     }
 
