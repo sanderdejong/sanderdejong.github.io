@@ -1,3 +1,8 @@
+## [3.0.1] - 2026-11-22
+
+### ⚙️ Miscellaneous Tasks
+
+- Updated github actions to node 24 versions
 ## [3.0.0] - 2026-11-22
 
 ### 🚀 Features
