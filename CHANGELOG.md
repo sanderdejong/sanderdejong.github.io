@@ -1,3 +1,11 @@
+## [3.5.0] - 2026-11-23
+
+### 🚀 Features
+
+- Redesigned the About section as a full-width plum band with three weighted columns and light paper specks
+- Removed the redundant anchor links from the homepage intro
+- Redesigned the Projects section into a full-width two-column carousel with framed Astro-optimized project images, monogram fallbacks, and borderless bottom controls
+
 ## [3.4.0] - 2026-11-22
 
 ### 🚀 Features
