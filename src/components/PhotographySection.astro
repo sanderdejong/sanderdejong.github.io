@@ -684,11 +684,12 @@ const serializedCategories = await Promise.all(
         text-decoration-color: transparent;
         text-decoration-thickness: 2px;
         text-underline-offset: 0.16em;
-        transition: text-decoration-color var(--dur-micro) var(--ease-out);
+        transition: color var(--dur-micro) var(--ease-out), text-decoration-color var(--dur-micro) var(--ease-out);
     }
 
     @media (hover: hover) and (pointer: fine) {
         .photo-category-card:hover .photo-card-title {
+            color: var(--color-mark);
             text-decoration-color: var(--color-mark);
         }
     }

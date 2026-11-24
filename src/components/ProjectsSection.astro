@@ -436,32 +436,25 @@ const projects: Project[] = [
         font-weight: 500;
         line-height: 1.2;
         text-decoration: none;
-    }
-
-    .project-link svg {
-        color: var(--link-icon);
         transition: color var(--dur-micro) var(--ease-out);
     }
 
-    .project-link--web {
-        --link-icon: var(--color-mark);
-    }
-
-    .project-link--github {
-        --link-icon: var(--color-github-icon);
+    .project-link svg {
+        color: currentColor;
+        transition: color var(--dur-micro) var(--ease-out);
     }
 
     .project-link span {
         text-decoration-line: underline;
-        text-decoration-thickness: 2px;
-        text-decoration-color: var(--color-mark);
+        text-decoration-thickness: 1.5px;
+        text-decoration-color: color-mix(in oklab, var(--color-ink) 32%, transparent);
         text-underline-offset: 0.2em;
         transition: text-decoration-color var(--dur-micro) var(--ease-out);
     }
 
     @media (hover: hover) and (pointer: fine) {
-        .project-link:hover svg {
-            color: var(--color-ink);
+        .project-link:hover {
+            color: var(--color-mark);
         }
 
         .project-link:hover span {
