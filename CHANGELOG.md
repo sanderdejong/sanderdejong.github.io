@@ -1,3 +1,10 @@
+## [3.6.1] - 2026-11-24
+
+### 🐛 Bug Fixes
+
+- Scoped hover styles and card/button press shifts to `@media (hover: hover) and (pointer: fine)` and disabled native tap highlight so mobile scrolling no longer triggers or sticks hover states
+- Removed `tabindex="0"` from the Projects carousel track so touch-scrolling over project cards no longer triggers a focus outline
+
 ## [3.6.0] - 2026-11-24
 
 ### 🚀 Features

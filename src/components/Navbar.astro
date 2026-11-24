@@ -159,7 +159,6 @@
         transition: background-color var(--dur-micro) var(--ease-out);
     }
 
-    .nav-link:hover,
     .nav-link[aria-current="location"] {
         color: var(--color-band-ink);
     }
@@ -169,9 +168,15 @@
         view-transition-name: nav-mark;
     }
 
-    .nav-link:hover .nav-mark,
-    .nav-link[aria-current="location"]:hover .nav-mark {
-        background: var(--color-band-ink);
+    @media (hover: hover) and (pointer: fine) {
+        .nav-link:hover {
+            color: var(--color-band-ink);
+        }
+
+        .nav-link:hover .nav-mark,
+        .nav-link[aria-current="location"]:hover .nav-mark {
+            background: var(--color-band-ink);
+        }
     }
 
     .nav-link:active .nav-mark,
@@ -209,18 +214,20 @@
         transition: fill var(--dur-micro) var(--ease-out);
     }
 
-    .theme-btn:hover .theme-moon path,
-    .theme-btn:hover .theme-sun circle {
-        fill: currentColor;
+    @media (hover: hover) and (pointer: fine) {
+        .theme-btn:hover .theme-moon path,
+        .theme-btn:hover .theme-sun circle {
+            fill: currentColor;
+        }
+
+        .theme-btn:active {
+            transform: translateY(1px);
+        }
     }
 
     .theme-btn:disabled {
         opacity: 0.5;
         cursor: not-allowed;
-    }
-
-    .theme-btn:active {
-        transform: translateY(1px);
     }
 
     .theme-btn:focus-visible {

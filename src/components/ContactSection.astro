@@ -103,18 +103,20 @@ import ContentWithHeading from './ContentWithHeading.astro';
         --brand-edge: var(--color-ink);
     }
 
-    .contact-card:hover {
-        background: var(--brand-bg);
-        color: var(--brand-ink);
-        border-color: var(--brand-edge);
-        box-shadow: var(--shadow-card);
-        transform: translate(-3px, -3px);
-    }
+    @media (hover: hover) and (pointer: fine) {
+        .contact-card:hover {
+            background: var(--brand-bg);
+            color: var(--brand-ink);
+            border-color: var(--brand-edge);
+            box-shadow: var(--shadow-card);
+            transform: translate(-3px, -3px);
+        }
 
-    /* Rests on a 3px shadow; hover lifts onto 6px and press sinks flat, so the shadow's far corner never moves. */
-    .contact-card:active {
-        box-shadow: 0 0 0 var(--color-shadow);
-        transform: translate(3px, 3px);
+        /* Rests on a 3px shadow; hover lifts onto 6px and press sinks flat, so the shadow's far corner never moves. */
+        .contact-card:active {
+            box-shadow: 0 0 0 var(--color-shadow);
+            transform: translate(3px, 3px);
+        }
     }
 
     .contact-card:focus-visible {
@@ -131,8 +133,10 @@ import ContentWithHeading from './ContentWithHeading.astro';
         transition: color var(--dur-short) var(--ease-out);
     }
 
-    .contact-card:hover .contact-brand {
-        color: var(--brand-ink);
+    @media (hover: hover) and (pointer: fine) {
+        .contact-card:hover .contact-brand {
+            color: var(--brand-ink);
+        }
     }
 
     .contact-name {
@@ -149,8 +153,10 @@ import ContentWithHeading from './ContentWithHeading.astro';
         transition: text-decoration-color var(--dur-micro) var(--ease-out);
     }
 
-    .contact-card:hover .contact-name {
-        text-decoration-color: var(--brand-ink);
+    @media (hover: hover) and (pointer: fine) {
+        .contact-card:hover .contact-name {
+            text-decoration-color: var(--brand-ink);
+        }
     }
 
     .contact-use {
