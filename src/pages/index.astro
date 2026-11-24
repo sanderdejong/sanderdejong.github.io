@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ContentWithHeading from '../components/ContentWithHeading.astro';
 import AboutSection from '../components/AboutSection.astro';
 import ProjectsSection from '../components/ProjectsSection.astro';
+import PhotographySection from '../components/PhotographySection.astro';
 import ContactSection from '../components/ContactSection.astro';
 ---
 <BaseLayout>
@@ -19,6 +20,7 @@ import ContactSection from '../components/ContactSection.astro';
     <div class="portfolio-sections" slot="sections">
         <AboutSection />
         <ProjectsSection />
+        <PhotographySection />
         <ContactSection />
     </div>
 </BaseLayout>
@@ -26,7 +28,7 @@ import ContactSection from '../components/ContactSection.astro';
 <style>
     .portfolio-sections {
         display: grid;
-        gap: var(--section-gap-s);
+        gap: 0;
         grid-column: 1 / -1;
         min-width: 0;
     }

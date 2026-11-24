@@ -4,6 +4,7 @@
             <li><a href="/#home" class="nav-link" data-astro-reload>Home<span class="nav-mark" aria-hidden="true"></span></a></li>
             <li><a href="/#about" class="nav-link" data-astro-reload>About<span class="nav-mark" aria-hidden="true"></span></a></li>
             <li><a href="/#projects" class="nav-link" data-astro-reload>Projects<span class="nav-mark" aria-hidden="true"></span></a></li>
+            <li><a href="/#photography" class="nav-link" data-astro-reload>Photography<span class="nav-mark" aria-hidden="true"></span></a></li>
             <li><a href="/#contact" class="nav-link" data-astro-reload>Contact<span class="nav-mark" aria-hidden="true"></span></a></li>
         </ul>
         <button class="theme-btn" id="theme-btn" type="button" aria-label="Dark mode" aria-pressed="false" hidden>
@@ -38,7 +39,7 @@
 
         // The section under the nav (plus a third of the screen) is current; at the very bottom, the last one is.
         function currentHash() {
-            const sections = ["about", "projects", "contact"].map((id) => document.getElementById(id)).filter(Boolean);
+            const sections = ["about", "projects", "photography", "contact"].map((id) => document.getElementById(id)).filter(Boolean);
             const line = (document.querySelector(".navbar")?.offsetHeight || 0) + window.innerHeight / 3;
             let hash = "#home";
             for (const section of sections) {
@@ -258,6 +259,7 @@
         .nav-link {
             min-height: 44px;
             padding-inline: var(--space-2xs);
+            font-size: var(--text-sm);
         }
 
         .nav-list li:first-child .nav-link {
