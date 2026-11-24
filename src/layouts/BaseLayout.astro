@@ -122,6 +122,21 @@ const year = new Date().getFullYear();
     </div>
 </footer>
 
+<script>
+    const syncBandDotGrids = () => {
+        const bodyTop = document.body.getBoundingClientRect().top;
+        document.querySelectorAll<HTMLElement>('.about-band, .photo-band').forEach((band) => {
+            const offset = band.getBoundingClientRect().top - bodyTop;
+            band.style.setProperty('--dot-offset-y', `${-offset}px`);
+        });
+    };
+
+    syncBandDotGrids();
+    document.addEventListener('astro:page-load', syncBandDotGrids);
+    window.addEventListener('resize', syncBandDotGrids, { passive: true });
+    document.fonts?.ready.then(syncBandDotGrids);
+</script>
+
 </body>
 </html>
 

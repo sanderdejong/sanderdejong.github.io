@@ -22,31 +22,34 @@ body {
     color: var(--color-ink-2);
 }
 
-/* The pour's speck grain across the whole paper: dark specks on the cast pour, white specks screened on the night pour. */
-body,
-.card-surface {
+/* Architectural micro-dot grid across the entire page canvas; scrolls with the page and fades softly at the edges. */
+body {
+    position: relative;
     isolation: isolate;
 }
 
-.card-surface {
-    position: relative;
-    background: var(--color-plate);
-}
-
-body::before,
-.card-surface::before {
+body::before {
     content: "";
     position: absolute;
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    opacity: var(--texture-opacity);
-    background-size: 200px 200px;
-    background-image: var(--grain);
+    background-image: radial-gradient(var(--color-dot) 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: 50% 0;
+    mask-image:
+        linear-gradient(to right, transparent, #000 18%, #000 82%, transparent),
+        linear-gradient(to bottom, transparent, #000 180px, #000 calc(100% - 180px), transparent);
+    mask-composite: intersect;
+    -webkit-mask-image:
+        linear-gradient(to right, transparent, #000 18%, #000 82%, transparent),
+        linear-gradient(to bottom, transparent, #000 180px, #000 calc(100% - 180px), transparent);
+    -webkit-mask-composite: source-in;
 }
 
-body::before {
-    position: fixed;
+.card-surface {
+    position: relative;
+    background: var(--color-plate);
 }
 
 h1, h2, h3 {
