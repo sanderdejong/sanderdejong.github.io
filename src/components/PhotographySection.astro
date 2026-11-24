@@ -1,0 +1,1166 @@
+---
+import { Image, getImage } from 'astro:assets';
+import ContentWithHeading from './ContentWithHeading.astro';
+import { photoCategories } from '../data/photography';
+
+const serializedCategories = await Promise.all(
+    photoCategories.map(async (category) => ({
+        slug: category.slug,
+        title: category.title,
+        summary: category.summary,
+        photos: await Promise.all(
+            category.photos.map(async (photo) => {
+                const full = photo.src
+                    ? await getImage({ src: photo.src, width: 1400, format: 'webp' })
+                    : null;
+                const thumb = photo.src
+                    ? await getImage({ src: photo.src, width: 160, format: 'webp' })
+                    : null;
+                return {
+                    id: photo.id,
+                    title: photo.title,
+                    alt: photo.alt,
+                    src: full?.src ?? null,
+                    thumbSrc: thumb?.src ?? full?.src ?? null,
+                    width: photo.src?.width ?? null,
+                    height: photo.src?.height ?? null,
+                    aspect: photo.aspect ?? '3 / 2',
+                    location: photo.location ?? null,
+                    date: photo.date ?? null,
+                    camera: photo.camera ?? null,
+                    lens: photo.lens ?? null,
+                    settings: photo.settings ?? null,
+                };
+            }),
+        ),
+    })),
+);
+---
+    <ContentWithHeading id="photography">
+        <div class="photo-band">
+            <h2 id="photography-heading">photography<span class="period">.</span></h2>
+
+            <ul class="photo-categories" role="list">
+                {photoCategories.map((category) => {
+                    const cover = category.photos[category.coverIndex ?? 0];
+                    const countLabel = category.photos.length === 1 ? '1 photo' : `${category.photos.length} photos`;
+                    return (
+                        <li>
+                            <button
+                                type="button"
+                                class="card-surface photo-category-card"
+                                data-photo-category={category.slug}
+                                aria-haspopup="dialog"
+                                aria-controls="photo-dialog"
+                            >
+                                <span class="photo-cover" aria-hidden="true">
+                                    {cover?.src ? (
+                                        <Image
+                                            class="photo-cover-img"
+                                            src={cover.src}
+                                            alt=""
+                                            widths={[480, 768]}
+                                            sizes="(min-width: 52rem) 30vw, 92vw"
+                                            loading="lazy"
+                                            decoding="async"
+                                        />
+                                    ) : (
+                                        <span class="photo-placeholder">
+                                            <span class="photo-placeholder-frame">
+                                                <span class="photo-placeholder-mark">{category.title.slice(0, 1)}<span class="period">.</span></span>
+                                                <span class="photo-placeholder-hint">Cover photo</span>
+                                            </span>
+                                        </span>
+                                    )}
+                                </span>
+                                <span class="photo-card-body">
+                                    <span class="photo-card-title">{category.title}</span>
+                                    <span class="photo-card-summary">{category.summary}</span>
+                                    <span class="photo-card-footer">
+                                        <span class="photo-card-count">{countLabel}</span>
+                                        <svg aria-hidden="true" class="photo-card-arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                                    </span>
+                                </span>
+                            </button>
+                        </li>
+                    );
+                })}
+            </ul>
+        </div>
+
+        <dialog class="photo-dialog" id="photo-dialog" aria-labelledby="photo-dialog-title">
+            <div class="photo-dialog-inner" data-photo-backdrop>
+                <header class="photo-dialog-header">
+                    <div class="photo-dialog-heading">
+                        <h3 id="photo-dialog-title" class="photo-dialog-title"></h3>
+                        <span class="photo-dialog-counter" data-photo-counter aria-live="polite"></span>
+                    </div>
+                    <div class="photo-thumbs" data-photo-thumbs role="group" aria-label="Select photo"></div>
+                    <button type="button" class="photo-dialog-close" data-photo-close aria-label="Close gallery">
+                        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M6 6 18 18"/><path d="M18 6 6 18"/></svg>
+                    </button>
+                </header>
+
+                <div class="photo-stage-wrap" data-photo-backdrop>
+                    <button type="button" class="photo-nav-btn" data-photo-prev aria-label="Previous photo">
+                        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M19 12H5"/><path d="m11 6-6 6 6 6"/></svg>
+                    </button>
+
+                    <figure class="photo-stage" data-photo-stage data-photo-backdrop>
+                        <div class="photo-stage-media" data-photo-media data-photo-backdrop></div>
+                    </figure>
+
+                    <button type="button" class="photo-nav-btn" data-photo-next aria-label="Next photo">
+                        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                    </button>
+                </div>
+
+                <footer class="photo-dialog-footer">
+                    <dl class="photo-meta" data-photo-meta></dl>
+                </footer>
+            </div>
+        </dialog>
+
+        <script type="application/json" id="photo-categories-data" set:html={JSON.stringify(serializedCategories)}></script>
+    </ContentWithHeading>
+
+<script>
+    interface SerializedPhoto {
+        id: string;
+        title: string;
+        alt: string;
+        src: string | null;
+        thumbSrc: string | null;
+        width: number | null;
+        height: number | null;
+        aspect: string;
+        location: string | null;
+        date: string | null;
+        camera: string | null;
+        lens: string | null;
+        settings: string | null;
+    }
+
+    interface SerializedCategory {
+        slug: string;
+        title: string;
+        summary: string;
+        photos: SerializedPhoto[];
+    }
+
+    const initPhotographyGallery = () => {
+        const dialog = document.getElementById('photo-dialog') as HTMLDialogElement | null;
+        const dataEl = document.getElementById('photo-categories-data');
+        if (!dialog || !dataEl || dialog.dataset.bound === 'true') return;
+        dialog.dataset.bound = 'true';
+
+        let categories: SerializedCategory[] = [];
+        try {
+            categories = JSON.parse(dataEl.textContent || '[]');
+        } catch {
+            return;
+        }
+
+        const titleEl = document.getElementById('photo-dialog-title');
+        const counterEl = dialog.querySelector<HTMLElement>('[data-photo-counter]');
+        const mediaEl = dialog.querySelector<HTMLElement>('[data-photo-media]');
+        const metaEl = dialog.querySelector<HTMLElement>('[data-photo-meta]');
+        const thumbsEl = dialog.querySelector<HTMLElement>('[data-photo-thumbs]');
+        const prevBtn = dialog.querySelector<HTMLButtonElement>('[data-photo-prev]');
+        const nextBtn = dialog.querySelector<HTMLButtonElement>('[data-photo-next]');
+        const closeBtn = dialog.querySelector<HTMLButtonElement>('[data-photo-close]');
+
+        let activeCategory: SerializedCategory | null = null;
+        let activeIndex = 0;
+        let lastTrigger: HTMLButtonElement | null = null;
+        let renderToken = 0;
+        const imageCache = new Map<string, Promise<HTMLImageElement>>();
+
+        const preloadPhoto = (src: string, alt: string, width: number | null, height: number | null) => {
+            const existing = imageCache.get(src);
+            if (existing) return existing;
+
+            const promise = new Promise<HTMLImageElement>((resolve) => {
+                const img = new Image();
+                img.className = 'photo-stage-img';
+                img.alt = alt;
+                if (width) img.width = width;
+                if (height) img.height = height;
+                img.decoding = 'async';
+                img.src = src;
+
+                const finish = () => resolve(img);
+                if (img.complete && img.naturalWidth > 0) {
+                    finish();
+                } else if (typeof img.decode === 'function') {
+                    img.decode().then(finish, finish);
+                } else {
+                    img.addEventListener('load', finish, { once: true });
+                    img.addEventListener('error', finish, { once: true });
+                }
+            });
+
+            imageCache.set(src, promise);
+            return promise;
+        };
+
+        const warmCategory = (category: SerializedCategory) => {
+            for (const photo of category.photos) {
+                if (photo.src) {
+                    preloadPhoto(photo.src, photo.alt, photo.width, photo.height);
+                }
+            }
+        };
+
+        const updateThumbFades = () => {
+            if (!thumbsEl) return;
+            const maxScroll = thumbsEl.scrollWidth - thumbsEl.clientWidth;
+            if (maxScroll <= 1) {
+                delete thumbsEl.dataset.fadeLeft;
+                delete thumbsEl.dataset.fadeRight;
+                return;
+            }
+            if (thumbsEl.scrollLeft > 2) {
+                thumbsEl.dataset.fadeLeft = 'true';
+            } else {
+                delete thumbsEl.dataset.fadeLeft;
+            }
+            if (thumbsEl.scrollLeft < maxScroll - 2) {
+                thumbsEl.dataset.fadeRight = 'true';
+            } else {
+                delete thumbsEl.dataset.fadeRight;
+            }
+        };
+
+        thumbsEl?.addEventListener('scroll', updateThumbFades, { passive: true });
+        window.addEventListener('resize', () => {
+            if (dialog.open) updateThumbFades();
+        });
+
+        const swapStageMedia = (nextEl: HTMLElement, direction: number) => {
+            if (!mediaEl) return;
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const currentEl = mediaEl.querySelector<HTMLElement>(':scope > :not([data-exiting="true"])');
+
+            if (!currentEl || direction === 0 || reducedMotion || typeof nextEl.animate !== 'function') {
+                mediaEl.replaceChildren(nextEl);
+                return;
+            }
+
+            mediaEl.querySelectorAll('[data-exiting="true"]').forEach((el) => el.remove());
+
+            const distance = mediaEl.clientWidth + 32;
+            const duration = 480;
+            const easing = 'cubic-bezier(0.32, 0.72, 0, 1)';
+            currentEl.dataset.exiting = 'true';
+            currentEl.style.pointerEvents = 'none';
+
+            mediaEl.appendChild(nextEl);
+
+            const outAnim = currentEl.animate(
+                [
+                    { transform: 'translateX(0)' },
+                    { transform: `translateX(${-direction * distance}px)` },
+                ],
+                { duration, easing, fill: 'forwards' },
+            );
+            outAnim.addEventListener('finish', () => currentEl.remove(), { once: true });
+
+            nextEl.animate(
+                [
+                    { transform: `translateX(${direction * distance}px)` },
+                    { transform: 'translateX(0)' },
+                ],
+                { duration, easing },
+            );
+        };
+
+        const renderPhoto = (index: number, direction = 0) => {
+            if (!activeCategory || !mediaEl || !metaEl || !counterEl || !thumbsEl) return;
+            const total = activeCategory.photos.length;
+            if (total === 0) return;
+
+            activeIndex = ((index % total) + total) % total;
+            const photo = activeCategory.photos[activeIndex];
+            const token = ++renderToken;
+
+            counterEl.textContent = `${activeIndex + 1} / ${total}`;
+
+            if (photo.src) {
+                preloadPhoto(photo.src, photo.alt, photo.width, photo.height).then((loadedImg) => {
+                    if (token !== renderToken || !mediaEl) return;
+                    const displayImg = loadedImg.cloneNode(false) as HTMLImageElement;
+                    displayImg.alt = photo.alt;
+                    swapStageMedia(displayImg, direction);
+                });
+            } else {
+                const frame = document.createElement('div');
+                frame.className = 'photo-stage-placeholder';
+                frame.style.aspectRatio = photo.aspect;
+
+                const label = document.createElement('span');
+                label.className = 'photo-stage-placeholder-title';
+                label.textContent = photo.title;
+
+                const hint = document.createElement('span');
+                hint.className = 'photo-stage-placeholder-hint';
+                hint.textContent = `${photo.aspect.replace(/\s+/g, '')} frame`;
+
+                frame.append(label, hint);
+                swapStageMedia(frame, direction);
+            }
+
+            metaEl.replaceChildren();
+            const gear = [photo.camera, photo.lens, photo.settings].filter(Boolean).join(', ');
+            const fields: Array<[string, string | null]> = [
+                ['Location', photo.location],
+                ['Date', photo.date],
+                ['Camera & lens', gear || null],
+            ];
+
+            for (const [label, value] of fields) {
+                if (!value) continue;
+                const item = document.createElement('div');
+                item.className = 'photo-meta-item';
+
+                const dt = document.createElement('dt');
+                dt.textContent = label;
+
+                const dd = document.createElement('dd');
+                dd.textContent = value;
+
+                item.append(dt, dd);
+                metaEl.appendChild(item);
+            }
+
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            thumbsEl.querySelectorAll<HTMLButtonElement>('[data-photo-thumb]').forEach((btn, i) => {
+                if (i === activeIndex) {
+                    btn.setAttribute('aria-current', 'true');
+                    btn.scrollIntoView({
+                        behavior: reducedMotion ? 'auto' : 'smooth',
+                        inline: 'center',
+                        block: 'nearest',
+                    });
+                } else {
+                    btn.removeAttribute('aria-current');
+                }
+            });
+
+            if (prevBtn) prevBtn.disabled = total <= 1;
+            if (nextBtn) nextBtn.disabled = total <= 1;
+            requestAnimationFrame(updateThumbFades);
+        };
+
+        const openCategory = (slug: string, trigger: HTMLButtonElement) => {
+            const category = categories.find((item) => item.slug === slug);
+            if (!category || !titleEl || !thumbsEl) return;
+
+            activeCategory = category;
+            lastTrigger = trigger;
+            warmCategory(category);
+
+            titleEl.replaceChildren(
+                document.createTextNode(category.title.toLowerCase()),
+                Object.assign(document.createElement('span'), { className: 'period', textContent: '.' }),
+            );
+
+            thumbsEl.replaceChildren();
+            category.photos.forEach((photo, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'photo-thumb';
+                btn.dataset.photoThumb = String(idx);
+                btn.setAttribute('aria-label', `Show ${photo.title}`);
+
+                if (photo.thumbSrc || photo.src) {
+                    const img = document.createElement('img');
+                    img.src = photo.thumbSrc || photo.src;
+                    img.alt = '';
+                    btn.appendChild(img);
+                } else {
+                    const num = document.createElement('span');
+                    num.className = 'photo-thumb-num';
+                    num.textContent = String(idx + 1).padStart(2, '0');
+                    btn.appendChild(num);
+                }
+
+                btn.addEventListener('click', () => {
+                    if (idx === activeIndex) return;
+                    renderPhoto(idx, idx > activeIndex ? 1 : -1);
+                });
+                thumbsEl.appendChild(btn);
+            });
+
+            mediaEl?.replaceChildren();
+            renderPhoto(0);
+            dialog.showModal();
+            requestAnimationFrame(updateThumbFades);
+            closeBtn?.focus({ preventScroll: true });
+        };
+
+        document.querySelectorAll<HTMLButtonElement>('[data-photo-category]').forEach((btn) => {
+            const warm = () => {
+                const slug = btn.dataset.photoCategory;
+                const category = slug ? categories.find((item) => item.slug === slug) : null;
+                if (category) warmCategory(category);
+            };
+            btn.addEventListener('pointerenter', warm, { once: true });
+            btn.addEventListener('focus', warm, { once: true });
+            btn.addEventListener('click', () => {
+                const slug = btn.dataset.photoCategory;
+                if (slug) openCategory(slug, btn);
+            });
+        });
+
+        let isClosing = false;
+
+        const closeDialog = () => {
+            if (!dialog.open || isClosing) return;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                dialog.close();
+                return;
+            }
+            isClosing = true;
+            dialog.dataset.closing = 'true';
+
+            const finish = () => {
+                if (!isClosing) return;
+                isClosing = false;
+                delete dialog.dataset.closing;
+                if (dialog.open) dialog.close();
+            };
+
+            dialog.addEventListener('transitionend', (event) => {
+                if (event.target === dialog && event.propertyName === 'opacity') finish();
+            }, { once: true });
+            window.setTimeout(finish, 260);
+        };
+
+        prevBtn?.addEventListener('click', () => renderPhoto(activeIndex - 1, -1));
+        nextBtn?.addEventListener('click', () => renderPhoto(activeIndex + 1, 1));
+        closeBtn?.addEventListener('click', closeDialog);
+
+        dialog.addEventListener('cancel', (event) => {
+            event.preventDefault();
+            closeDialog();
+        });
+
+        dialog.addEventListener('wheel', (event) => {
+            const target = event.target as HTMLElement | null;
+            if (target?.closest('[data-photo-thumbs]') && Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+                return;
+            }
+            event.preventDefault();
+        }, { passive: false });
+
+        dialog.addEventListener('click', (event) => {
+            const target = event.target as HTMLElement | null;
+            if (target === dialog || target?.hasAttribute('data-photo-backdrop')) {
+                closeDialog();
+            }
+        });
+
+        dialog.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                renderPhoto(activeIndex - 1, -1);
+            } else if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                renderPhoto(activeIndex + 1, 1);
+            }
+        });
+
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchActive = false;
+
+        mediaEl?.addEventListener('touchstart', (event) => {
+            if (event.touches.length !== 1) {
+                touchActive = false;
+                return;
+            }
+            touchStartX = event.touches[0].clientX;
+            touchStartY = event.touches[0].clientY;
+            touchActive = true;
+        }, { passive: true });
+
+        mediaEl?.addEventListener('touchend', (event) => {
+            if (!touchActive || !activeCategory || activeCategory.photos.length <= 1) {
+                touchActive = false;
+                return;
+            }
+            touchActive = false;
+            const touch = event.changedTouches[0];
+            if (!touch) return;
+            const dx = touch.clientX - touchStartX;
+            const dy = touch.clientY - touchStartY;
+            if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+                if (dx < 0) {
+                    renderPhoto(activeIndex + 1, 1);
+                } else {
+                    renderPhoto(activeIndex - 1, -1);
+                }
+            }
+        }, { passive: true });
+
+        mediaEl?.addEventListener('touchcancel', () => {
+            touchActive = false;
+        }, { passive: true });
+
+        dialog.addEventListener('close', () => {
+            lastTrigger?.focus({ preventScroll: true });
+        });
+    };
+
+    initPhotographyGallery();
+    document.addEventListener('astro:page-load', initPhotographyGallery);
+</script>
+
+<style>
+    .photo-band {
+        position: relative;
+        isolation: isolate;
+        display: grid;
+        gap: var(--space-xl);
+        width: 100%;
+        padding-block: var(--section-pad);
+        padding-inline: 0;
+        background: var(--color-band);
+        color: var(--color-band-ink);
+        box-shadow: 0 0 0 100vmax var(--color-band);
+        clip-path: inset(0 -100vmax);
+    }
+
+    .photo-band::before {
+        content: "";
+        position: absolute;
+        inset: 0 -100vmax;
+        z-index: -1;
+        pointer-events: none;
+        opacity: var(--texture-opacity);
+        background-size: 200px 200px;
+        background-image: var(--grain-light-specks);
+    }
+
+    .photo-band h2 {
+        font-size: min(var(--text-section), 14cqi);
+        max-width: none;
+        color: inherit;
+        text-wrap: balance;
+    }
+
+    .photo-band :global(.period) {
+        color: var(--color-pop);
+    }
+
+    .photo-categories {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--space-lg);
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .photo-categories li {
+        display: flex;
+        min-width: 0;
+    }
+
+    .photo-category-card {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        width: 100%;
+        padding: 0;
+        border: 2px solid var(--color-band-card-border);
+        border-radius: 0;
+        color: var(--color-ink);
+        text-align: left;
+        cursor: pointer;
+        box-shadow: 3px 3px 0 var(--color-band-shadow);
+        transition:
+            box-shadow var(--dur-short) var(--ease-out),
+            transform var(--dur-short) var(--ease-out);
+    }
+
+    .photo-category-card:hover {
+        box-shadow: 6px 6px 0 var(--color-band-shadow);
+        transform: translate(-3px, -3px);
+    }
+
+    .photo-category-card:active {
+        box-shadow: 0 0 0 var(--color-band-shadow);
+        transform: translate(3px, 3px);
+    }
+
+    .photo-category-card:focus-visible {
+        outline: 2px solid var(--color-pop);
+        outline-offset: 4px;
+    }
+
+    .photo-cover {
+        display: block;
+        aspect-ratio: 4 / 3;
+        width: 100%;
+        overflow: hidden;
+        border-bottom: 2px solid var(--color-band-card-border);
+        background: var(--color-paper-2);
+    }
+
+    .photo-cover-img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform var(--dur-long) var(--ease-out);
+    }
+
+    .photo-category-card:hover .photo-cover-img {
+        transform: scale(1.03);
+    }
+
+    .photo-placeholder {
+        display: grid;
+        place-items: center;
+        width: 100%;
+        height: 100%;
+        padding: var(--space-md);
+        background: var(--color-paper-2);
+    }
+
+    .photo-placeholder-frame {
+        display: grid;
+        place-items: center;
+        align-content: center;
+        gap: var(--space-xs);
+        width: 100%;
+        height: 100%;
+        border: var(--rule-hair) dashed var(--color-rule);
+    }
+
+    .photo-placeholder-mark {
+        font-family: var(--font-display);
+        font-size: clamp(2.5rem, 4vw, 3.5rem);
+        font-weight: var(--display-weight);
+        line-height: 1;
+        letter-spacing: var(--tracking-display);
+        text-transform: uppercase;
+        color: var(--color-ink);
+    }
+
+    .photo-placeholder-mark .period {
+        color: var(--color-mark);
+    }
+
+    .photo-placeholder-hint {
+        font-family: var(--font-body);
+        font-size: var(--text-sm);
+        color: var(--color-muted);
+    }
+
+    .photo-card-body {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+        padding: var(--space-md);
+    }
+
+    .photo-card-title {
+        font-family: var(--font-display);
+        font-size: var(--text-xl);
+        font-weight: var(--display-weight);
+        line-height: 1.05;
+        text-transform: uppercase;
+        text-decoration-line: underline;
+        text-decoration-color: transparent;
+        text-decoration-thickness: 3px;
+        text-underline-offset: 0.12em;
+        transition: text-decoration-color var(--dur-micro) var(--ease-out);
+    }
+
+    .photo-category-card:hover .photo-card-title {
+        text-decoration-color: var(--color-mark);
+    }
+
+    .photo-card-summary {
+        font-family: var(--font-body);
+        font-size: var(--text-md);
+        line-height: 1.45;
+        color: var(--color-ink-2);
+    }
+
+    .photo-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-sm);
+        margin-block-start: auto;
+        padding-block-start: var(--space-sm);
+        border-top: var(--rule-hair) solid var(--color-rule);
+        color: var(--color-muted);
+        font-family: var(--font-body);
+        font-size: var(--text-sm);
+        font-weight: 500;
+    }
+
+    .photo-card-arrow {
+        width: 1.15rem;
+        height: 1.15rem;
+        color: var(--color-mark);
+        transition: transform var(--dur-micro) var(--ease-out);
+    }
+
+    .photo-category-card:hover .photo-card-arrow {
+        transform: translateX(3px);
+    }
+
+    @container (max-width: 52rem) {
+        .photo-categories {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    /* Full-bleed lightbox modal for photo-first viewing. */
+    .photo-dialog {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100dvh;
+        max-width: none;
+        max-height: none;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        color: var(--color-band-ink);
+        overflow: hidden;
+        overscroll-behavior: contain;
+        opacity: 0;
+        transform: scale(0.985);
+        transition:
+            opacity var(--dur-short) var(--ease-out),
+            transform var(--dur-short) var(--ease-out),
+            overlay var(--dur-short) allow-discrete,
+            display var(--dur-short) allow-discrete;
+    }
+
+    .photo-dialog[open] {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .photo-dialog[data-closing="true"] {
+        opacity: 0;
+        transform: scale(0.985);
+        pointer-events: none;
+    }
+
+    @starting-style {
+        .photo-dialog[open] {
+            opacity: 0;
+            transform: scale(0.985);
+        }
+    }
+
+    .photo-dialog::backdrop {
+        background: color-mix(in oklab, var(--color-band-shadow) 95%, transparent);
+        backdrop-filter: blur(6px);
+        opacity: 0;
+        transition:
+            opacity var(--dur-short) var(--ease-out),
+            overlay var(--dur-short) allow-discrete,
+            display var(--dur-short) allow-discrete;
+    }
+
+    .photo-dialog[open]::backdrop {
+        opacity: 1;
+    }
+
+    .photo-dialog[data-closing="true"]::backdrop {
+        opacity: 0;
+    }
+
+    @starting-style {
+        .photo-dialog[open]::backdrop {
+            opacity: 0;
+        }
+    }
+
+    .photo-dialog-inner {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        gap: var(--space-sm);
+        width: 100%;
+        height: 100%;
+        padding: var(--space-md) var(--space-lg) 0;
+    }
+
+    .photo-dialog-header {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, auto) minmax(0, 1fr);
+        align-items: center;
+        gap: var(--space-md);
+    }
+
+    .photo-dialog-heading {
+        display: flex;
+        align-items: baseline;
+        gap: var(--space-sm);
+        min-width: 0;
+        white-space: nowrap;
+        justify-self: start;
+    }
+
+    .photo-dialog-close {
+        justify-self: end;
+    }
+
+    .photo-dialog-title {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: var(--text-xl);
+        font-weight: var(--display-weight);
+        line-height: 1;
+        text-transform: uppercase;
+        color: var(--color-band-ink);
+    }
+
+    .photo-dialog-title :global(.period) {
+        color: var(--color-pop);
+    }
+
+    .photo-dialog-counter {
+        font-family: var(--font-body);
+        font-size: var(--text-sm);
+        font-weight: 500;
+        color: var(--color-band-muted);
+    }
+
+    .photo-dialog-close,
+    .photo-nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        color: var(--color-band-ink);
+        cursor: pointer;
+        transition:
+            color var(--dur-micro) var(--ease-out),
+            transform var(--dur-micro) var(--ease-out),
+            opacity var(--dur-micro) var(--ease-out);
+    }
+
+    .photo-dialog-close:hover,
+    .photo-nav-btn:hover:not(:disabled) {
+        color: var(--color-pop);
+    }
+
+    .photo-nav-btn[data-photo-prev]:hover:not(:disabled) {
+        transform: translateX(-2px);
+    }
+
+    .photo-nav-btn[data-photo-next]:hover:not(:disabled) {
+        transform: translateX(2px);
+    }
+
+    .photo-nav-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+    .photo-dialog-close:focus-visible,
+    .photo-nav-btn:focus-visible {
+        outline: 2px solid var(--color-pop);
+        outline-offset: 2px;
+    }
+
+    .photo-stage-wrap {
+        position: relative;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: var(--space-md);
+        min-height: 0;
+        height: 100%;
+    }
+
+    .photo-stage {
+        display: grid;
+        place-items: center;
+        margin: 0;
+        min-width: 0;
+        min-height: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .photo-stage-media {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 100%;
+        height: 100%;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        touch-action: pan-y;
+    }
+
+    .photo-stage-media > :global(*) {
+        grid-area: 1 / 1;
+    }
+
+    .photo-stage-media :global(.photo-stage-img) {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        min-width: 0;
+        min-height: 0;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border: 1px solid color-mix(in oklab, var(--color-band-ink) 20%, transparent);
+    }
+
+    .photo-stage-media :global(.photo-stage-placeholder) {
+        display: grid;
+        place-items: center;
+        align-content: center;
+        gap: var(--space-2xs);
+        width: min(100%, 820px);
+        max-height: calc(100dvh - 10rem);
+        padding: var(--space-lg);
+        border: 2px solid color-mix(in oklab, var(--color-band-ink) 35%, transparent);
+        background: var(--color-band);
+    }
+
+    .photo-stage-media :global(.photo-stage-placeholder-title) {
+        font-family: var(--font-display);
+        font-size: var(--text-2xl);
+        font-weight: var(--display-weight);
+        text-transform: uppercase;
+        color: var(--color-band-ink);
+    }
+
+    .photo-stage-media :global(.photo-stage-placeholder-hint) {
+        font-family: var(--font-body);
+        font-size: var(--text-sm);
+        color: var(--color-band-muted);
+    }
+
+    .photo-dialog-footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-width: 0;
+        min-height: 4.5rem;
+        padding-block: var(--space-md);
+        border-top: var(--rule-hair) solid color-mix(in oklab, var(--color-band-ink) 16%, transparent);
+    }
+
+    .photo-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2xs) var(--space-lg);
+        margin: 0;
+    }
+
+    .photo-meta :global(.photo-meta-item) {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-2xs) var(--space-xs);
+    }
+
+    .photo-meta :global(dt) {
+        font-family: var(--font-body);
+        font-size: var(--text-xs);
+        font-weight: 500;
+        line-height: 1.35;
+        color: var(--color-band-muted);
+    }
+
+    .photo-meta :global(dd) {
+        margin: 0;
+        font-family: var(--font-body);
+        font-size: var(--text-xs);
+        line-height: 1.35;
+        color: var(--color-band-ink);
+    }
+
+    .photo-thumbs {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 6px;
+        justify-self: center;
+        width: fit-content;
+        max-width: min(100%, 494px);
+        overflow-x: auto;
+        scrollbar-width: none;
+        padding-block: var(--space-3xs);
+    }
+
+    .photo-thumbs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .photo-thumbs[data-fade-left="true"][data-fade-right="true"] {
+        mask-image: linear-gradient(
+            to right,
+            transparent,
+            var(--color-band-ink) 32px,
+            var(--color-band-ink) calc(100% - 32px),
+            transparent
+        );
+    }
+
+    .photo-thumbs[data-fade-left="true"]:not([data-fade-right="true"]) {
+        mask-image: linear-gradient(
+            to right,
+            transparent,
+            var(--color-band-ink) 32px,
+            var(--color-band-ink)
+        );
+    }
+
+    .photo-thumbs[data-fade-right="true"]:not([data-fade-left="true"]) {
+        mask-image: linear-gradient(
+            to right,
+            var(--color-band-ink),
+            var(--color-band-ink) calc(100% - 32px),
+            transparent
+        );
+    }
+
+    .photo-thumbs :global(.photo-thumb) {
+        flex: 0 0 auto;
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 32px;
+        padding: 0;
+        border: 2px solid color-mix(in oklab, var(--color-band-ink) 28%, transparent);
+        border-radius: 0;
+        background: var(--color-band);
+        color: var(--color-band-muted);
+        font-family: var(--font-body);
+        font-size: var(--text-xs);
+        font-weight: 500;
+        opacity: 0.65;
+        cursor: pointer;
+        overflow: hidden;
+        transition:
+            border-color var(--dur-micro) var(--ease-out),
+            opacity var(--dur-micro) var(--ease-out);
+    }
+
+    .photo-thumbs :global(.photo-thumb img) {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .photo-thumbs :global(.photo-thumb:hover) {
+        border-color: var(--color-band-ink);
+        opacity: 1;
+    }
+
+    .photo-thumbs :global(.photo-thumb[aria-current="true"]) {
+        border-color: var(--color-pop);
+        opacity: 1;
+    }
+
+    .photo-thumbs :global(.photo-thumb:focus-visible) {
+        outline: 2px solid var(--color-pop);
+        outline-offset: 2px;
+        opacity: 1;
+    }
+
+    @media (max-width: 48rem) {
+        .photo-dialog-inner {
+            padding: var(--space-sm) var(--space-sm) 0;
+            gap: var(--space-xs);
+        }
+
+        .photo-dialog-footer {
+            min-height: 4rem;
+            padding-block: var(--space-sm);
+        }
+
+        .photo-dialog-header {
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: var(--space-xs);
+        }
+
+        .photo-thumbs {
+            grid-column: 1 / -1;
+            grid-row: 2;
+        }
+
+        .photo-stage-wrap {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .photo-stage {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .photo-nav-btn {
+            position: absolute;
+            top: 50%;
+            z-index: 2;
+            transform: translateY(-50%);
+            filter: drop-shadow(0 1px 4px var(--color-band-shadow));
+        }
+
+        .photo-nav-btn[data-photo-prev] {
+            left: var(--space-xs);
+        }
+
+        .photo-nav-btn[data-photo-next] {
+            right: var(--space-xs);
+        }
+
+        .photo-nav-btn[data-photo-prev]:hover:not(:disabled) {
+            transform: translate(-2px, -50%);
+        }
+
+        .photo-nav-btn[data-photo-next]:hover:not(:disabled) {
+            transform: translate(2px, -50%);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .photo-category-card,
+        .photo-cover-img,
+        .photo-card-title,
+        .photo-card-arrow,
+        .photo-dialog,
+        .photo-dialog::backdrop,
+        .photo-dialog-close,
+        .photo-nav-btn,
+        .photo-thumbs :global(.photo-thumb) {
+            transition: none;
+        }
+
+        .photo-category-card:hover,
+        .photo-category-card:active,
+        .photo-category-card:hover .photo-cover-img,
+        .photo-category-card:hover .photo-card-arrow {
+            transform: none;
+        }
+    }
+</style>
