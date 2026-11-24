@@ -1,8 +1,10 @@
 ---
 import "../styles/global.css";
-import '@fontsource/oswald/700.css';
-import '@fontsource/archivo/400.css';
-import '@fontsource/archivo/500.css';
+import '@fontsource/bricolage-grotesque/600.css';
+import '@fontsource/bricolage-grotesque/700.css';
+import '@fontsource/dm-sans/400.css';
+import '@fontsource/dm-sans/500.css';
+import '@fontsource/dm-sans/600.css';
 import {ClientRouter} from 'astro:transitions';
 import {Image} from 'astro:assets';
 import profilePic from '../assets/profile.png';
@@ -22,7 +24,7 @@ const {
     portrait = true,
 } = Astro.props;
 
-const themeColor = {light: '#f4e9e2', dark: '#3e223b'};
+const themeColor = {light: '#fdf9f3', dark: '#1b1614'};
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
 const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
@@ -218,19 +220,13 @@ const year = new Date().getFullYear();
      * 6px small, 10px mid, 14px from 400px.
      */
     .profile-wrapper {
-        --cast: 6px;
         width: 100%;
         aspect-ratio: 1;
+        border-radius: var(--radius-portrait);
+        overflow: hidden;
         background: var(--color-paper-2);
-        box-shadow: var(--cast) var(--cast) 0 var(--color-cast);
-    }
-
-    @container portrait (min-width: 200px) {
-        .profile-wrapper { --cast: 10px; }
-    }
-
-    @container portrait (min-width: 400px) {
-        .profile-wrapper { --cast: 14px; }
+        border: 1px solid color-mix(in oklab, var(--color-accent) 28%, var(--color-border));
+        box-shadow: var(--shadow-portrait);
     }
 
     @container portrait (min-width: 460px) {
@@ -248,8 +244,6 @@ const year = new Date().getFullYear();
         height: 100%;
         object-fit: cover;
         filter: brightness(var(--portrait-brightness));
-        outline: 2px solid var(--color-ink);
-        outline-offset: -2px;
     }
 
     .content {
@@ -292,7 +286,7 @@ const year = new Date().getFullYear();
     .footer-bar {
         display: flex;
         justify-content: center;
-        padding-block: 0 var(--space-lg);
+        padding-block: 0 calc(var(--space-2xl) + var(--space-lg));
         text-align: center;
     }
 
