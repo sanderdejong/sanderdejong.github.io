@@ -26,6 +26,7 @@ const themeColor = {light: '#f4e9e2', dark: '#3e223b'};
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
 const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
+const year = new Date().getFullYear();
 ---
 
 <html lang="en">
@@ -113,6 +114,11 @@ const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
         <slot name="sections"/>
     </div>
 </main>
+<footer class="site-footer">
+    <div class="footer-bar container">
+        <p class="footer-copy">&copy; {year} {pageAuthor}</p>
+    </div>
+</footer>
 
 </body>
 </html>
@@ -166,10 +172,15 @@ const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
 
 <style>
     .layout {
+        --section-pad: var(--space-3xl);
         flex: 1;
         display: grid;
         align-content: start;
         padding-block: var(--space-2xl) var(--space-3xl);
+    }
+
+    .layout:has(#home) {
+        padding-block: var(--section-pad) 0;
     }
 
     .layout-wrapper {
@@ -178,6 +189,10 @@ const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
         column-gap: var(--gap-columns);
         row-gap: var(--section-gap-s);
         align-items: start;
+    }
+
+    #home {
+        row-gap: var(--section-pad);
     }
 
     .sidebar,
@@ -243,6 +258,7 @@ const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
 
     @media (max-width: 60rem) {
         .layout {
+            --section-pad: var(--space-2xl);
             padding-block: var(--space-xl) var(--space-2xl);
         }
     }
@@ -267,5 +283,22 @@ const socialImageURL = new URL('/og.png', Astro.site || Astro.url.origin);
             grid-column: 1;
             grid-row: 1;
         }
+    }
+
+    .site-footer {
+        color: var(--color-muted);
+    }
+
+    .footer-bar {
+        display: flex;
+        justify-content: center;
+        padding-block: 0 var(--space-lg);
+        text-align: center;
+    }
+
+    .footer-copy {
+        margin: 0;
+        font-size: var(--text-sm);
+        color: inherit;
     }
 </style>
