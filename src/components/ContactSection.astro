@@ -89,7 +89,8 @@ import ContentWithHeading from './ContentWithHeading.astro';
     }
 
     .contact-card--deep {
-        --brand-icon: var(--color-github-icon);
+        --brand-icon: var(--color-ink);
+        --brand-icon-hover: var(--color-github-icon);
         --brand-surface: var(--color-github-surface);
         --brand-border: var(--color-github-border);
     }
@@ -125,11 +126,14 @@ import ContentWithHeading from './ContentWithHeading.astro';
         width: 1.65rem;
         height: 1.65rem;
         color: var(--brand-icon);
-        transition: transform var(--dur-short) var(--ease-out);
+        transition:
+            color var(--dur-short) var(--ease-out),
+            transform var(--dur-short) var(--ease-out);
     }
 
     @media (hover: hover) and (pointer: fine) {
         .contact-card:hover .contact-brand {
+            color: var(--brand-icon-hover, var(--brand-icon));
             transform: scale(1.06);
         }
     }
@@ -164,7 +168,7 @@ import ContentWithHeading from './ContentWithHeading.astro';
 
     @media (hover: hover) and (pointer: fine) {
         .contact-card:hover .contact-icon {
-            color: var(--brand-icon);
+            color: var(--brand-icon-hover, var(--brand-icon));
             transform: translateX(3px);
         }
     }

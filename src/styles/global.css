@@ -60,7 +60,7 @@ a {
     color: var(--color-ink);
     text-decoration-line: underline;
     text-decoration-thickness: 1.5px;
-    text-decoration-color: color-mix(in oklab, var(--color-accent) 48%, transparent);
+    text-decoration-color: color-mix(in oklab, var(--color-ink) 32%, transparent);
     text-underline-offset: 0.2em;
     transition: text-decoration-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
 }
