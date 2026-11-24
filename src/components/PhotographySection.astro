@@ -427,14 +427,14 @@ const serializedCategories = await Promise.all(
             const finish = () => {
                 if (!isClosing) return;
                 isClosing = false;
-                delete dialog.dataset.closing;
                 if (dialog.open) dialog.close();
+                delete dialog.dataset.closing;
             };
 
             dialog.addEventListener('transitionend', (event) => {
                 if (event.target === dialog && event.propertyName === 'opacity') finish();
             }, { once: true });
-            window.setTimeout(finish, 260);
+            window.setTimeout(finish, 360);
         };
 
         prevBtn?.addEventListener('click', () => renderPhoto(activeIndex - 1, -1));
@@ -751,29 +751,32 @@ const serializedCategories = await Promise.all(
         overflow: hidden;
         overscroll-behavior: contain;
         opacity: 0;
-        transform: scale(0.985);
+        transform: translateY(10px) scale(0.975);
         transition:
-            opacity var(--dur-short) var(--ease-out),
-            transform var(--dur-short) var(--ease-out),
-            overlay var(--dur-short) allow-discrete,
-            display var(--dur-short) allow-discrete;
+            opacity 320ms var(--ease-in-out),
+            transform 320ms var(--ease-out),
+            overlay 320ms allow-discrete,
+            display 320ms allow-discrete;
     }
 
     .photo-dialog[open] {
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0) scale(1);
     }
 
     .photo-dialog[data-closing="true"] {
         opacity: 0;
-        transform: scale(0.985);
+        transform: translateY(8px) scale(0.98);
         pointer-events: none;
+        transition:
+            opacity 280ms var(--ease-in-out),
+            transform 280ms var(--ease-in-out);
     }
 
     @starting-style {
         .photo-dialog[open] {
             opacity: 0;
-            transform: scale(0.985);
+            transform: translateY(10px) scale(0.975);
         }
     }
 
@@ -782,9 +785,9 @@ const serializedCategories = await Promise.all(
         backdrop-filter: blur(6px);
         opacity: 0;
         transition:
-            opacity var(--dur-short) var(--ease-out),
-            overlay var(--dur-short) allow-discrete,
-            display var(--dur-short) allow-discrete;
+            opacity 320ms var(--ease-in-out),
+            overlay 320ms allow-discrete,
+            display 320ms allow-discrete;
     }
 
     .photo-dialog[open]::backdrop {
@@ -793,6 +796,7 @@ const serializedCategories = await Promise.all(
 
     .photo-dialog[data-closing="true"]::backdrop {
         opacity: 0;
+        transition: opacity 280ms var(--ease-in-out);
     }
 
     @starting-style {
