@@ -1,3 +1,15 @@
+## [3.6.0] - 2026-11-24
+
+### 🚀 Features
+
+- Added a Photography section on a full-width plum band with category cards (Landscapes, Travels, Birds) and a full-bleed lightbox featuring top-bar thumbnail navigation with overflow fades, push-slide transitions, mobile touch swipe, shift-free scroll lock, and centered EXIF metadata
+- Added an Instagram contact card with brand hover styling and a compact mobile layout
+- Added a site copyright footer and unified vertical section padding across the homepage
+
+### 🐛 Bug Fixes
+
+- Aligned Projects carousel slides and left borders cleanly across sub-pixel viewports and flush-split the project card media
+
 ## [3.5.0] - 2026-11-23
 
 ### 🚀 Features
