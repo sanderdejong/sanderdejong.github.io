@@ -29,9 +29,12 @@
   --color-focus: oklch(55% 0.15 44);
   --color-cast: var(--color-accent);
 
-  --color-nav-bg: color-mix(in oklab, var(--color-band) 86%, transparent);
-  --color-nav-border: color-mix(in oklab, var(--color-band-ink) 16%, transparent);
-  --color-nav-pill: color-mix(in oklab, var(--color-pop) 22%, transparent);
+  --color-nav-bg: color-mix(in oklab, var(--color-plate) 82%, transparent);
+  --color-nav-ink: var(--color-ink);
+  --color-nav-muted: var(--color-ink-2);
+  --color-nav-active: var(--color-mark);
+  --color-nav-border: color-mix(in oklab, var(--color-ink) 14%, transparent);
+  --color-nav-pill: color-mix(in oklab, var(--color-accent) 14%, transparent);
   --color-hover-surface: oklch(96.8% 0.022 65);
   --color-hover-border: color-mix(in oklab, var(--color-accent) 42%, transparent);
   --color-tag-bg: color-mix(in oklab, var(--color-accent) 12%, transparent);
@@ -61,7 +64,7 @@
   --shadow-portrait: 0 18px 38px -12px rgba(176, 86, 40, 0.28), 0 6px 14px -6px rgba(40, 31, 26, 0.12);
   --shadow-band-card: 0 12px 28px -10px rgba(18, 12, 8, 0.42);
   --shadow-band-card-hover: 0 18px 36px -10px rgba(14, 9, 6, 0.56);
-  --shadow-nav: 0 14px 36px -8px rgba(24, 15, 10, 0.36), 0 2px 8px rgba(24, 15, 10, 0.16);
+  --shadow-nav: 0 12px 32px -8px rgba(40, 26, 16, 0.22), 0 2px 8px rgba(40, 26, 16, 0.1);
 
   --texture-opacity: 0;
   --grain-light-specks: none;
@@ -99,9 +102,12 @@
   --color-focus: oklch(75% 0.135 55);
   --color-cast: var(--color-accent);
 
-  --color-nav-bg: color-mix(in oklab, oklch(27% 0.022 48) 86%, transparent);
-  --color-nav-border: color-mix(in oklab, var(--color-band-ink) 14%, transparent);
-  --color-nav-pill: color-mix(in oklab, var(--color-pop) 22%, transparent);
+  --color-nav-bg: color-mix(in oklab, var(--color-paper) 84%, transparent);
+  --color-nav-ink: var(--color-ink);
+  --color-nav-muted: var(--color-ink-2);
+  --color-nav-active: var(--color-accent);
+  --color-nav-border: color-mix(in oklab, var(--color-ink) 16%, transparent);
+  --color-nav-pill: color-mix(in oklab, var(--color-accent) 20%, transparent);
   --color-hover-surface: oklch(28.5% 0.022 46);
   --color-hover-border: color-mix(in oklab, var(--color-accent) 42%, transparent);
   --color-tag-bg: color-mix(in oklab, var(--color-accent) 15%, transparent);
@@ -158,9 +164,12 @@
     --color-focus: oklch(75% 0.135 55);
     --color-cast: var(--color-accent);
 
-    --color-nav-bg: color-mix(in oklab, oklch(27% 0.022 48) 86%, transparent);
-    --color-nav-border: color-mix(in oklab, var(--color-band-ink) 14%, transparent);
-    --color-nav-pill: color-mix(in oklab, var(--color-pop) 22%, transparent);
+    --color-nav-bg: color-mix(in oklab, var(--color-paper) 84%, transparent);
+    --color-nav-ink: var(--color-ink);
+    --color-nav-muted: var(--color-ink-2);
+    --color-nav-active: var(--color-accent);
+    --color-nav-border: color-mix(in oklab, var(--color-ink) 16%, transparent);
+    --color-nav-pill: color-mix(in oklab, var(--color-accent) 20%, transparent);
     --color-hover-surface: oklch(28.5% 0.022 46);
     --color-hover-border: color-mix(in oklab, var(--color-accent) 42%, transparent);
     --color-tag-bg: color-mix(in oklab, var(--color-accent) 15%, transparent);
