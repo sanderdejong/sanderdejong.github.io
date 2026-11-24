@@ -242,20 +242,20 @@
   resolved "https://registry.yarnpkg.com/@fontsource-variable/geist-mono/-/geist-mono-5.2.7.tgz#c5b05ebfd133b33ac6e0812d6ec8f8ca1dc627ca"
   integrity sha512-ZKlZ5sjtalb2TwXKs400mAGDlt/+2ENLNySPx0wTz3bP3mWARCsUW+rpxzZc7e05d2qGch70pItt3K4qttbIYA==
 
-"@fontsource/archivo@^5.3.0":
+"@fontsource/bricolage-grotesque@^5.3.0":
   version "5.3.0"
-  resolved "https://registry.yarnpkg.com/@fontsource/archivo/-/archivo-5.3.0.tgz#c0af54dc50817cd19c7711bd1db51b28efc4d358"
-  integrity sha512-5DIMgPVJRi62OqdOVoogCFxP73EkNM/E0YVTSDIQlDEJfDbxqZduwM/YoNZwC9Sx1CDgpKinqf8ckRY1QNIecw==
+  resolved "https://npm.cloudsmith.io/dpg-media/public/@fontsource/bricolage-grotesque/-/bricolage-grotesque-5.3.0.tgz#7bf0f8b105902dd54f5d71e00b7b67966fd957a2"
+  integrity sha512-MdOVb/5in11IfN/IQJOExMuu6AroCIQbirl0yX7NUvKk+h0HYIKfGaVAXRS/gCPil4aFxWhjZnOw28tUwv7tFw==
+
+"@fontsource/dm-sans@^5.3.0":
+  version "5.3.0"
+  resolved "https://npm.cloudsmith.io/dpg-media/public/@fontsource/dm-sans/-/dm-sans-5.3.0.tgz#27cf2e04a7d9186f4b42fb0518f7350715ec65ac"
+  integrity sha512-lYJtMXXO28q1z+yz+z8XKd0s4hXaa9QdkETzkyD760sidCv5heI86weYA0sx0Nc4pAMAQTUuyf4gO44cYKKS9g==
 
 "@fontsource/material-icons@^5.2.7":
   version "5.2.7"
   resolved "https://registry.yarnpkg.com/@fontsource/material-icons/-/material-icons-5.2.7.tgz#d408ee5677fca128c058c9ab77af0808a2179693"
   integrity sha512-crPmK0L34lPGmS5GSGLasKpRGQzl95SxMsLM+QhBHPgR9uxSsyI5CUTb0cgoMpjtR+Bf1bC9QOe6pavoybbBwg==
-
-"@fontsource/oswald@^5.3.0":
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/@fontsource/oswald/-/oswald-5.3.0.tgz#0a470c8ffef665fd99f1df50349b610317bb658a"
-  integrity sha512-16r2aHActe0pH+9FLdk/74/YxXM7HpGak05kAzx3RvSToiJwGvyhv6GvckPz+YuZmvL1nxWbEop2jAXRcXYPRg==
 
 "@img/colour@^1.0.0":
   version "1.0.0"

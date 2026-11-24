@@ -1,82 +1,197 @@
 :root {
   color-scheme: light;
   --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px; --space-4xl: 144px;
-  --text-xs: 0.8125rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.25rem; --text-xl: 1.5625rem; --text-2xl: 1.953rem; --text-3xl: 2.441rem;
-  --text-display-s: clamp(2.25rem, 4vw + 0.5rem, 3.75rem); --text-display: clamp(2.75rem, 5vw + 1rem, 5.25rem);
-  --text-section: clamp(2rem, 2.5vw + 1rem, 3.5rem); --text-title: clamp(1.25rem, 0.75vw + 0.875rem, 1.625rem); --text-lead: clamp(1.125rem, 0.35vw + 1rem, 1.375rem);
+  --text-xs: 0.8125rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.25rem; --text-xl: 1.5rem; --text-2xl: 1.875rem; --text-3xl: 2.25rem;
+  --text-display-s: clamp(2rem, 3.4vw + 0.5rem, 3.25rem); --text-display: clamp(2.4rem, 4.2vw + 0.75rem, 4.35rem);
+  --text-section: clamp(1.85rem, 2.2vw + 0.9rem, 3rem); --text-title: clamp(1.2rem, 0.7vw + 0.85rem, 1.5rem); --text-lead: clamp(1.0625rem, 0.35vw + 0.95rem, 1.3rem);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-in: cubic-bezier(0.7, 0, 0.84, 0); --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --dur-micro: 120ms; --dur-short: 220ms; --dur-long: 420ms;
-  --color-error: oklch(52% 0.19 27); --color-success: oklch(50% 0.12 150);
+  --color-error: oklch(52% 0.17 27); --color-success: oklch(50% 0.12 150);
   --container: 1440px; --gutter: 64px; --gap-columns: 32px; --section-gap-s: 120px; --section-gap: 144px; --section-gap-l: 176px;
   --z-base: 1; --z-raised: 10; --z-dropdown: 100; --z-sticky: 200; --z-sticky-nav: 300; --z-modal: 400; --z-toast: 500; --z-tooltip: 600;
-  --color-paper: oklch(94% 0.015 50); --color-paper-2: oklch(91% 0.018 45); --color-paper-3: oklch(88% 0.022 40);
-  --color-plate: oklch(97% 0.01 50); --color-plate-ink: oklch(28% 0.07 330);
-  --color-ink: oklch(28% 0.07 330); --color-ink-2: oklch(32% 0.065 330); --color-muted: oklch(45% 0.045 330);
-  --color-rule: oklch(79% 0.025 30);
-  --color-accent: oklch(74% 0.17 55); --color-accent-ink: oklch(26% 0.07 330); --color-focus: oklch(52% 0.16 42);
-  --color-accent-deep: oklch(46% 0.15 40);
-  --color-mark: oklch(52% 0.16 42);
-  --color-shadow: var(--color-ink);
-  --color-band: oklch(28% 0.07 330); --color-band-ink: oklch(94% 0.015 50); --color-band-muted: oklch(84% 0.025 330); --color-band-shadow: oklch(16% 0.05 330); --color-band-card-border: var(--color-band-shadow);
-  --color-pop: var(--color-accent); --color-pop-ink: oklch(26% 0.07 330);
-  --color-card-deep: var(--color-band); --color-card-deep-edge: var(--color-band);
-  --color-github: oklch(25% 0.015 255); --color-github-ink: oklch(96% 0.005 255); --color-github-icon: oklch(25% 0.015 255);
-  --color-linkedin: oklch(50% 0.16 254); --color-linkedin-ink: oklch(97% 0.005 254); --color-linkedin-icon: oklch(50% 0.16 254);
-  --color-instagram: oklch(52% 0.21 356); --color-instagram-ink: oklch(97% 0.005 356); --color-instagram-icon: oklch(52% 0.21 356);
+
+  /* Fireside Studio — Light (Warm Ivory, Cozy Espresso Band, Glowing Copper) */
+  --color-paper: oklch(98.2% 0.01 80);
+  --color-paper-2: oklch(94.4% 0.016 70);
+  --color-paper-3: oklch(90.8% 0.022 65);
+  --color-plate: oklch(100% 0 0);
+  --color-plate-ink: oklch(25% 0.025 45);
+  --color-ink: oklch(25% 0.025 45);
+  --color-ink-2: oklch(41% 0.025 45);
+  --color-muted: oklch(51% 0.025 45);
+  --color-rule: oklch(86% 0.02 60);
+  --color-border: color-mix(in oklab, var(--color-ink) 10%, transparent);
+
+  --color-accent: oklch(63% 0.155 45);
+  --color-accent-ink: oklch(98.2% 0.01 80);
+  --color-mark: oklch(52% 0.145 43);
+  --color-accent-deep: oklch(44% 0.13 42);
+  --color-focus: oklch(55% 0.15 44);
   --color-cast: var(--color-accent);
-  --texture-opacity: 0.1;
-  --grain-light-specks: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 9 -4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 9 -4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+
+  --color-nav-bg: color-mix(in oklab, var(--color-band) 86%, transparent);
+  --color-nav-border: color-mix(in oklab, var(--color-band-ink) 16%, transparent);
+  --color-nav-pill: color-mix(in oklab, var(--color-pop) 22%, transparent);
+  --color-hover-surface: oklch(96.8% 0.022 65);
+  --color-hover-border: color-mix(in oklab, var(--color-accent) 42%, transparent);
+  --color-tag-bg: color-mix(in oklab, var(--color-accent) 12%, transparent);
+  --color-tag-ink: oklch(46% 0.135 42);
+
+  --color-band: oklch(28.5% 0.028 45);
+  --color-band-ink: oklch(97% 0.012 72);
+  --color-band-muted: oklch(84% 0.022 65);
+  --color-band-shadow: oklch(21% 0.02 45);
+  --color-band-card-border: color-mix(in oklab, var(--color-band-ink) 14%, transparent);
+  --color-pop: oklch(75% 0.135 55);
+  --color-pop-ink: oklch(25% 0.025 45);
+  --color-card-deep: var(--color-band);
+  --color-card-deep-edge: var(--color-band);
+
+  --color-github: oklch(45% 0.095 148); --color-github-ink: oklch(97% 0.006 148); --color-github-icon: oklch(45% 0.095 148);
+  --color-github-surface: oklch(96% 0.022 145); --color-github-border: color-mix(in oklab, var(--color-github-icon) 38%, transparent);
+  --color-linkedin: oklch(46% 0.125 250); --color-linkedin-ink: oklch(97% 0.006 250); --color-linkedin-icon: oklch(46% 0.125 250);
+  --color-linkedin-surface: oklch(96.2% 0.022 248); --color-linkedin-border: color-mix(in oklab, var(--color-linkedin-icon) 38%, transparent);
+  --color-instagram: oklch(50% 0.155 358); --color-instagram-ink: oklch(97% 0.006 358); --color-instagram-icon: oklch(50% 0.155 358);
+  --color-instagram-surface: oklch(96.2% 0.024 358); --color-instagram-border: color-mix(in oklab, var(--color-instagram-icon) 38%, transparent);
+
+  --color-shadow: rgba(64, 42, 28, 0.16);
+  --shadow-card: 0 10px 28px -12px rgba(64, 42, 28, 0.16), 0 2px 6px -2px rgba(64, 42, 28, 0.06);
+  --shadow-card-hover: 0 16px 34px -12px rgba(138, 68, 32, 0.22), 0 4px 10px -4px rgba(64, 42, 28, 0.08);
+  --shadow-contact: 0 4px 14px -6px rgba(64, 42, 28, 0.12), 0 1px 3px rgba(64, 42, 28, 0.05);
+  --shadow-portrait: 0 18px 38px -12px rgba(176, 86, 40, 0.28), 0 6px 14px -6px rgba(40, 31, 26, 0.12);
+  --shadow-band-card: 0 12px 28px -10px rgba(18, 12, 8, 0.42);
+  --shadow-band-card-hover: 0 18px 36px -10px rgba(14, 9, 6, 0.56);
+  --shadow-nav: 0 14px 36px -8px rgba(24, 15, 10, 0.36), 0 2px 8px rgba(24, 15, 10, 0.16);
+
+  --texture-opacity: 0;
+  --grain-light-specks: none;
+  --grain: none;
   --portrait-brightness: 1;
-  --font-display: "Oswald", "Arial Narrow", ui-sans-serif, sans-serif; --font-body: "Archivo", system-ui, ui-sans-serif, sans-serif;
-  --radius-card: 0; --radius-pill: 0; --rule-hair: 1px; --rule-bar: 3px;
-  --shadow-card: 6px 6px 0 var(--color-shadow);
-  --tracking-display: -0.005em; --display-weight: 700;
+
+  --font-display: "Bricolage Grotesque", system-ui, ui-sans-serif, sans-serif;
+  --font-body: "DM Sans", system-ui, ui-sans-serif, sans-serif;
+  --radius-card: 12px;
+  --radius-portrait: 14px;
+  --radius-pill: 8px;
+  --rule-hair: 1px;
+  --rule-bar: 2px;
+  --tracking-display: -0.025em;
+  --display-weight: 600;
 }
+
 :root.dark {
   color-scheme: dark;
-  --color-paper: oklch(31% 0.055 330); --color-paper-2: oklch(35% 0.052 335); --color-paper-3: oklch(39% 0.05 340);
-  --color-plate: oklch(37% 0.048 345); --color-plate-ink: oklch(94% 0.015 50);
-  --color-ink: oklch(94% 0.015 50); --color-ink-2: oklch(90% 0.015 50); --color-muted: oklch(82% 0.025 340);
-  --color-rule: oklch(48% 0.045 330);
-  --color-accent: oklch(74% 0.17 55); --color-accent-ink: oklch(26% 0.07 330); --color-focus: oklch(76% 0.16 58);
-  --color-accent-deep: oklch(84% 0.11 62);
-  --color-mark: oklch(76% 0.16 58);
-  --color-shadow: oklch(13% 0.04 330);
-  --color-band: oklch(22% 0.045 330); --color-band-ink: oklch(94% 0.015 50); --color-band-muted: oklch(84% 0.025 330); --color-band-shadow: var(--color-shadow); --color-band-card-border: var(--color-ink);
-  --color-project-cover: oklch(41% 0.085 335);
-  --color-pop: var(--color-accent); --color-pop-ink: oklch(26% 0.07 330);
-  --color-card-deep: oklch(34% 0.08 330); --color-card-deep-edge: var(--color-pop);
-  --color-github: oklch(22% 0.015 255); --color-github-ink: oklch(96% 0.005 255); --color-github-icon: oklch(94% 0.01 255);
-  --color-linkedin: oklch(50% 0.16 254); --color-linkedin-ink: oklch(97% 0.005 254); --color-linkedin-icon: oklch(72% 0.13 254);
-  --color-instagram: oklch(52% 0.21 356); --color-instagram-ink: oklch(97% 0.005 356); --color-instagram-icon: oklch(75% 0.16 356);
-  --color-cast: oklch(64% 0.11 52);
-  --texture-opacity: 0.09;
-  --grain: var(--grain-light-specks);
-  --portrait-brightness: 0.92;
+  --color-paper: oklch(20.5% 0.015 45);
+  --color-paper-2: oklch(24.5% 0.017 45);
+  --color-paper-3: oklch(28.5% 0.02 45);
+  --color-plate: oklch(24.5% 0.017 45);
+  --color-plate-ink: oklch(95.2% 0.014 70);
+  --color-ink: oklch(95.2% 0.014 70);
+  --color-ink-2: oklch(82.5% 0.02 65);
+  --color-muted: oklch(68.5% 0.022 55);
+  --color-rule: color-mix(in oklab, var(--color-ink) 12%, transparent);
+  --color-border: color-mix(in oklab, var(--color-ink) 9%, transparent);
+
+  --color-accent: oklch(75% 0.135 55);
+  --color-accent-ink: oklch(20.5% 0.015 45);
+  --color-mark: oklch(78% 0.125 56);
+  --color-accent-deep: oklch(84% 0.105 58);
+  --color-focus: oklch(75% 0.135 55);
+  --color-cast: var(--color-accent);
+
+  --color-nav-bg: color-mix(in oklab, oklch(27% 0.022 48) 86%, transparent);
+  --color-nav-border: color-mix(in oklab, var(--color-band-ink) 14%, transparent);
+  --color-nav-pill: color-mix(in oklab, var(--color-pop) 22%, transparent);
+  --color-hover-surface: oklch(28.5% 0.022 46);
+  --color-hover-border: color-mix(in oklab, var(--color-accent) 42%, transparent);
+  --color-tag-bg: color-mix(in oklab, var(--color-accent) 15%, transparent);
+  --color-tag-ink: oklch(84% 0.105 58);
+
+  --color-band: oklch(24.8% 0.02 48);
+  --color-band-ink: oklch(95.2% 0.014 70);
+  --color-band-muted: oklch(81.5% 0.02 65);
+  --color-band-shadow: oklch(15% 0.014 45);
+  --color-band-card-border: color-mix(in oklab, var(--color-band-ink) 10%, transparent);
+  --color-project-cover: oklch(27% 0.022 45);
+  --color-pop: oklch(75% 0.135 55);
+  --color-pop-ink: oklch(20.5% 0.015 45);
+  --color-card-deep: oklch(26% 0.02 45);
+  --color-card-deep-edge: var(--color-pop);
+
+  --color-github: oklch(45% 0.095 148); --color-github-ink: oklch(97% 0.006 148); --color-github-icon: oklch(74% 0.095 148);
+  --color-github-surface: oklch(27.5% 0.026 146); --color-github-border: color-mix(in oklab, var(--color-github-icon) 40%, transparent);
+  --color-linkedin: oklch(46% 0.125 250); --color-linkedin-ink: oklch(97% 0.006 250); --color-linkedin-icon: oklch(74% 0.105 248);
+  --color-linkedin-surface: oklch(27.5% 0.028 248); --color-linkedin-border: color-mix(in oklab, var(--color-linkedin-icon) 40%, transparent);
+  --color-instagram: oklch(50% 0.155 358); --color-instagram-ink: oklch(97% 0.006 358); --color-instagram-icon: oklch(75% 0.13 358);
+  --color-instagram-surface: oklch(27.5% 0.030 356); --color-instagram-border: color-mix(in oklab, var(--color-instagram-icon) 40%, transparent);
+
+  --color-shadow: rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 12px 30px -12px rgba(0, 0, 0, 0.48), 0 2px 6px rgba(0, 0, 0, 0.22);
+  --shadow-card-hover: 0 18px 36px -12px rgba(0, 0, 0, 0.62), 0 4px 12px rgba(0, 0, 0, 0.28);
+  --shadow-contact: 0 4px 14px -6px rgba(0, 0, 0, 0.36);
+  --shadow-portrait: 0 18px 38px -12px rgba(240, 151, 91, 0.18), 0 8px 20px -8px rgba(0, 0, 0, 0.5);
+  --shadow-band-card: 0 12px 28px -10px rgba(0, 0, 0, 0.5);
+  --shadow-band-card-hover: 0 18px 36px -10px rgba(0, 0, 0, 0.64);
+  --shadow-nav: 0 16px 38px -8px rgba(0, 0, 0, 0.6), 0 2px 10px rgba(0, 0, 0, 0.32);
+  --portrait-brightness: 0.94;
 }
-/* Without script the class never lands, so the system setting picks the plum night. */
+
+/* Without script the class never lands, so the system setting picks the roasted cocoa dark mode. */
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
     color-scheme: dark;
-    --color-paper: oklch(31% 0.055 330); --color-paper-2: oklch(35% 0.052 335); --color-paper-3: oklch(39% 0.05 340);
-    --color-plate: oklch(37% 0.048 345); --color-plate-ink: oklch(94% 0.015 50);
-    --color-ink: oklch(94% 0.015 50); --color-ink-2: oklch(90% 0.015 50); --color-muted: oklch(82% 0.025 340);
-    --color-rule: oklch(48% 0.045 330);
-    --color-accent: oklch(74% 0.17 55); --color-accent-ink: oklch(26% 0.07 330); --color-focus: oklch(76% 0.16 58);
-    --color-accent-deep: oklch(84% 0.11 62);
-    --color-mark: oklch(76% 0.16 58);
-    --color-shadow: oklch(13% 0.04 330);
-    --color-band: oklch(22% 0.045 330); --color-band-ink: oklch(94% 0.015 50); --color-band-muted: oklch(84% 0.025 330); --color-band-shadow: var(--color-shadow); --color-band-card-border: var(--color-ink);
-    --color-project-cover: oklch(41% 0.085 335);
-      --color-pop: var(--color-accent); --color-pop-ink: oklch(26% 0.07 330);
-    --color-card-deep: oklch(34% 0.08 330); --color-card-deep-edge: var(--color-pop);
-    --color-github: oklch(22% 0.015 255); --color-github-ink: oklch(96% 0.005 255); --color-github-icon: oklch(94% 0.01 255);
-    --color-linkedin: oklch(50% 0.16 254); --color-linkedin-ink: oklch(97% 0.005 254); --color-linkedin-icon: oklch(72% 0.13 254);
-    --color-instagram: oklch(52% 0.21 356); --color-instagram-ink: oklch(97% 0.005 356); --color-instagram-icon: oklch(75% 0.16 356);
-    --color-cast: oklch(64% 0.11 52);
-    --texture-opacity: 0.09;
-    --grain: var(--grain-light-specks);
-    --portrait-brightness: 0.92;
+    --color-paper: oklch(20.5% 0.015 45);
+    --color-paper-2: oklch(24.5% 0.017 45);
+    --color-paper-3: oklch(28.5% 0.02 45);
+    --color-plate: oklch(24.5% 0.017 45);
+    --color-plate-ink: oklch(95.2% 0.014 70);
+    --color-ink: oklch(95.2% 0.014 70);
+    --color-ink-2: oklch(82.5% 0.02 65);
+    --color-muted: oklch(68.5% 0.022 55);
+    --color-rule: color-mix(in oklab, var(--color-ink) 12%, transparent);
+    --color-border: color-mix(in oklab, var(--color-ink) 9%, transparent);
+
+    --color-accent: oklch(75% 0.135 55);
+    --color-accent-ink: oklch(20.5% 0.015 45);
+    --color-mark: oklch(78% 0.125 56);
+    --color-accent-deep: oklch(84% 0.105 58);
+    --color-focus: oklch(75% 0.135 55);
+    --color-cast: var(--color-accent);
+
+    --color-nav-bg: color-mix(in oklab, oklch(27% 0.022 48) 86%, transparent);
+    --color-nav-border: color-mix(in oklab, var(--color-band-ink) 14%, transparent);
+    --color-nav-pill: color-mix(in oklab, var(--color-pop) 22%, transparent);
+    --color-hover-surface: oklch(28.5% 0.022 46);
+    --color-hover-border: color-mix(in oklab, var(--color-accent) 42%, transparent);
+    --color-tag-bg: color-mix(in oklab, var(--color-accent) 15%, transparent);
+    --color-tag-ink: oklch(84% 0.105 58);
+
+    --color-band: oklch(24.8% 0.02 48);
+    --color-band-ink: oklch(95.2% 0.014 70);
+    --color-band-muted: oklch(81.5% 0.02 65);
+    --color-band-shadow: oklch(15% 0.014 45);
+    --color-band-card-border: color-mix(in oklab, var(--color-band-ink) 10%, transparent);
+    --color-project-cover: oklch(27% 0.022 45);
+    --color-pop: oklch(75% 0.135 55);
+    --color-pop-ink: oklch(20.5% 0.015 45);
+    --color-card-deep: oklch(26% 0.02 45);
+    --color-card-deep-edge: var(--color-pop);
+
+    --color-github: oklch(45% 0.095 148); --color-github-ink: oklch(97% 0.006 148); --color-github-icon: oklch(74% 0.095 148);
+    --color-github-surface: oklch(27.5% 0.026 146); --color-github-border: color-mix(in oklab, var(--color-github-icon) 40%, transparent);
+    --color-linkedin: oklch(46% 0.125 250); --color-linkedin-ink: oklch(97% 0.006 250); --color-linkedin-icon: oklch(74% 0.105 248);
+    --color-linkedin-surface: oklch(27.5% 0.028 248); --color-linkedin-border: color-mix(in oklab, var(--color-linkedin-icon) 40%, transparent);
+    --color-instagram: oklch(50% 0.155 358); --color-instagram-ink: oklch(97% 0.006 358); --color-instagram-icon: oklch(75% 0.13 358);
+    --color-instagram-surface: oklch(27.5% 0.030 356); --color-instagram-border: color-mix(in oklab, var(--color-instagram-icon) 40%, transparent);
+
+    --color-shadow: rgba(0, 0, 0, 0.45);
+    --shadow-card: 0 12px 30px -12px rgba(0, 0, 0, 0.48), 0 2px 6px rgba(0, 0, 0, 0.22);
+    --shadow-card-hover: 0 18px 36px -12px rgba(0, 0, 0, 0.62), 0 4px 12px rgba(0, 0, 0, 0.28);
+    --shadow-contact: 0 4px 14px -6px rgba(0, 0, 0, 0.36);
+    --shadow-portrait: 0 18px 38px -12px rgba(240, 151, 91, 0.18), 0 8px 20px -8px rgba(0, 0, 0, 0.5);
+    --shadow-band-card: 0 12px 28px -10px rgba(0, 0, 0, 0.5);
+    --shadow-band-card-hover: 0 18px 36px -10px rgba(0, 0, 0, 0.64);
+    --shadow-nav: 0 16px 38px -8px rgba(0, 0, 0, 0.6), 0 2px 10px rgba(0, 0, 0, 0.32);
+    --portrait-brightness: 0.94;
   }
 }

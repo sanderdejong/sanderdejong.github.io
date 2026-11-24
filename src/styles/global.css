@@ -51,22 +51,21 @@ body::before {
 
 h1, h2, h3 {
     color: var(--color-ink);
-    text-transform: uppercase;
 }
 
-/* Tangerine fills never carry text on linen (2:1), so links keep their ink and the underline takes the deeper mark tangerine. */
 a {
     color: var(--color-ink);
     text-decoration-line: underline;
-    text-decoration-thickness: 2px;
-    text-decoration-color: var(--color-mark);
-    text-underline-offset: 0.18em;
-    transition: text-decoration-color var(--dur-micro) var(--ease-out);
+    text-decoration-thickness: 1.5px;
+    text-decoration-color: color-mix(in oklab, var(--color-accent) 48%, transparent);
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
 }
 
 @media (hover: hover) and (pointer: fine) {
     a:hover {
-        text-decoration-color: currentColor;
+        color: var(--color-mark);
+        text-decoration-color: var(--color-mark);
     }
 }
 

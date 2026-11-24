@@ -274,10 +274,11 @@ const projects: Project[] = [
         display: grid;
         grid-auto-flow: column;
         grid-auto-columns: 100%;
-        width: calc(100% + var(--space-3xs));
-        width: round(down, calc(100% + var(--space-3xs)), 1px);
+        width: calc(100% + var(--space-lg) * 2);
+        width: round(down, calc(100% + var(--space-lg) * 2), 1px);
         min-width: 0;
-        margin-inline-start: calc(-1 * var(--space-3xs));
+        margin-inline: calc(-1 * var(--space-lg));
+        margin-block: calc(-1 * var(--space-md)) calc(-1 * var(--space-lg));
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         overscroll-behavior-x: contain;
@@ -291,7 +292,7 @@ const projects: Project[] = [
     .project-slide {
         display: flex;
         min-width: 0;
-        padding: var(--space-3xs) var(--space-xs) var(--space-xs) var(--space-3xs);
+        padding: var(--space-md) var(--space-lg) var(--space-xl) var(--space-lg);
         scroll-snap-align: start;
         scroll-snap-stop: always;
     }
@@ -303,7 +304,9 @@ const projects: Project[] = [
         width: 100%;
         min-width: 0;
         padding: 0;
-        border: 2px solid var(--color-ink);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-card);
+        overflow: hidden;
         background: var(--color-plate);
         color: var(--color-plate-ink);
         box-shadow: var(--shadow-card);
@@ -343,7 +346,7 @@ const projects: Project[] = [
         min-width: 0;
         aspect-ratio: 16 / 10;
         overflow: hidden;
-        border-top: 2px solid var(--color-ink);
+        border-top: 1px solid var(--color-border);
         background: var(--color-paper-2);
     }
 
@@ -383,7 +386,7 @@ const projects: Project[] = [
             aspect-ratio: auto;
             height: 100%;
             border-top: 0;
-            border-inline-start: 2px solid var(--color-ink);
+            border-inline-start: 1px solid var(--color-border);
         }
     }
 

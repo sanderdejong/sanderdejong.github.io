@@ -574,26 +574,28 @@ const serializedCategories = await Promise.all(
         grid-template-rows: auto 1fr;
         width: 100%;
         padding: 0;
-        border: 2px solid var(--color-band-card-border);
-        border-radius: 0;
+        border: 1px solid var(--color-band-card-border);
+        border-radius: var(--radius-card);
+        overflow: hidden;
         color: var(--color-ink);
         text-align: left;
         cursor: pointer;
-        box-shadow: 3px 3px 0 var(--color-band-shadow);
+        box-shadow: var(--shadow-band-card);
         transition:
             box-shadow var(--dur-short) var(--ease-out),
+            border-color var(--dur-short) var(--ease-out),
             transform var(--dur-short) var(--ease-out);
     }
 
     @media (hover: hover) and (pointer: fine) {
         .photo-category-card:hover {
-            box-shadow: 6px 6px 0 var(--color-band-shadow);
-            transform: translate(-3px, -3px);
+            border-color: var(--color-hover-border);
+            box-shadow: var(--shadow-band-card-hover);
+            transform: translateY(-3px);
         }
 
         .photo-category-card:active {
-            box-shadow: 0 0 0 var(--color-band-shadow);
-            transform: translate(3px, 3px);
+            transform: translateY(-1px);
         }
     }
 
@@ -607,7 +609,7 @@ const serializedCategories = await Promise.all(
         aspect-ratio: 4 / 3;
         width: 100%;
         overflow: hidden;
-        border-bottom: 2px solid var(--color-band-card-border);
+        border-bottom: 1px solid var(--color-border);
         background: var(--color-paper-2);
     }
 
@@ -675,12 +677,11 @@ const serializedCategories = await Promise.all(
         font-family: var(--font-display);
         font-size: var(--text-xl);
         font-weight: var(--display-weight);
-        line-height: 1.05;
-        text-transform: uppercase;
+        line-height: 1.15;
         text-decoration-line: underline;
         text-decoration-color: transparent;
-        text-decoration-thickness: 3px;
-        text-underline-offset: 0.12em;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 0.16em;
         transition: text-decoration-color var(--dur-micro) var(--ease-out);
     }
 
@@ -831,8 +832,7 @@ const serializedCategories = await Promise.all(
         font-family: var(--font-display);
         font-size: var(--text-xl);
         font-weight: var(--display-weight);
-        line-height: 1;
-        text-transform: uppercase;
+        line-height: 1.1;
         color: var(--color-band-ink);
     }
 
@@ -1062,7 +1062,7 @@ const serializedCategories = await Promise.all(
         height: 32px;
         padding: 0;
         border: 2px solid color-mix(in oklab, var(--color-band-ink) 28%, transparent);
-        border-radius: 0;
+        border-radius: 6px;
         background: var(--color-band);
         color: var(--color-band-muted);
         font-family: var(--font-body);
