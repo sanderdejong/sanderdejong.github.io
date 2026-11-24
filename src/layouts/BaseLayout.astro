@@ -197,7 +197,7 @@ const year = new Date().getFullYear();
     }
 
     .layout:has(#home) {
-        padding-block: var(--section-pad) 0;
+        padding-block: var(--space-2xl) 0;
     }
 
     .layout-wrapper {
@@ -209,7 +209,7 @@ const year = new Date().getFullYear();
     }
 
     #home {
-        row-gap: var(--section-pad);
+        row-gap: var(--section-gap-s);
         scroll-margin-top: 100vh;
     }
 
@@ -270,6 +270,10 @@ const year = new Date().getFullYear();
         .layout {
             --section-pad: var(--space-2xl);
             padding-block: var(--space-xl) var(--space-2xl);
+        }
+
+        .layout:has(#home) {
+            padding-block: var(--space-xl) 0;
         }
     }
 
