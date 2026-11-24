@@ -76,7 +76,7 @@ const projects: Project[] = [
         <h2 id="projects-heading">projects<span class="period">.</span></h2>
 
         <div class="projects-carousel" role="region" aria-roledescription="carousel" aria-label="Projects">
-            <div class="projects-track" data-projects-track tabindex="0">
+            <div class="projects-track" data-projects-track>
                 {projects.map((project) => (
                     <div class="project-slide">
                         <article class="card-surface project-card" aria-labelledby={project.slug}>
@@ -288,11 +288,6 @@ const projects: Project[] = [
         display: none;
     }
 
-    .projects-track:focus-visible {
-        outline: 2px solid var(--color-focus);
-        outline-offset: 4px;
-    }
-
     .project-slide {
         display: flex;
         min-width: 0;
@@ -461,12 +456,14 @@ const projects: Project[] = [
         transition: text-decoration-color var(--dur-micro) var(--ease-out);
     }
 
-    .project-link:hover svg {
-        color: var(--color-ink);
-    }
+    @media (hover: hover) and (pointer: fine) {
+        .project-link:hover svg {
+            color: var(--color-ink);
+        }
 
-    .project-link:hover span {
-        text-decoration-color: currentColor;
+        .project-link:hover span {
+            text-decoration-color: currentColor;
+        }
     }
 
     .project-link:active span {
@@ -502,16 +499,18 @@ const projects: Project[] = [
             opacity var(--dur-short) var(--ease-out);
     }
 
-    .projects-btn:hover:not(:disabled) {
-        color: var(--color-mark);
-    }
+    @media (hover: hover) and (pointer: fine) {
+        .projects-btn:hover:not(:disabled) {
+            color: var(--color-mark);
+        }
 
-    .projects-btn[data-projects-prev]:hover:not(:disabled) {
-        transform: translateX(-2px);
-    }
+        .projects-btn[data-projects-prev]:hover:not(:disabled) {
+            transform: translateX(-2px);
+        }
 
-    .projects-btn[data-projects-next]:hover:not(:disabled) {
-        transform: translateX(2px);
+        .projects-btn[data-projects-next]:hover:not(:disabled) {
+            transform: translateX(2px);
+        }
     }
 
     .projects-btn:active:not(:disabled) {
@@ -560,8 +559,10 @@ const projects: Project[] = [
             transform var(--dur-micro) var(--ease-out);
     }
 
-    .projects-dot:hover::before {
-        background: var(--color-muted);
+    @media (hover: hover) and (pointer: fine) {
+        .projects-dot:hover::before {
+            background: var(--color-muted);
+        }
     }
 
     .projects-dot[aria-current="true"]::before {

@@ -585,14 +585,16 @@ const serializedCategories = await Promise.all(
             transform var(--dur-short) var(--ease-out);
     }
 
-    .photo-category-card:hover {
-        box-shadow: 6px 6px 0 var(--color-band-shadow);
-        transform: translate(-3px, -3px);
-    }
+    @media (hover: hover) and (pointer: fine) {
+        .photo-category-card:hover {
+            box-shadow: 6px 6px 0 var(--color-band-shadow);
+            transform: translate(-3px, -3px);
+        }
 
-    .photo-category-card:active {
-        box-shadow: 0 0 0 var(--color-band-shadow);
-        transform: translate(3px, 3px);
+        .photo-category-card:active {
+            box-shadow: 0 0 0 var(--color-band-shadow);
+            transform: translate(3px, 3px);
+        }
     }
 
     .photo-category-card:focus-visible {
@@ -617,8 +619,10 @@ const serializedCategories = await Promise.all(
         transition: transform var(--dur-long) var(--ease-out);
     }
 
-    .photo-category-card:hover .photo-cover-img {
-        transform: scale(1.03);
+    @media (hover: hover) and (pointer: fine) {
+        .photo-category-card:hover .photo-cover-img {
+            transform: scale(1.03);
+        }
     }
 
     .photo-placeholder {
@@ -680,8 +684,10 @@ const serializedCategories = await Promise.all(
         transition: text-decoration-color var(--dur-micro) var(--ease-out);
     }
 
-    .photo-category-card:hover .photo-card-title {
-        text-decoration-color: var(--color-mark);
+    @media (hover: hover) and (pointer: fine) {
+        .photo-category-card:hover .photo-card-title {
+            text-decoration-color: var(--color-mark);
+        }
     }
 
     .photo-card-summary {
@@ -712,8 +718,10 @@ const serializedCategories = await Promise.all(
         transition: transform var(--dur-micro) var(--ease-out);
     }
 
-    .photo-category-card:hover .photo-card-arrow {
-        transform: translateX(3px);
+    @media (hover: hover) and (pointer: fine) {
+        .photo-category-card:hover .photo-card-arrow {
+            transform: translateX(3px);
+        }
     }
 
     @container (max-width: 52rem) {
@@ -858,17 +866,19 @@ const serializedCategories = await Promise.all(
             opacity var(--dur-micro) var(--ease-out);
     }
 
-    .photo-dialog-close:hover,
-    .photo-nav-btn:hover:not(:disabled) {
-        color: var(--color-pop);
-    }
+    @media (hover: hover) and (pointer: fine) {
+        .photo-dialog-close:hover,
+        .photo-nav-btn:hover:not(:disabled) {
+            color: var(--color-pop);
+        }
 
-    .photo-nav-btn[data-photo-prev]:hover:not(:disabled) {
-        transform: translateX(-2px);
-    }
+        .photo-nav-btn[data-photo-prev]:hover:not(:disabled) {
+            transform: translateX(-2px);
+        }
 
-    .photo-nav-btn[data-photo-next]:hover:not(:disabled) {
-        transform: translateX(2px);
+        .photo-nav-btn[data-photo-next]:hover:not(:disabled) {
+            transform: translateX(2px);
+        }
     }
 
     .photo-nav-btn:disabled {
@@ -1072,9 +1082,11 @@ const serializedCategories = await Promise.all(
         object-fit: cover;
     }
 
-    .photo-thumbs :global(.photo-thumb:hover) {
-        border-color: var(--color-band-ink);
-        opacity: 1;
+    @media (hover: hover) and (pointer: fine) {
+        .photo-thumbs :global(.photo-thumb:hover) {
+            border-color: var(--color-band-ink);
+            opacity: 1;
+        }
     }
 
     .photo-thumbs :global(.photo-thumb[aria-current="true"]) {
@@ -1133,7 +1145,9 @@ const serializedCategories = await Promise.all(
         .photo-nav-btn[data-photo-next] {
             right: var(--space-xs);
         }
+    }
 
+    @media (max-width: 48rem) and (hover: hover) and (pointer: fine) {
         .photo-nav-btn[data-photo-prev]:hover:not(:disabled) {
             transform: translate(-2px, -50%);
         }
