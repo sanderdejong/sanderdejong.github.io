@@ -107,30 +107,41 @@
             syncThemeButtons();
         }
 
+        let cachedSections = [];
+        let cachedNavLinks = [];
+        let cachedNavCurrentEls = [];
+        let cachedDock = null;
+        let cachedTopNav = null;
+        let lastHash = null;
+        let lastDockVisible = null;
+
         function currentHash() {
-            const sections = ["about", "projects", "photography", "contact"].map((id) => document.getElementById(id)).filter(Boolean);
             const line = window.innerHeight / 3;
             let hash = "#home";
-            for (const section of sections) {
+            for (const section of cachedSections) {
                 if (section.getBoundingClientRect().top <= line) hash = "#" + section.id;
             }
             const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
-            if (atBottom && sections.length) hash = "#" + sections[sections.length - 1].id;
+            if (atBottom && cachedSections.length) hash = "#" + cachedSections[cachedSections.length - 1].id;
             return hash;
         }
 
-        function syncDockVisibility() {
-            const dock = document.getElementById("nav-dock");
-            const topNav = document.querySelector(".nav-top");
-            if (!dock || !topNav) return;
-            dock.classList.add("is-managed");
-            const visible = topNav.getBoundingClientRect().bottom < -40;
-            dock.classList.toggle("is-visible", visible);
-            dock.setAttribute("aria-hidden", String(!visible));
-            dock.inert = !visible;
-            if (!visible && dock.contains(document.activeElement)) {
+        function setDockVisible(visible) {
+            if (!cachedDock) return;
+            if (lastDockVisible === visible) return;
+            lastDockVisible = visible;
+            cachedDock.classList.add("is-managed");
+            cachedDock.classList.toggle("is-visible", visible);
+            cachedDock.setAttribute("aria-hidden", String(!visible));
+            cachedDock.inert = !visible;
+            if (!visible && cachedDock.contains(document.activeElement)) {
                 document.activeElement.blur();
             }
+        }
+
+        function syncDockVisibility() {
+            if (!cachedDock || !cachedTopNav) return;
+            setDockVisible(cachedTopNav.getBoundingClientRect().bottom < -40);
         }
 
         const SECTION_LABELS = {
@@ -141,21 +152,24 @@
             "#contact": "Contact",
         };
 
-        function syncActiveLink() {
+        function syncActiveLink(force = false) {
             const { pathname } = window.location;
             const hash = currentHash();
-            document.querySelectorAll(".nav-link").forEach((link) => {
-                if (link.pathname === pathname && link.hash === hash) {
-                    link.setAttribute("aria-current", "location");
-                } else {
-                    link.removeAttribute("aria-current");
+            if (force || hash !== lastHash) {
+                lastHash = hash;
+                for (const link of cachedNavLinks) {
+                    if (link.pathname === pathname && link.hash === hash) {
+                        link.setAttribute("aria-current", "location");
+                    } else {
+                        link.removeAttribute("aria-current");
+                    }
                 }
-            });
-            const label = SECTION_LABELS[hash] || "Menu";
-            document.querySelectorAll(".js-nav-current").forEach((el) => {
-                el.textContent = label;
-            });
-            syncDockVisibility();
+                const label = SECTION_LABELS[hash] || "Menu";
+                for (const el of cachedNavCurrentEls) {
+                    el.textContent = label;
+                }
+            }
+            if (force) syncDockVisibility();
         }
 
         function setDrawerExpanded(expanded) {
@@ -233,6 +247,24 @@
             const navRoot = document.getElementById("nav-root");
             if (navRoot) navRoot.classList.add("has-mobile-drawer");
 
+            cachedSections = ["about", "projects", "photography", "contact"]
+                .map((id) => document.getElementById(id))
+                .filter(Boolean);
+            cachedNavLinks = Array.from(document.querySelectorAll(".nav-link"));
+            cachedNavCurrentEls = Array.from(document.querySelectorAll(".js-nav-current"));
+            cachedDock = document.getElementById("nav-dock");
+            cachedTopNav = document.querySelector(".nav-top");
+
+            if (cachedTopNav && cachedDock && "IntersectionObserver" in window) {
+                const dockObserver = new IntersectionObserver(
+                    ([entry]) => {
+                        setDockVisible(!entry.isIntersecting && entry.boundingClientRect.bottom < 0);
+                    },
+                    { rootMargin: "40px 0px 0px 0px", threshold: 0 }
+                );
+                dockObserver.observe(cachedTopNav);
+            }
+
             document.querySelectorAll(".js-nav-menu-btn").forEach((btn) => {
                 btn.hidden = false;
                 if (btn.dataset.drawerInit) return;
@@ -268,7 +300,7 @@
                 });
             }
 
-            syncActiveLink();
+            syncActiveLink(true);
             syncThemeButtons();
 
             document.querySelectorAll(".js-theme-btn").forEach((btn) => {
@@ -407,11 +439,12 @@
         padding: var(--space-2xs) var(--space-xs);
         border-radius: var(--radius-portrait);
         background: var(--color-nav-bg);
-        backdrop-filter: blur(18px) saturate(1.35);
-        -webkit-backdrop-filter: blur(18px) saturate(1.35);
+        backdrop-filter: blur(10px) saturate(1.2);
+        -webkit-backdrop-filter: blur(10px) saturate(1.2);
         border: 1px solid var(--color-nav-border);
         box-shadow: var(--shadow-nav);
         color: var(--color-nav-ink);
+        contain: layout style;
         transform: translateY(0) scale(1);
         transition:
             opacity var(--dur-long) var(--ease-in-out),

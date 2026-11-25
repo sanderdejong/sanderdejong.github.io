@@ -42,23 +42,24 @@ import ContentWithHeading from './ContentWithHeading.astro';
         width: 100%;
         padding-block: var(--section-pad);
         padding-inline: 0;
-        background: var(--color-band);
         color: var(--color-band-ink);
-        box-shadow: 0 0 0 100vmax var(--color-band);
-        clip-path: inset(0 -100vmax);
     }
 
     .about-band::before {
         content: "";
         position: absolute;
-        inset: 0 -100vmax;
+        inset-block: 0;
+        left: 50%;
+        width: 100vw;
+        transform: translateX(-50%);
         z-index: -1;
         pointer-events: none;
-        background-image: radial-gradient(var(--color-band-dot) 1px, transparent 1px);
-        background-size: 20px 20px;
-        background-position: 50% var(--dot-offset-y, 0px);
-        mask-image: linear-gradient(to right, transparent calc(50% - 50vw), #000 calc(50% - 32vw), #000 calc(50% + 32vw), transparent calc(50% + 50vw));
-        -webkit-mask-image: linear-gradient(to right, transparent calc(50% - 50vw), #000 calc(50% - 32vw), #000 calc(50% + 32vw), transparent calc(50% + 50vw));
+        background-color: var(--color-band);
+        background-image:
+            linear-gradient(to right, var(--color-band), transparent 18%, transparent 82%, var(--color-band)),
+            radial-gradient(var(--color-band-dot) 1px, transparent 1px);
+        background-size: 100% 100%, 20px 20px;
+        background-position: 0 0, 50% var(--dot-offset-y, 0px);
     }
 
     .about-band h2 {
