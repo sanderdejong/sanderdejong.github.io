@@ -26,17 +26,12 @@ body::before {
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background-image: radial-gradient(var(--color-dot) 1px, transparent 1px);
-    background-size: 20px 20px;
-    background-position: 50% 0;
-    mask-image:
-        linear-gradient(to right, transparent, #000 18%, #000 82%, transparent),
-        linear-gradient(to bottom, transparent, #000 180px, #000 calc(100% - 180px), transparent);
-    mask-composite: intersect;
-    -webkit-mask-image:
-        linear-gradient(to right, transparent, #000 18%, #000 82%, transparent),
-        linear-gradient(to bottom, transparent, #000 180px, #000 calc(100% - 180px), transparent);
-    -webkit-mask-composite: source-in;
+    background-image:
+        linear-gradient(to right, var(--color-paper), transparent 18%, transparent 82%, var(--color-paper)),
+        linear-gradient(to bottom, var(--color-paper), transparent 180px, transparent calc(100% - 180px), var(--color-paper)),
+        radial-gradient(var(--color-dot) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 20px 20px;
+    background-position: 0 0, 0 0, 50% 0;
 }
 
 .card-surface {
