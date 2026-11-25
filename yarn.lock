@@ -237,11 +237,6 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.25.12.tgz#9bdad8176be7811ad148d1f8772359041f46c6c5"
   integrity sha512-alJC0uCZpTFrSL0CCDjcgleBXPnCrEAhTBILpeAp7M/OFgoqtAetfBzX0xM00MUsVVPpVjlPuMbREqnZCXaTnA==
 
-"@fontsource-variable/geist-mono@^5.2.7":
-  version "5.2.7"
-  resolved "https://registry.yarnpkg.com/@fontsource-variable/geist-mono/-/geist-mono-5.2.7.tgz#c5b05ebfd133b33ac6e0812d6ec8f8ca1dc627ca"
-  integrity sha512-ZKlZ5sjtalb2TwXKs400mAGDlt/+2ENLNySPx0wTz3bP3mWARCsUW+rpxzZc7e05d2qGch70pItt3K4qttbIYA==
-
 "@fontsource/bricolage-grotesque@^5.3.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@fontsource/bricolage-grotesque/-/bricolage-grotesque-5.3.0.tgz#7bf0f8b105902dd54f5d71e00b7b67966fd957a2"
@@ -251,11 +246,6 @@
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@fontsource/dm-sans/-/dm-sans-5.3.0.tgz#27cf2e04a7d9186f4b42fb0518f7350715ec65ac"
   integrity sha512-lYJtMXXO28q1z+yz+z8XKd0s4hXaa9QdkETzkyD760sidCv5heI86weYA0sx0Nc4pAMAQTUuyf4gO44cYKKS9g==
-
-"@fontsource/material-icons@^5.2.7":
-  version "5.2.7"
-  resolved "https://registry.yarnpkg.com/@fontsource/material-icons/-/material-icons-5.2.7.tgz#d408ee5677fca128c058c9ab77af0808a2179693"
-  integrity sha512-crPmK0L34lPGmS5GSGLasKpRGQzl95SxMsLM+QhBHPgR9uxSsyI5CUTb0cgoMpjtR+Bf1bC9QOe6pavoybbBwg==
 
 "@img/colour@^1.0.0":
   version "1.0.0"
