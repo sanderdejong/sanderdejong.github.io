@@ -6,68 +6,98 @@
   --text-section: clamp(1.85rem, 2.2vw + 0.9rem, 3rem); --text-title: clamp(1.2rem, 0.7vw + 0.85rem, 1.5rem); --text-lead: clamp(1.0625rem, 0.35vw + 0.95rem, 1.3rem);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-in: cubic-bezier(0.7, 0, 0.84, 0); --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --dur-micro: 120ms; --dur-short: 220ms; --dur-long: 420ms;
-  --color-error: oklch(52% 0.17 27); --color-success: oklch(50% 0.12 150);
   --container: 1440px; --gutter: 64px; --gap-columns: 32px; --section-gap-s: 120px; --section-gap: 144px; --section-gap-l: 176px;
   --z-base: 1; --z-raised: 10; --z-dropdown: 100; --z-sticky: 200; --z-sticky-nav: 300; --z-modal: 400; --z-toast: 500; --z-tooltip: 600;
 
-  /* Fireside Studio — Light (Warm Ivory, Cozy Espresso Band, Glowing Copper) */
-  --color-paper: oklch(98.2% 0.01 80);
-  --color-paper-2: oklch(94.4% 0.016 70);
-  --color-paper-3: oklch(90.8% 0.022 65);
-  --color-plate: oklch(100% 0 0);
-  --color-plate-ink: oklch(25% 0.025 45);
-  --color-ink: oklch(25% 0.025 45);
-  --color-ink-2: oklch(41% 0.025 45);
-  --color-muted: oklch(51% 0.025 45);
-  --color-rule: oklch(86% 0.02 60);
-  --color-border: color-mix(in oklab, var(--color-ink) 10%, transparent);
+  /* Fireside Studio — Light (Warm Ivory & Cozy Espresso) / Dark (Roasted Cocoa) */
+  --color-paper: light-dark(oklch(98.2% 0.01 80), oklch(20.5% 0.015 45));
+  --color-paper-2: light-dark(oklch(94.4% 0.016 70), oklch(24.5% 0.017 45));
+  --color-paper-3: light-dark(oklch(90.8% 0.022 65), oklch(28.5% 0.02 45));
+  --color-plate: light-dark(oklch(100% 0 0), oklch(24.5% 0.017 45));
+  --color-plate-ink: light-dark(oklch(25% 0.025 45), oklch(95.2% 0.014 70));
+  --color-ink: light-dark(oklch(25% 0.025 45), oklch(95.2% 0.014 70));
+  --color-ink-2: light-dark(oklch(41% 0.025 45), oklch(82.5% 0.02 65));
+  --color-muted: light-dark(oklch(51% 0.025 45), oklch(68.5% 0.022 55));
+  --color-rule: light-dark(oklch(86% 0.02 60), color-mix(in oklab, var(--color-ink) 12%, transparent));
+  --color-border: light-dark(
+    color-mix(in oklab, var(--color-ink) 10%, transparent),
+    color-mix(in oklab, var(--color-ink) 9%, transparent)
+  );
 
-  --color-accent: oklch(63% 0.155 45);
-  --color-accent-ink: oklch(98.2% 0.01 80);
-  --color-mark: oklch(52% 0.145 43);
-  --color-accent-deep: oklch(44% 0.13 42);
-  --color-focus: oklch(55% 0.15 44);
-  --color-cast: var(--color-accent);
+  --color-accent: light-dark(oklch(63% 0.155 45), oklch(75% 0.135 55));
+  --color-accent-ink: light-dark(oklch(98.2% 0.01 80), oklch(20.5% 0.015 45));
+  --color-mark: light-dark(oklch(52% 0.145 43), oklch(78% 0.125 56));
+  --color-accent-deep: light-dark(oklch(44% 0.13 42), oklch(84% 0.105 58));
+  --color-focus: light-dark(oklch(55% 0.15 44), oklch(75% 0.135 55));
 
-  --color-nav-bg: color-mix(in oklab, var(--color-plate) 82%, transparent);
+  --color-nav-bg: light-dark(
+    color-mix(in oklab, var(--color-plate) 82%, transparent),
+    color-mix(in oklab, var(--color-paper) 84%, transparent)
+  );
   --color-nav-ink: var(--color-ink);
   --color-nav-muted: var(--color-ink-2);
-  --color-nav-active: var(--color-mark);
-  --color-nav-border: color-mix(in oklab, var(--color-ink) 14%, transparent);
-  --color-nav-pill: color-mix(in oklab, var(--color-accent) 14%, transparent);
-  --color-hover-surface: oklch(96.8% 0.022 65);
+  --color-nav-active: light-dark(var(--color-mark), var(--color-accent));
+  --color-nav-border: light-dark(
+    color-mix(in oklab, var(--color-ink) 14%, transparent),
+    color-mix(in oklab, var(--color-ink) 16%, transparent)
+  );
+  --color-nav-pill: light-dark(
+    color-mix(in oklab, var(--color-accent) 14%, transparent),
+    color-mix(in oklab, var(--color-accent) 20%, transparent)
+  );
+  --color-hover-surface: light-dark(oklch(96.8% 0.022 65), oklch(28.5% 0.022 46));
   --color-hover-border: color-mix(in oklab, var(--color-accent) 42%, transparent);
-  --color-tag-bg: color-mix(in oklab, var(--color-accent) 12%, transparent);
-  --color-tag-ink: oklch(46% 0.135 42);
 
-  --color-band: oklch(28.5% 0.028 45);
-  --color-band-ink: oklch(97% 0.012 72);
-  --color-band-muted: oklch(84% 0.022 65);
-  --color-band-shadow: oklch(21% 0.02 45);
-  --color-band-card-border: color-mix(in oklab, var(--color-band-ink) 14%, transparent);
+  --color-band: light-dark(oklch(28.5% 0.028 45), oklch(24.8% 0.02 48));
+  --color-band-ink: light-dark(oklch(97% 0.012 72), oklch(95.2% 0.014 70));
+  --color-band-muted: light-dark(oklch(84% 0.022 65), oklch(81.5% 0.02 65));
+  --color-band-shadow: light-dark(oklch(21% 0.02 45), oklch(15% 0.014 45));
+  --color-band-card-border: light-dark(
+    color-mix(in oklab, var(--color-band-ink) 14%, transparent),
+    color-mix(in oklab, var(--color-band-ink) 10%, transparent)
+  );
   --color-pop: oklch(75% 0.135 55);
-  --color-pop-ink: oklch(25% 0.025 45);
-  --color-card-deep: var(--color-band);
-  --color-card-deep-edge: var(--color-band);
+  --color-pop-ink: light-dark(oklch(25% 0.025 45), oklch(20.5% 0.015 45));
 
-  --color-github: oklch(45% 0.095 148); --color-github-ink: oklch(97% 0.006 148); --color-github-icon: oklch(45% 0.095 148);
-  --color-github-surface: oklch(96% 0.022 145); --color-github-border: color-mix(in oklab, var(--color-github-icon) 38%, transparent);
-  --color-linkedin: oklch(46% 0.125 250); --color-linkedin-ink: oklch(97% 0.006 250); --color-linkedin-icon: oklch(46% 0.125 250);
-  --color-linkedin-surface: oklch(96.2% 0.022 248); --color-linkedin-border: color-mix(in oklab, var(--color-linkedin-icon) 38%, transparent);
-  --color-instagram: oklch(50% 0.155 358); --color-instagram-ink: oklch(97% 0.006 358); --color-instagram-icon: oklch(50% 0.155 358);
-  --color-instagram-surface: oklch(96.2% 0.024 358); --color-instagram-border: color-mix(in oklab, var(--color-instagram-icon) 38%, transparent);
+  --color-github: oklch(45% 0.095 148);
+  --color-github-icon: light-dark(oklch(45% 0.095 148), oklch(74% 0.095 148));
+  --color-github-surface: light-dark(oklch(96% 0.022 145), oklch(27.5% 0.026 146));
+  --color-github-border: color-mix(in oklab, var(--color-github-icon) 39%, transparent);
+  --color-linkedin: oklch(46% 0.125 250);
+  --color-linkedin-icon: light-dark(oklch(46% 0.125 250), oklch(74% 0.105 248));
+  --color-linkedin-surface: light-dark(oklch(96.2% 0.022 248), oklch(27.5% 0.028 248));
+  --color-linkedin-border: color-mix(in oklab, var(--color-linkedin-icon) 39%, transparent);
+  --color-instagram: oklch(50% 0.155 358);
+  --color-instagram-icon: light-dark(oklch(50% 0.155 358), oklch(75% 0.13 358));
+  --color-instagram-surface: light-dark(oklch(96.2% 0.024 358), oklch(27.5% 0.030 356));
+  --color-instagram-border: color-mix(in oklab, var(--color-instagram-icon) 39%, transparent);
 
-  --color-shadow: rgba(64, 42, 28, 0.16);
-  --shadow-card: 0 10px 28px -12px rgba(64, 42, 28, 0.16), 0 2px 6px -2px rgba(64, 42, 28, 0.06);
-  --shadow-card-hover: 0 16px 34px -12px rgba(138, 68, 32, 0.22), 0 4px 10px -4px rgba(64, 42, 28, 0.08);
-  --shadow-contact: 0 4px 14px -6px rgba(64, 42, 28, 0.12), 0 1px 3px rgba(64, 42, 28, 0.05);
-  --shadow-portrait: 0 18px 38px -12px rgba(176, 86, 40, 0.28), 0 6px 14px -6px rgba(40, 31, 26, 0.12);
-  --shadow-band-card: 0 12px 28px -10px rgba(18, 12, 8, 0.42);
-  --shadow-band-card-hover: 0 18px 36px -10px rgba(14, 9, 6, 0.56);
-  --shadow-nav: 0 12px 32px -8px rgba(40, 26, 16, 0.22), 0 2px 8px rgba(40, 26, 16, 0.1);
+  --shadow-card:
+    0 11px 29px -12px light-dark(oklch(28% 0.04 45 / 0.16), oklch(0% 0 0 / 0.48)),
+    0 2px 6px -1px light-dark(oklch(28% 0.04 45 / 0.06), oklch(0% 0 0 / 0.22));
+  --shadow-card-hover:
+    0 17px 35px -12px light-dark(oklch(46% 0.10 42 / 0.22), oklch(0% 0 0 / 0.62)),
+    0 4px 11px -3px light-dark(oklch(28% 0.04 45 / 0.08), oklch(0% 0 0 / 0.28));
+  --shadow-contact:
+    0 4px 14px -6px light-dark(oklch(28% 0.04 45 / 0.12), oklch(0% 0 0 / 0.36)),
+    0 1px 3px light-dark(oklch(28% 0.04 45 / 0.05), oklch(0% 0 0 / 0.18));
+  --shadow-portrait:
+    0 18px 38px -12px light-dark(oklch(54% 0.13 44 / 0.28), oklch(75% 0.13 55 / 0.18)),
+    0 7px 16px -6px light-dark(oklch(23% 0.02 45 / 0.12), oklch(0% 0 0 / 0.50));
+  --shadow-band-card: 0 12px 28px -10px light-dark(oklch(14% 0.02 45 / 0.42), oklch(0% 0 0 / 0.50));
+  --shadow-band-card-hover: 0 18px 36px -10px light-dark(oklch(11% 0.02 45 / 0.56), oklch(0% 0 0 / 0.64));
+  --shadow-nav:
+    0 14px 35px -8px light-dark(oklch(21% 0.03 45 / 0.22), oklch(0% 0 0 / 0.60)),
+    0 2px 9px light-dark(oklch(21% 0.03 45 / 0.10), oklch(0% 0 0 / 0.32));
 
-  --color-dot: color-mix(in oklab, var(--color-ink) 12%, transparent);
-  --color-band-dot: color-mix(in oklab, var(--color-band-ink) 11%, transparent);
+  --color-dot: light-dark(
+    color-mix(in oklab, var(--color-ink) 12%, transparent),
+    color-mix(in oklab, var(--color-ink) 10%, transparent)
+  );
+  --color-band-dot: light-dark(
+    color-mix(in oklab, var(--color-band-ink) 11%, transparent),
+    color-mix(in oklab, var(--color-band-ink) 10%, transparent)
+  );
   --portrait-brightness: 1;
 
   --font-display: "Bricolage Grotesque", system-ui, ui-sans-serif, sans-serif;
@@ -83,63 +113,6 @@
 
 :root.dark {
   color-scheme: dark;
-  --color-paper: oklch(20.5% 0.015 45);
-  --color-paper-2: oklch(24.5% 0.017 45);
-  --color-paper-3: oklch(28.5% 0.02 45);
-  --color-plate: oklch(24.5% 0.017 45);
-  --color-plate-ink: oklch(95.2% 0.014 70);
-  --color-ink: oklch(95.2% 0.014 70);
-  --color-ink-2: oklch(82.5% 0.02 65);
-  --color-muted: oklch(68.5% 0.022 55);
-  --color-rule: color-mix(in oklab, var(--color-ink) 12%, transparent);
-  --color-border: color-mix(in oklab, var(--color-ink) 9%, transparent);
-
-  --color-accent: oklch(75% 0.135 55);
-  --color-accent-ink: oklch(20.5% 0.015 45);
-  --color-mark: oklch(78% 0.125 56);
-  --color-accent-deep: oklch(84% 0.105 58);
-  --color-focus: oklch(75% 0.135 55);
-  --color-cast: var(--color-accent);
-
-  --color-nav-bg: color-mix(in oklab, var(--color-paper) 84%, transparent);
-  --color-nav-ink: var(--color-ink);
-  --color-nav-muted: var(--color-ink-2);
-  --color-nav-active: var(--color-accent);
-  --color-nav-border: color-mix(in oklab, var(--color-ink) 16%, transparent);
-  --color-nav-pill: color-mix(in oklab, var(--color-accent) 20%, transparent);
-  --color-hover-surface: oklch(28.5% 0.022 46);
-  --color-hover-border: color-mix(in oklab, var(--color-accent) 42%, transparent);
-  --color-tag-bg: color-mix(in oklab, var(--color-accent) 15%, transparent);
-  --color-tag-ink: oklch(84% 0.105 58);
-
-  --color-band: oklch(24.8% 0.02 48);
-  --color-band-ink: oklch(95.2% 0.014 70);
-  --color-band-muted: oklch(81.5% 0.02 65);
-  --color-band-shadow: oklch(15% 0.014 45);
-  --color-band-card-border: color-mix(in oklab, var(--color-band-ink) 10%, transparent);
-  --color-project-cover: oklch(27% 0.022 45);
-  --color-pop: oklch(75% 0.135 55);
-  --color-pop-ink: oklch(20.5% 0.015 45);
-  --color-card-deep: oklch(26% 0.02 45);
-  --color-card-deep-edge: var(--color-pop);
-
-  --color-github: oklch(45% 0.095 148); --color-github-ink: oklch(97% 0.006 148); --color-github-icon: oklch(74% 0.095 148);
-  --color-github-surface: oklch(27.5% 0.026 146); --color-github-border: color-mix(in oklab, var(--color-github-icon) 40%, transparent);
-  --color-linkedin: oklch(46% 0.125 250); --color-linkedin-ink: oklch(97% 0.006 250); --color-linkedin-icon: oklch(74% 0.105 248);
-  --color-linkedin-surface: oklch(27.5% 0.028 248); --color-linkedin-border: color-mix(in oklab, var(--color-linkedin-icon) 40%, transparent);
-  --color-instagram: oklch(50% 0.155 358); --color-instagram-ink: oklch(97% 0.006 358); --color-instagram-icon: oklch(75% 0.13 358);
-  --color-instagram-surface: oklch(27.5% 0.030 356); --color-instagram-border: color-mix(in oklab, var(--color-instagram-icon) 40%, transparent);
-
-  --color-shadow: rgba(0, 0, 0, 0.45);
-  --shadow-card: 0 12px 30px -12px rgba(0, 0, 0, 0.48), 0 2px 6px rgba(0, 0, 0, 0.22);
-  --shadow-card-hover: 0 18px 36px -12px rgba(0, 0, 0, 0.62), 0 4px 12px rgba(0, 0, 0, 0.28);
-  --shadow-contact: 0 4px 14px -6px rgba(0, 0, 0, 0.36);
-  --shadow-portrait: 0 18px 38px -12px rgba(240, 151, 91, 0.18), 0 8px 20px -8px rgba(0, 0, 0, 0.5);
-  --shadow-band-card: 0 12px 28px -10px rgba(0, 0, 0, 0.5);
-  --shadow-band-card-hover: 0 18px 36px -10px rgba(0, 0, 0, 0.64);
-  --shadow-nav: 0 16px 38px -8px rgba(0, 0, 0, 0.6), 0 2px 10px rgba(0, 0, 0, 0.32);
-  --color-dot: color-mix(in oklab, var(--color-ink) 10%, transparent);
-  --color-band-dot: color-mix(in oklab, var(--color-band-ink) 10%, transparent);
   --portrait-brightness: 0.94;
 }
 
@@ -147,63 +120,6 @@
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
     color-scheme: dark;
-    --color-paper: oklch(20.5% 0.015 45);
-    --color-paper-2: oklch(24.5% 0.017 45);
-    --color-paper-3: oklch(28.5% 0.02 45);
-    --color-plate: oklch(24.5% 0.017 45);
-    --color-plate-ink: oklch(95.2% 0.014 70);
-    --color-ink: oklch(95.2% 0.014 70);
-    --color-ink-2: oklch(82.5% 0.02 65);
-    --color-muted: oklch(68.5% 0.022 55);
-    --color-rule: color-mix(in oklab, var(--color-ink) 12%, transparent);
-    --color-border: color-mix(in oklab, var(--color-ink) 9%, transparent);
-
-    --color-accent: oklch(75% 0.135 55);
-    --color-accent-ink: oklch(20.5% 0.015 45);
-    --color-mark: oklch(78% 0.125 56);
-    --color-accent-deep: oklch(84% 0.105 58);
-    --color-focus: oklch(75% 0.135 55);
-    --color-cast: var(--color-accent);
-
-    --color-nav-bg: color-mix(in oklab, var(--color-paper) 84%, transparent);
-    --color-nav-ink: var(--color-ink);
-    --color-nav-muted: var(--color-ink-2);
-    --color-nav-active: var(--color-accent);
-    --color-nav-border: color-mix(in oklab, var(--color-ink) 16%, transparent);
-    --color-nav-pill: color-mix(in oklab, var(--color-accent) 20%, transparent);
-    --color-hover-surface: oklch(28.5% 0.022 46);
-    --color-hover-border: color-mix(in oklab, var(--color-accent) 42%, transparent);
-    --color-tag-bg: color-mix(in oklab, var(--color-accent) 15%, transparent);
-    --color-tag-ink: oklch(84% 0.105 58);
-
-    --color-band: oklch(24.8% 0.02 48);
-    --color-band-ink: oklch(95.2% 0.014 70);
-    --color-band-muted: oklch(81.5% 0.02 65);
-    --color-band-shadow: oklch(15% 0.014 45);
-    --color-band-card-border: color-mix(in oklab, var(--color-band-ink) 10%, transparent);
-    --color-project-cover: oklch(27% 0.022 45);
-    --color-pop: oklch(75% 0.135 55);
-    --color-pop-ink: oklch(20.5% 0.015 45);
-    --color-card-deep: oklch(26% 0.02 45);
-    --color-card-deep-edge: var(--color-pop);
-
-    --color-github: oklch(45% 0.095 148); --color-github-ink: oklch(97% 0.006 148); --color-github-icon: oklch(74% 0.095 148);
-    --color-github-surface: oklch(27.5% 0.026 146); --color-github-border: color-mix(in oklab, var(--color-github-icon) 40%, transparent);
-    --color-linkedin: oklch(46% 0.125 250); --color-linkedin-ink: oklch(97% 0.006 250); --color-linkedin-icon: oklch(74% 0.105 248);
-    --color-linkedin-surface: oklch(27.5% 0.028 248); --color-linkedin-border: color-mix(in oklab, var(--color-linkedin-icon) 40%, transparent);
-    --color-instagram: oklch(50% 0.155 358); --color-instagram-ink: oklch(97% 0.006 358); --color-instagram-icon: oklch(75% 0.13 358);
-    --color-instagram-surface: oklch(27.5% 0.030 356); --color-instagram-border: color-mix(in oklab, var(--color-instagram-icon) 40%, transparent);
-
-    --color-shadow: rgba(0, 0, 0, 0.45);
-    --shadow-card: 0 12px 30px -12px rgba(0, 0, 0, 0.48), 0 2px 6px rgba(0, 0, 0, 0.22);
-    --shadow-card-hover: 0 18px 36px -12px rgba(0, 0, 0, 0.62), 0 4px 12px rgba(0, 0, 0, 0.28);
-    --shadow-contact: 0 4px 14px -6px rgba(0, 0, 0, 0.36);
-    --shadow-portrait: 0 18px 38px -12px rgba(240, 151, 91, 0.18), 0 8px 20px -8px rgba(0, 0, 0, 0.5);
-    --shadow-band-card: 0 12px 28px -10px rgba(0, 0, 0, 0.5);
-    --shadow-band-card-hover: 0 18px 36px -10px rgba(0, 0, 0, 0.64);
-    --shadow-nav: 0 16px 38px -8px rgba(0, 0, 0, 0.6), 0 2px 10px rgba(0, 0, 0, 0.32);
-    --color-dot: color-mix(in oklab, var(--color-ink) 10%, transparent);
-    --color-band-dot: color-mix(in oklab, var(--color-band-ink) 10%, transparent);
     --portrait-brightness: 0.94;
   }
 }
