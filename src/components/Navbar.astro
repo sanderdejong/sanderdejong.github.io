@@ -90,21 +90,17 @@
             });
         }
 
-        let themeTransitionTimer = 0;
-
         function applyTheme(isDark) {
-            const root = document.documentElement;
+            const update = () => {
+                window.applyTheme(isDark);
+                syncThemeButtons();
+            };
             const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-            if (!reduced) {
-                root.classList.add("theme-transition");
-                window.clearTimeout(themeTransitionTimer);
-                themeTransitionTimer = window.setTimeout(() => {
-                    root.classList.remove("theme-transition");
-                    themeTransitionTimer = 0;
-                }, 340);
+            if (!reduced && typeof document.startViewTransition === "function") {
+                document.startViewTransition(update);
+            } else {
+                update();
             }
-            window.applyTheme(isDark);
-            syncThemeButtons();
         }
 
         let cachedSections = [];
