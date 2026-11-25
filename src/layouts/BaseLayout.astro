@@ -136,6 +136,289 @@ const year = new Date().getFullYear();
     syncBandDotGrids();
     window.addEventListener('resize', scheduleSyncBandDotGrids, { passive: true });
     document.fonts?.ready.then(syncBandDotGrids);
+
+    // Interactive dot-grid lens distortion across the page canvas and dark bands (fine pointers, motion-safe).
+    if (
+        window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+        const RADIUS = 170;
+        const SIZE = RADIUS * 2 + 24;
+        const HALF = SIZE / 2;
+        const STEP = 20;
+        const MAX_PUSH = 2.2;
+
+        const createLensLayer = (host: HTMLElement, isBand: boolean) => {
+            const clip = document.createElement('div');
+            clip.className = isBand ? 'band-lens-clip' : 'page-lens-clip';
+            clip.setAttribute('aria-hidden', 'true');
+            const canvas = document.createElement('canvas');
+            canvas.className = 'dot-lens-canvas';
+            canvas.style.width = `${SIZE}px`;
+            canvas.style.height = `${SIZE}px`;
+            clip.appendChild(canvas);
+            host.prepend(clip);
+            const ctx = canvas.getContext('2d');
+            return { host, clip, canvas, ctx, isBand, visible: false, top: 0, bottom: 0, width: 0 };
+        };
+
+        const layers = [
+            createLensLayer(document.body, false),
+            ...Array.from(document.querySelectorAll<HTMLElement>('.about-band, .photo-band')).map((band) =>
+                createLensLayer(band, true),
+            ),
+        ];
+
+        // Resolve CSS tokens (including light-dark() and color-mix()) to canvas-ready colors.
+        const probe = document.createElement('span');
+        probe.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none;';
+        document.body.appendChild(probe);
+
+        const resolveColor = (expr: string) => {
+            probe.style.color = '';
+            probe.style.color = expr;
+            return getComputedStyle(probe).color;
+        };
+
+        const zeroAlpha = (c: string) => {
+            const rgb = c.match(/^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/);
+            if (rgb) return `rgba(${rgb[1]}, ${rgb[2]}, ${rgb[3]}, 0)`;
+            if (c.includes('/')) return c.replace(/\/[^)]+\)/, '/ 0)');
+            return c.replace(/\)$/, ' / 0)');
+        };
+
+        let palette = {
+            paper: '',
+            paperClear: '',
+            band: '',
+            bandClear: '',
+            dot: '',
+            bandDot: '',
+            accent: '',
+            pop: '',
+            glowPaper: '',
+            glowPaperClear: '',
+            glowBand: '',
+            glowBandClear: '',
+        };
+
+        const syncPalette = () => {
+            const paper = resolveColor('var(--color-paper)');
+            const band = resolveColor('var(--color-band)');
+            const glowPaper = resolveColor('color-mix(in oklab, var(--color-accent) 3.5%, transparent)');
+            const glowBand = resolveColor('color-mix(in oklab, var(--color-pop) 4.5%, transparent)');
+            palette = {
+                paper,
+                paperClear: zeroAlpha(paper),
+                band,
+                bandClear: zeroAlpha(band),
+                dot: resolveColor('var(--color-dot)'),
+                bandDot: resolveColor('var(--color-band-dot)'),
+                accent: resolveColor('color-mix(in oklab, var(--color-accent) 44%, transparent)'),
+                pop: resolveColor('color-mix(in oklab, var(--color-pop) 48%, transparent)'),
+                glowPaper,
+                glowPaperClear: zeroAlpha(glowPaper),
+                glowBand,
+                glowBandClear: zeroAlpha(glowBand),
+            };
+        };
+
+        let dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const resizeCanvases = () => {
+            dpr = Math.min(window.devicePixelRatio || 1, 2);
+            const bodyRect = document.body.getBoundingClientRect();
+            const bodyHeight = document.body.scrollHeight;
+            for (const layer of layers) {
+                layer.canvas.width = Math.round(SIZE * dpr);
+                layer.canvas.height = Math.round(SIZE * dpr);
+                if (layer.isBand) {
+                    const rect = layer.host.getBoundingClientRect();
+                    layer.top = rect.top - bodyRect.top;
+                    layer.bottom = rect.bottom - bodyRect.top;
+                    layer.width = layer.clip.clientWidth || window.innerWidth;
+                } else {
+                    layer.top = 0;
+                    layer.bottom = bodyHeight;
+                    layer.width = document.body.clientWidth || window.innerWidth;
+                }
+            }
+        };
+
+        syncPalette();
+        resizeCanvases();
+
+        let clientX = -999;
+        let clientY = -999;
+        let pointerActive = false;
+        let frame = 0;
+
+        const edgeAlpha = (px: number, py: number, width: number, bodyHeight: number, isBand: boolean) => {
+            const xFrac = px / width;
+            const horiz = Math.min(1, xFrac / 0.18, (1 - xFrac) / 0.18);
+            if (horiz <= 0) return 0;
+            if (isBand) return horiz;
+            const vert = Math.min(1, py / 180, (bodyHeight - py) / 180);
+            return vert <= 0 ? 0 : horiz * vert;
+        };
+
+        const render = () => {
+            frame = 0;
+            const pageX = clientX + window.scrollX;
+            const pageY = clientY + window.scrollY;
+            const bodyHeight = document.body.scrollHeight;
+
+            for (const layer of layers) {
+                const { ctx, canvas, isBand, top, bottom, width } = layer;
+                if (!ctx) continue;
+
+                const inRange = pointerActive && pageY >= top - RADIUS && pageY <= bottom + RADIUS;
+                if (!inRange) {
+                    if (layer.visible) {
+                        layer.visible = false;
+                        canvas.classList.remove('is-active');
+                    }
+                    continue;
+                }
+
+                const localX = pageX;
+                const localY = pageY - top;
+                const originX = localX - HALF;
+                const originY = localY - HALF;
+
+                canvas.style.transform = `translate3d(${originX}px, ${originY}px, 0)`;
+                if (!layer.visible) {
+                    layer.visible = true;
+                    canvas.classList.add('is-active');
+                }
+
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                ctx.clearRect(0, 0, SIZE, SIZE);
+
+                // Softly cover the static base dots inside the lens so distorted dots never double up.
+                const bg = isBand ? palette.band : palette.paper;
+                const bgClear = isBand ? palette.bandClear : palette.paperClear;
+                const cover = ctx.createRadialGradient(HALF, HALF, 0, HALF, HALF, RADIUS);
+                cover.addColorStop(0, bg);
+                cover.addColorStop(0.76, bg);
+                cover.addColorStop(1, bgClear);
+                ctx.fillStyle = cover;
+                ctx.fillRect(0, 0, SIZE, SIZE);
+
+                // Whisper-subtle ambient warmth at the center of the lens (respects page edge fades).
+                const centerEdge = edgeAlpha(pageX, pageY, width, bodyHeight, isBand);
+                if (centerEdge > 0.01) {
+                    const glow = ctx.createRadialGradient(HALF, HALF, 0, HALF, HALF, RADIUS * 0.85);
+                    glow.addColorStop(0, isBand ? palette.glowBand : palette.glowPaper);
+                    glow.addColorStop(1, isBand ? palette.glowBandClear : palette.glowPaperClear);
+                    ctx.globalAlpha = centerEdge;
+                    ctx.fillStyle = glow;
+                    ctx.fillRect(0, 0, SIZE, SIZE);
+                }
+
+                // Grid origin matches CSS `background-position: 50% 0` (20px tiles with dot center at +10px).
+                const gridOriginX = width / 2;
+                const kStart = Math.floor((pageX - RADIUS - gridOriginX) / STEP);
+                const kEnd = Math.ceil((pageX + RADIUS - gridOriginX) / STEP);
+                const mStart = Math.floor((pageY - RADIUS - 10) / STEP);
+                const mEnd = Math.ceil((pageY + RADIUS - 10) / STEP);
+
+                const baseDot = isBand ? palette.bandDot : palette.dot;
+                const accentDot = isBand ? palette.pop : palette.accent;
+
+                for (let k = kStart; k <= kEnd; k++) {
+                    const gx = gridOriginX + k * STEP;
+                    const dx = gx - pageX;
+                    for (let m = mStart; m <= mEnd; m++) {
+                        const gy = 10 + m * STEP;
+                        const dy = gy - pageY;
+                        const dist = Math.hypot(dx, dy);
+                        if (dist >= RADIUS) continue;
+
+                        const ea = edgeAlpha(gx, gy, width, bodyHeight, isBand);
+                        if (ea <= 0.01) continue;
+
+                        const u = 1 - dist / RADIUS; // 1 at cursor, 0 at edge
+                        const ease = u * u * (3 - 2 * u); // smoothstep
+
+                        // Gentle convex lens displacement (0 at center & edge, peaks smoothly mid-ring).
+                        const push = dist > 0.001 ? Math.sin(Math.PI * u) * MAX_PUSH : 0;
+                        const nx = dist > 0.001 ? dx / dist : 0;
+                        const ny = dist > 0.001 ? dy / dist : 0;
+
+                        const cx = gx + nx * push - originX;
+                        const cy = gy - top + ny * push - originY;
+                        const radius = 1 + ease * 0.45;
+
+                        // Base dot (fades cleanly at page edges just like body::before / band::before).
+                        ctx.globalAlpha = ea * (1 - ease * 0.45);
+                        ctx.fillStyle = baseDot;
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                        ctx.fill();
+
+                        // Warm accent highlight blended in proportionally to proximity & edge fade.
+                        if (ease > 0.02) {
+                            ctx.globalAlpha = ea * ease;
+                            ctx.fillStyle = accentDot;
+                            ctx.beginPath();
+                            ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
+                }
+                ctx.globalAlpha = 1;
+            }
+        };
+
+        const scheduleRender = () => {
+            if (!frame) frame = requestAnimationFrame(render);
+        };
+
+        window.addEventListener(
+            'pointermove',
+            (e) => {
+                if (e.pointerType !== 'mouse') return;
+                clientX = e.clientX;
+                clientY = e.clientY;
+                pointerActive = true;
+                scheduleRender();
+            },
+            { passive: true },
+        );
+
+        window.addEventListener(
+            'scroll',
+            () => {
+                if (pointerActive) scheduleRender();
+            },
+            { passive: true },
+        );
+
+        document.documentElement.addEventListener('pointerleave', () => {
+            pointerActive = false;
+            for (const layer of layers) {
+                layer.visible = false;
+                layer.canvas.classList.remove('is-active');
+            }
+        });
+
+        window.addEventListener(
+            'resize',
+            () => {
+                resizeCanvases();
+                if (pointerActive) scheduleRender();
+            },
+            { passive: true },
+        );
+
+        document.fonts?.ready.then(resizeCanvases);
+
+        // Re-resolve colors when light/dark theme toggles on <html>.
+        new MutationObserver(() => {
+            syncPalette();
+            if (pointerActive) scheduleRender();
+        }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    }
 </script>
 
 </body>
@@ -163,6 +446,39 @@ const year = new Date().getFullYear();
 
     #main:focus {
         outline: none;
+    }
+
+    .page-lens-clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    .band-lens-clip {
+        position: absolute;
+        inset-block: 0;
+        left: 50%;
+        width: 100vw;
+        transform: translateX(-50%);
+        overflow: hidden;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    .dot-lens-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 280ms var(--ease-out);
+        will-change: transform, opacity;
+    }
+
+    .dot-lens-canvas.is-active {
+        opacity: 1;
     }
 </style>
 
