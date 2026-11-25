@@ -64,14 +64,10 @@ a:active {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-    html.theme-transition,
-    html.theme-transition *,
-    html.theme-transition *::before,
-    html.theme-transition *::after {
-        transition-property: background-color, color, border-color, box-shadow, fill, stroke, filter !important;
-        transition-duration: 320ms !important;
-        transition-timing-function: var(--ease-in-out) !important;
-        transition-delay: 0ms !important;
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: 240ms;
+        animation-timing-function: var(--ease-in-out);
     }
 }
 
