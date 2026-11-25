@@ -204,8 +204,8 @@ const serializedCategories = await Promise.all(
             return promise;
         };
 
-        const warmCategory = (category: SerializedCategory) => {
-            for (const photo of category.photos) {
+        const warmCategory = (category: SerializedCategory, limit = category.photos.length) => {
+            for (const photo of category.photos.slice(0, limit)) {
                 if (photo.src) {
                     preloadPhoto(photo.src, photo.alt, photo.width, photo.height);
                 }
@@ -403,7 +403,7 @@ const serializedCategories = await Promise.all(
             const warm = () => {
                 const slug = btn.dataset.photoCategory;
                 const category = slug ? categories.find((item) => item.slug === slug) : null;
-                if (category) warmCategory(category);
+                if (category) warmCategory(category, 1);
             };
             btn.addEventListener('pointerenter', warm, { once: true });
             btn.addEventListener('focus', warm, { once: true });
@@ -449,6 +449,9 @@ const serializedCategories = await Promise.all(
         dialog.addEventListener('wheel', (event) => {
             const target = event.target as HTMLElement | null;
             if (target?.closest('[data-photo-thumbs]') && Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+                return;
+            }
+            if (dialog.scrollHeight > dialog.clientHeight) {
                 return;
             }
             event.preventDefault();
@@ -514,7 +517,6 @@ const serializedCategories = await Promise.all(
     };
 
     initPhotographyGallery();
-    document.addEventListener('astro:page-load', initPhotographyGallery);
 </script>
 
 <style>
@@ -748,7 +750,7 @@ const serializedCategories = await Promise.all(
         border-radius: 0;
         background: transparent;
         color: var(--color-band-ink);
-        overflow: hidden;
+        overflow: auto;
         overscroll-behavior: contain;
         opacity: 0;
         transform: translateY(10px) scale(0.975);
@@ -1065,8 +1067,8 @@ const serializedCategories = await Promise.all(
         flex: 0 0 auto;
         display: grid;
         place-items: center;
-        width: 44px;
-        height: 32px;
+        width: 56px;
+        height: 44px;
         padding: 0;
         border: 2px solid color-mix(in oklab, var(--color-band-ink) 28%, transparent);
         border-radius: 6px;
