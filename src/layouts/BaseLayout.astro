@@ -1,11 +1,6 @@
 ---
 import "../styles/global.css";
-import '@fontsource/bricolage-grotesque/600.css';
-import '@fontsource/bricolage-grotesque/700.css';
-import '@fontsource/dm-sans/400.css';
-import '@fontsource/dm-sans/500.css';
-import '@fontsource/dm-sans/600.css';
-import {Image} from 'astro:assets';
+import {Font, Image} from 'astro:assets';
 import profilePic from '../assets/profile.png';
 import Navbar from '../components/Navbar.astro';
 
@@ -39,6 +34,8 @@ const year = new Date().getFullYear();
     <link rel="canonical" href={canonicalURL}/>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
     <link rel="sitemap" href="/sitemap-index.xml"/>
+    <Font cssVariable="--font-display" preload/>
+    <Font cssVariable="--font-body" preload/>
 
     <meta charset="utf-8"/>
     <meta name="author" content={pageAuthor}/>
