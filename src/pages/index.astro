@@ -9,7 +9,10 @@ import ContactSection from '../components/ContactSection.astro';
 <BaseLayout>
     <ContentWithHeading>
         <hgroup>
-            <h1>hi, I am <span class="nowrap">Sander de Jong<span class="period">.</span></span></h1>
+            <h1 class="hero-title">
+                <span class="hero-greeting">hi, I am</span>
+                <span class="nowrap">Sander de Jong<span class="period">.</span></span>
+            </h1>
             <p class="standfirst">Software &amp; AWS Cloud Engineer</p>
         </hgroup>
         <p>
@@ -26,6 +29,20 @@ import ContactSection from '../components/ContactSection.astro';
 </BaseLayout>
 
 <style>
+    hgroup h1.hero-title {
+        font-size: min(clamp(2.75rem, 5vw + 0.85rem, 4.85rem), 12.2cqi);
+        line-height: 1.02;
+    }
+
+    .hero-greeting {
+        display: block;
+        font-size: clamp(1.5rem, 1.8vw + 0.85rem, 2.35rem);
+        font-weight: 500;
+        letter-spacing: -0.015em;
+        line-height: 1.2;
+        margin-bottom: 0.12em;
+    }
+
     .portfolio-sections {
         display: grid;
         gap: 0;

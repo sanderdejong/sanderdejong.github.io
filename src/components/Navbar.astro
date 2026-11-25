@@ -33,7 +33,7 @@
         </div>
     </nav>
 
-    <nav class="nav-dock" id="nav-dock" aria-label="Section navigation">
+    <nav class="nav-dock" id="nav-dock" aria-label="Section navigation" aria-hidden="true" inert>
         <ul class="nav-dock-list">
             <li><a href="/#home" class="nav-link nav-dock-link">Home</a></li>
             <li><a href="/#about" class="nav-link nav-dock-link">About</a></li>
@@ -126,7 +126,6 @@
             if (!cachedDock) return;
             if (lastDockVisible === visible) return;
             lastDockVisible = visible;
-            cachedDock.classList.add("is-managed");
             cachedDock.classList.toggle("is-visible", visible);
             cachedDock.setAttribute("aria-hidden", String(!visible));
             cachedDock.inert = !visible;
@@ -441,22 +440,26 @@
         box-shadow: var(--shadow-nav);
         color: var(--color-nav-ink);
         contain: layout style;
-        transform: translateY(0) scale(1);
-        transition:
-            opacity var(--dur-long) var(--ease-in-out),
-            transform var(--dur-long) var(--ease-out),
-            visibility 0s linear 0s;
-    }
-
-    .nav-dock.is-managed:not(.is-visible) {
+        will-change: opacity, transform;
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
-        transform: translateY(10px) scale(0.98);
+        transform: translateY(8px);
         transition:
-            opacity var(--dur-short) var(--ease-in-out),
-            transform var(--dur-short) var(--ease-in-out),
-            visibility 0s linear var(--dur-short);
+            opacity var(--dur-long) var(--ease-in-out),
+            transform var(--dur-long) var(--ease-in-out),
+            visibility 0s linear var(--dur-long);
+    }
+
+    .nav-dock.is-visible {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+        transition:
+            opacity var(--dur-long) var(--ease-in-out),
+            transform var(--dur-long) var(--ease-in-out),
+            visibility 0s linear 0s;
     }
 
     .nav-dock-list {
