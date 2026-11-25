@@ -45,8 +45,10 @@ const { id } = Astro.props;
     }
 
     .content-block :global(.standfirst) {
-        font-size: var(--text-xl);
-        font-weight: 500;
+        font-family: var(--font-mono);
+        font-size: clamp(0.95rem, 0.45vw + 0.85rem, 1.125rem);
+        font-weight: 400;
+        letter-spacing: -0.01em;
         line-height: 1.25;
         text-wrap: balance;
         color: var(--color-mark);
