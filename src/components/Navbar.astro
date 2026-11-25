@@ -1,12 +1,12 @@
-<div class="nav-root" transition:persist="navbar">
+<div class="nav-root">
     <nav class="nav-top" aria-label="Main">
         <div class="nav-top-bar container">
             <ul class="nav-top-list">
-                <li><a href="/#home" class="nav-link nav-top-link" data-astro-reload>Home</a></li>
-                <li><a href="/#about" class="nav-link nav-top-link" data-astro-reload>About</a></li>
-                <li><a href="/#projects" class="nav-link nav-top-link" data-astro-reload>Projects</a></li>
-                <li><a href="/#photography" class="nav-link nav-top-link" data-astro-reload>Photography</a></li>
-                <li><a href="/#contact" class="nav-link nav-top-link" data-astro-reload>Contact</a></li>
+                <li><a href="/#home" class="nav-link nav-top-link">Home</a></li>
+                <li><a href="/#about" class="nav-link nav-top-link">About</a></li>
+                <li><a href="/#projects" class="nav-link nav-top-link">Projects</a></li>
+                <li><a href="/#photography" class="nav-link nav-top-link">Photography</a></li>
+                <li><a href="/#contact" class="nav-link nav-top-link">Contact</a></li>
             </ul>
             <button class="theme-btn nav-top-theme js-theme-btn" id="theme-btn" type="button" aria-label="Dark mode" aria-pressed="false" hidden>
                 <svg class="theme-moon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
@@ -20,18 +20,18 @@
         </div>
     </nav>
 
-    <nav class="nav-dock" id="nav-dock" aria-label="Section navigation" aria-hidden="true">
+    <nav class="nav-dock" id="nav-dock" aria-label="Section navigation">
         <ul class="nav-dock-list">
-            <li><a href="/#home" class="nav-link nav-dock-link" data-astro-reload>Home</a></li>
-            <li><a href="/#about" class="nav-link nav-dock-link" data-astro-reload>About</a></li>
-            <li><a href="/#projects" class="nav-link nav-dock-link" data-astro-reload>Projects</a></li>
+            <li><a href="/#home" class="nav-link nav-dock-link">Home</a></li>
+            <li><a href="/#about" class="nav-link nav-dock-link">About</a></li>
+            <li><a href="/#projects" class="nav-link nav-dock-link">Projects</a></li>
             <li>
-                <a href="/#photography" class="nav-link nav-dock-link" data-astro-reload>
+                <a href="/#photography" class="nav-link nav-dock-link">
                     <span class="nav-label-full">Photography</span>
                     <span class="nav-label-short" aria-hidden="true">Photos</span>
                 </a>
             </li>
-            <li><a href="/#contact" class="nav-link nav-dock-link" data-astro-reload>Contact</a></li>
+            <li><a href="/#contact" class="nav-link nav-dock-link">Contact</a></li>
         </ul>
         <span class="nav-dock-sep" aria-hidden="true"></span>
         <button class="theme-btn nav-dock-theme js-theme-btn" type="button" aria-label="Dark mode" aria-pressed="false" hidden>
@@ -84,6 +84,7 @@
             const visible = topNav.getBoundingClientRect().bottom < -40;
             dock.classList.toggle("is-visible", visible);
             dock.setAttribute("aria-hidden", String(!visible));
+            dock.inert = !visible;
             if (!visible && dock.contains(document.activeElement)) {
                 document.activeElement.blur();
             }
@@ -137,19 +138,23 @@
             if (!localStorage.getItem("theme")) applyTheme(e.matches);
         });
 
-        document.addEventListener("astro:page-load", initNavbar);
-        document.addEventListener("astro:after-swap", syncActiveLink);
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", initNavbar, { once: true });
+        } else {
+            initNavbar();
+        }
         window.addEventListener("hashchange", syncActiveLink);
 
-        let scrollFrame = 0;
-        window.addEventListener("scroll", () => {
-            if (scrollFrame) return;
-            scrollFrame = requestAnimationFrame(() => {
-                scrollFrame = 0;
+        let syncFrame = 0;
+        const scheduleSyncActiveLink = () => {
+            if (syncFrame) return;
+            syncFrame = requestAnimationFrame(() => {
+                syncFrame = 0;
                 syncActiveLink();
             });
-        }, { passive: true });
-        window.addEventListener("resize", syncActiveLink, { passive: true });
+        };
+        window.addEventListener("scroll", scheduleSyncActiveLink, { passive: true });
+        window.addEventListener("resize", scheduleSyncActiveLink, { passive: true });
     })();
 </script>
 
@@ -186,6 +191,7 @@
     .nav-top-link {
         display: inline-flex;
         align-items: center;
+        min-height: 44px;
         padding: var(--space-xs) var(--space-sm);
         border-radius: var(--radius-pill);
         font-size: var(--text-md);
@@ -261,9 +267,17 @@
         display: flex;
         align-items: center;
         gap: 2px;
+        min-width: 0;
         margin: 0;
         padding: 0;
         list-style: none;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scrollbar-width: none;
+    }
+
+    .nav-dock-list::-webkit-scrollbar {
+        display: none;
     }
 
     .nav-dock-list li {
@@ -273,6 +287,7 @@
     .nav-dock-link {
         display: inline-flex;
         align-items: center;
+        min-height: 44px;
         padding: var(--space-xs) var(--space-sm);
         border-radius: var(--radius-pill);
         font-size: var(--text-sm);
@@ -325,7 +340,7 @@
         align-items: center;
         justify-content: center;
         padding: 0;
-        border: 1px solid transparent;
+        border: 0;
         border-radius: var(--radius-pill);
         background: transparent;
         cursor: pointer;
@@ -333,19 +348,18 @@
         transition:
             color var(--dur-micro) var(--ease-out),
             background-color var(--dur-micro) var(--ease-out),
-            border-color var(--dur-micro) var(--ease-out),
             transform var(--dur-micro) var(--ease-out);
     }
 
     .nav-top-theme {
-        min-width: 40px;
-        min-height: 40px;
+        min-width: 44px;
+        min-height: 44px;
         color: var(--color-muted);
     }
 
     .nav-dock-theme {
-        min-width: 34px;
-        min-height: 34px;
+        min-width: 44px;
+        min-height: 44px;
         color: var(--color-nav-muted);
     }
 
@@ -363,13 +377,11 @@
         .nav-top-theme:hover {
             color: var(--color-ink);
             background: color-mix(in oklab, var(--color-ink) 6%, transparent);
-            border-color: var(--color-border);
         }
 
         .nav-dock-theme:hover {
             color: var(--color-nav-ink);
             background: color-mix(in oklab, var(--color-nav-ink) 8%, transparent);
-            border-color: var(--color-nav-border);
         }
 
         .theme-btn:hover .theme-moon path,

@@ -31,13 +31,12 @@ import ContentWithHeading from './ContentWithHeading.astro';
                 </a>
             </li>
             <li>
-                <a class="card-surface contact-card contact-card--instagram" href="https://sanderdejong.dev" target="_blank" rel="noopener noreferrer" aria-labelledby="contact-instagram contact-instagram-tab" aria-describedby="contact-instagram-use">
+                {/* TODO: replace with real Instagram URL and restore <a> + external-link icon */}
+                <div class="card-surface contact-card contact-card--instagram contact-card--soon" aria-labelledby="contact-instagram" aria-describedby="contact-instagram-use">
                     <svg aria-hidden="true" class="contact-brand" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3Z"/></svg>
                     <span class="contact-name" id="contact-instagram">Instagram</span>
-                    <span class="contact-use" id="contact-instagram-use">Photos I’ve taken.</span>
-                    <span class="visually-hidden" id="contact-instagram-tab"> (opens in a new tab)</span>
-                    <svg aria-hidden="true" class="contact-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v8H3V6h8"/></svg>
-                </a>
+                    <span class="contact-use" id="contact-instagram-use">Photos I’ve taken — link coming soon.</span>
+                </div>
             </li>
         </ul>
     </ContentWithHeading>
@@ -101,8 +100,13 @@ import ContentWithHeading from './ContentWithHeading.astro';
         --brand-border: var(--color-instagram-border);
     }
 
+    .contact-card--soon {
+        opacity: 0.72;
+        cursor: default;
+    }
+
     @media (hover: hover) and (pointer: fine) {
-        .contact-card:hover {
+        a.contact-card:hover {
             background: var(--brand-surface);
             color: var(--color-ink);
             border-color: var(--brand-border);
@@ -110,7 +114,7 @@ import ContentWithHeading from './ContentWithHeading.astro';
             transform: translateY(-2px);
         }
 
-        .contact-card:active {
+        a.contact-card:active {
             transform: translateY(0);
         }
     }
@@ -132,7 +136,7 @@ import ContentWithHeading from './ContentWithHeading.astro';
     }
 
     @media (hover: hover) and (pointer: fine) {
-        .contact-card:hover .contact-brand {
+        a.contact-card:hover .contact-brand {
             color: var(--brand-icon-hover, var(--brand-icon));
             transform: scale(1.06);
         }
@@ -152,6 +156,7 @@ import ContentWithHeading from './ContentWithHeading.astro';
         font-size: var(--text-md);
         line-height: 1.4;
         color: var(--color-muted);
+        overflow-wrap: anywhere;
     }
 
     .contact-icon {
@@ -175,17 +180,16 @@ import ContentWithHeading from './ContentWithHeading.astro';
 
     @container (max-width: 28rem) {
         .contact-card {
-            align-items: center;
-            row-gap: 0;
+            column-gap: var(--space-sm);
+            padding: var(--space-md);
         }
 
-        .contact-brand,
-        .contact-icon {
-            grid-row: 1;
+        .contact-name {
+            font-size: var(--text-lg);
         }
 
         .contact-use {
-            display: none;
+            font-size: var(--text-sm);
         }
     }
 

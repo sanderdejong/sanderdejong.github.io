@@ -37,9 +37,8 @@ const projects: Project[] = [
         slug: 'trail-notebook',
         title: 'Trail notebook',
         description: 'A notebook for planning hikes and remembering what the map leaves out. Save a route, mark useful waypoints, and jot down trail conditions, water stops, or the turn you missed. View past hikes by area when you want to go back.',
-        tags: ['Astro', 'TypeScript', 'Leaflet', 'OpenStreetMap', 'GPX', 'IndexedDB', 'CSS', 'Vitest'],
-        websiteUrl: 'https://sanderdejong.dev',
-        githubUrl: 'https://github.com/sanderdejong',
+        tags: ['Astro', 'TypeScript', 'Leaflet', 'IndexedDB'],
+        // TODO: add websiteUrl / githubUrl once real project content is ready
         image: {
             src: trailNotebookImg,
             alt: 'Wooden staircase steps climbing through a misty forest trail',
@@ -50,8 +49,8 @@ const projects: Project[] = [
         slug: 'deploy-log',
         title: 'Deploy log',
         description: 'A searchable deployment history that brings together the commit, environment, and outcome for every release. Compare runs across environments and follow the record back to the change that shipped.',
-        tags: ['Java', 'Spring Boot', 'AWS Lambda', 'DynamoDB', 'EventBridge', 'GitHub Actions', 'Terraform', 'JUnit'],
-        githubUrl: 'https://github.com/sanderdejong',
+        tags: ['Java', 'AWS Lambda', 'DynamoDB', 'Terraform'],
+        // TODO: add githubUrl once real project content is ready
         image: {
             src: deployLogImg,
             alt: 'Close-up of a silver laptop resting on a wooden desk',
@@ -62,7 +61,7 @@ const projects: Project[] = [
         slug: 'reading-shelf',
         title: 'Reading shelf',
         description: 'A personal reading log for keeping track of books, saving notes, and finding something to read next.',
-        tags: ['TypeScript', 'SQLite', 'HTML', 'CSS', 'Playwright'],
+        tags: ['TypeScript', 'SQLite', 'HTML', 'CSS'],
         image: {
             src: readingShelfImg,
             alt: 'Narrow aisle between tall wooden bookshelves lined with books',
@@ -75,10 +74,17 @@ const projects: Project[] = [
     <ContentWithHeading id="projects">
         <h2 id="projects-heading">projects<span class="period">.</span></h2>
 
-        <div class="projects-carousel" role="region" aria-roledescription="carousel" aria-label="Projects">
+        <div class="projects-carousel" role="region" aria-roledescription="carousel" aria-label="Projects" data-projects-carousel>
+            <p class="visually-hidden" aria-live="polite" aria-atomic="true" data-projects-status></p>
             <div class="projects-track" data-projects-track>
-                {projects.map((project) => (
-                    <div class="project-slide">
+                {projects.map((project, index) => (
+                    <div
+                        class="project-slide"
+                        role="group"
+                        aria-roledescription="slide"
+                        aria-label={`${index + 1} of ${projects.length}: ${project.title}`}
+                        inert={index !== 0 ? true : undefined}
+                    >
                         <article class="card-surface project-card" aria-labelledby={project.slug}>
                             <div class="project-content">
                                 <h3 id={project.slug}>{project.title}</h3>
@@ -127,7 +133,7 @@ const projects: Project[] = [
                                         alt={project.image.alt}
                                         widths={[480, 768, 1024]}
                                         sizes="(min-width: 56rem) 42vw, 92vw"
-                                        loading="eager"
+                                        loading="lazy"
                                         decoding="async"
                                         style={project.image.position ? `object-position: ${project.image.position}` : undefined}
                                     />
@@ -168,12 +174,14 @@ const projects: Project[] = [
 
 <script>
     const initProjectsCarousel = () => {
+        const carousel = document.querySelector<HTMLElement>('[data-projects-carousel]');
         const track = document.querySelector<HTMLElement>('[data-projects-track]');
-        if (!track || track.dataset.bound === 'true') return;
+        if (!carousel || !track || track.dataset.bound === 'true') return;
         track.dataset.bound = 'true';
 
         const prevBtn = document.querySelector<HTMLButtonElement>('[data-projects-prev]');
         const nextBtn = document.querySelector<HTMLButtonElement>('[data-projects-next]');
+        const statusEl = document.querySelector<HTMLElement>('[data-projects-status]');
         const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-projects-jump]'));
         const slides = Array.from(track.querySelectorAll<HTMLElement>('.project-slide'));
         const total = slides.length;
@@ -183,6 +191,20 @@ const projects: Project[] = [
 
         let activeIndex = 0;
         let targetIndex: number | null = null;
+
+        const announceSlide = (index: number) => {
+            if (!statusEl) return;
+            const heading = slides[index]?.querySelector('h3')?.textContent?.trim();
+            statusEl.textContent = heading
+                ? `Showing ${heading}, project ${index + 1} of ${total}`
+                : `Showing project ${index + 1} of ${total}`;
+        };
+
+        const renderSlides = (index: number) => {
+            slides.forEach((slide, i) => {
+                slide.inert = i !== index;
+            });
+        };
 
         const renderDots = (index: number) => {
             dots.forEach((btn, i) => {
@@ -199,17 +221,23 @@ const projects: Project[] = [
             if (nextBtn) nextBtn.disabled = index === total - 1;
         };
 
-        const renderState = (index: number) => {
-            activeIndex = Math.max(0, Math.min(total - 1, index));
+        const renderState = (index: number, announce = false) => {
+            const next = Math.max(0, Math.min(total - 1, index));
+            const changed = next !== activeIndex;
+            activeIndex = next;
+            renderSlides(activeIndex);
             renderDots(activeIndex);
             renderButtons(activeIndex);
+            if (announce && changed) announceSlide(activeIndex);
         };
 
         const scrollToIndex = (index: number) => {
             const clamped = Math.max(0, Math.min(total - 1, index));
             if (clamped === activeIndex) return;
             activeIndex = clamped;
+            renderSlides(clamped);
             renderDots(clamped);
+            announceSlide(clamped);
             const targetLeft = slides[clamped].offsetLeft - slides[0].offsetLeft;
             const reduced = prefersReducedMotion();
             targetIndex = reduced ? null : clamped;
@@ -220,9 +248,21 @@ const projects: Project[] = [
             if (reduced) renderButtons(clamped);
         };
 
+        renderSlides(0);
+
         prevBtn?.addEventListener('click', () => scrollToIndex(activeIndex - 1));
         nextBtn?.addEventListener('click', () => scrollToIndex(activeIndex + 1));
         dots.forEach((btn, i) => btn.addEventListener('click', () => scrollToIndex(i)));
+
+        carousel.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                scrollToIndex(activeIndex - 1);
+            } else if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                scrollToIndex(activeIndex + 1);
+            }
+        });
 
         let rafId = 0;
         track.addEventListener('scroll', () => {
@@ -239,7 +279,7 @@ const projects: Project[] = [
                     }
                     return;
                 }
-                renderState(current);
+                renderState(current, true);
             });
         }, { passive: true });
 
@@ -255,16 +295,15 @@ const projects: Project[] = [
     };
 
     initProjectsCarousel();
-    document.addEventListener('astro:page-load', initProjectsCarousel);
 </script>
 
 <style>
-    /* Hallmark · shape: full-width card carousel · genre: editorial · theme: locked Plum & linen · signature: one full-width cardstock project slide at a time with centered bottom controls · v2.0.0 */
     :global(#projects) {
         padding-block: var(--section-pad);
     }
 
     .projects-carousel {
+        --track-bleed: min(var(--space-lg), var(--gutter));
         display: grid;
         gap: var(--space-lg);
         width: 100%;
@@ -274,10 +313,10 @@ const projects: Project[] = [
         display: grid;
         grid-auto-flow: column;
         grid-auto-columns: 100%;
-        width: calc(100% + var(--space-lg) * 2);
-        width: round(down, calc(100% + var(--space-lg) * 2), 1px);
+        width: calc(100% + var(--track-bleed) * 2);
+        width: round(down, calc(100% + var(--track-bleed) * 2), 1px);
         min-width: 0;
-        margin-inline: calc(-1 * var(--space-lg));
+        margin-inline: calc(-1 * var(--track-bleed));
         margin-block: calc(-1 * var(--space-md)) calc(-1 * var(--space-lg));
         overflow-x: auto;
         scroll-snap-type: x mandatory;
@@ -292,7 +331,7 @@ const projects: Project[] = [
     .project-slide {
         display: flex;
         min-width: 0;
-        padding: var(--space-md) var(--space-lg) var(--space-xl) var(--space-lg);
+        padding: var(--space-md) var(--track-bleed) var(--space-xl) var(--track-bleed);
         scroll-snap-align: start;
         scroll-snap-stop: always;
     }
@@ -482,8 +521,8 @@ const projects: Project[] = [
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 2.5rem;
-        height: 2.5rem;
+        width: 2.75rem;
+        height: 2.75rem;
         padding: 0;
         border: 0;
         background: transparent;
@@ -528,13 +567,13 @@ const projects: Project[] = [
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: var(--space-xs);
+        gap: 0;
     }
 
     .projects-dot {
         position: relative;
-        width: 1.5rem;
-        height: 1.5rem;
+        width: 2.75rem;
+        height: 2.75rem;
         padding: 0;
         border: 0;
         background: transparent;
@@ -549,7 +588,7 @@ const projects: Project[] = [
         width: 0.5rem;
         height: 0.5rem;
         border-radius: 50%;
-        background: var(--color-rule);
+        background: var(--color-muted);
         transition:
             background-color var(--dur-micro) var(--ease-out),
             transform var(--dur-micro) var(--ease-out);
@@ -557,7 +596,7 @@ const projects: Project[] = [
 
     @media (hover: hover) and (pointer: fine) {
         .projects-dot:hover::before {
-            background: var(--color-muted);
+            background: var(--color-ink);
         }
     }
 

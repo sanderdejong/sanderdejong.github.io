@@ -5,7 +5,6 @@ import '@fontsource/bricolage-grotesque/700.css';
 import '@fontsource/dm-sans/400.css';
 import '@fontsource/dm-sans/500.css';
 import '@fontsource/dm-sans/600.css';
-import {ClientRouter} from 'astro:transitions';
 import {Image} from 'astro:assets';
 import profilePic from '../assets/profile.png';
 import Navbar from '../components/Navbar.astro';
@@ -15,6 +14,7 @@ interface Props {
     pageTitle?: string;
     pageDescription?: string;
     portrait?: boolean;
+    robots?: string;
 }
 
 const {
@@ -22,6 +22,7 @@ const {
     pageTitle = "Sander de Jong - Software & AWS Cloud Engineer",
     pageDescription = "Sander de Jong, Software & AWS Cloud Engineer with over six years of experience in cloud-native development with Java and AWS.",
     portrait = true,
+    robots = "index, follow",
 } = Astro.props;
 
 const themeColor = {light: '#fdf9f3', dark: '#1b1614'};
@@ -42,7 +43,7 @@ const year = new Date().getFullYear();
     <meta charset="utf-8"/>
     <meta name="author" content={pageAuthor}/>
     <meta name="description" content={pageDescription}/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta name="generator" content={Astro.generator}/>
 
     <!-- Open Graph / Facebook -->
@@ -62,7 +63,7 @@ const year = new Date().getFullYear();
     <meta name="twitter:description" content={pageDescription}/>
     <meta name="twitter:image" content={socialImageURL}/>
 
-    <meta name="robots" content="index, follow"/>
+    <meta name="robots" content={robots}/>
     <meta name="theme-color" content={themeColor.light} media="(prefers-color-scheme: light)"/>
     <meta name="theme-color" content={themeColor.dark} media="(prefers-color-scheme: dark)"/>
     <script is:inline define:vars={{themeColor}}>
@@ -75,13 +76,7 @@ const year = new Date().getFullYear();
         };
         const saved = localStorage.getItem('theme');
         window.applyTheme(saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches);
-
-        // Carry the theme across Astro view transitions.
-        document.addEventListener('astro:before-swap', (ev) => {
-            window.applyTheme(document.documentElement.classList.contains('dark'), ev.newDocument);
-        });
     </script>
-    <ClientRouter/>
 </head>
 
 <body>
@@ -91,7 +86,7 @@ const year = new Date().getFullYear();
     <div class="layout-wrapper container" id={Astro.slots.has("sections") ? "home" : undefined}>
         {portrait && (
             <div class="sidebar">
-                <div class="sidebar-inner" transition:persist="sidebar">
+                <div class="sidebar-inner">
                     <div class="profile">
                         <div class="profile-wrapper">
                             <Image src={profilePic}
@@ -131,9 +126,17 @@ const year = new Date().getFullYear();
         });
     };
 
+    let resizeFrame = 0;
+    const scheduleSyncBandDotGrids = () => {
+        if (resizeFrame) return;
+        resizeFrame = requestAnimationFrame(() => {
+            resizeFrame = 0;
+            syncBandDotGrids();
+        });
+    };
+
     syncBandDotGrids();
-    document.addEventListener('astro:page-load', syncBandDotGrids);
-    window.addEventListener('resize', syncBandDotGrids, { passive: true });
+    window.addEventListener('resize', scheduleSyncBandDotGrids, { passive: true });
     document.fonts?.ready.then(syncBandDotGrids);
 </script>
 
@@ -162,28 +165,6 @@ const year = new Date().getFullYear();
 
     #main:focus {
         outline: none;
-    }
-
-    /* Between routes the portrait glides to its new size and the nav mark slides along the rule with it. Neither fades. */
-    ::view-transition-group(portrait),
-    ::view-transition-group(nav-mark) {
-        animation-duration: var(--dur-long);
-        animation-timing-function: var(--ease-out);
-    }
-
-    ::view-transition-old(portrait),
-    ::view-transition-old(nav-mark) {
-        animation: none;
-        opacity: 0;
-    }
-
-    ::view-transition-new(portrait),
-    ::view-transition-new(nav-mark) {
-        animation: none;
-    }
-
-    ::view-transition-new(nav-mark) {
-        height: 100%;
     }
 </style>
 
@@ -219,10 +200,6 @@ const year = new Date().getFullYear();
         grid-template-columns: minmax(0, 1fr);
     }
 
-    .sidebar-inner {
-        view-transition-name: portrait;
-    }
-
     .profile {
         width: min(100%, clamp(115px, 46px + 17.6vw, 300px));
         justify-self: center;
@@ -232,8 +209,7 @@ const year = new Date().getFullYear();
     /*
      * The portrait is pixel art from a 460px source. It fills its column; whenever that draws it
      * larger than the source it upscales with hard pixels, and downscales stay smooth so the
-     * scanlines don't alias. It stands on a tangerine block that steps with it in whole pixels:
-     * 6px small, 10px mid, 14px from 400px.
+     * scanlines don't alias.
      */
     .profile-wrapper {
         width: 100%;
