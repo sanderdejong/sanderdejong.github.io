@@ -39,6 +39,15 @@ export default defineConfig({
       subsets: ['latin'],
       fallbacks: ['system-ui', 'ui-sans-serif', 'sans-serif'],
     },
+    {
+      provider: fontProviders.fontsource(),
+      name: 'JetBrains Mono',
+      cssVariable: '--font-mono',
+      weights: [400],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+    },
   ],
   image: {
     service: {
