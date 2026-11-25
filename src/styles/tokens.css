@@ -100,8 +100,6 @@
   );
   --portrait-brightness: 1;
 
-  --font-display: "Bricolage Grotesque", system-ui, ui-sans-serif, sans-serif;
-  --font-body: "DM Sans", system-ui, ui-sans-serif, sans-serif;
   --radius-card: 12px;
   --radius-portrait: 14px;
   --radius-pill: 8px;
