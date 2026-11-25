@@ -1,4 +1,4 @@
-<div class="nav-root">
+<div class="nav-root" id="nav-root">
     <nav class="nav-top" aria-label="Main">
         <div class="nav-top-bar container">
             <ul class="nav-top-list">
@@ -8,6 +8,19 @@
                 <li><a href="/#photography" class="nav-link nav-top-link">Photography</a></li>
                 <li><a href="/#contact" class="nav-link nav-top-link">Contact</a></li>
             </ul>
+            <button
+                class="nav-menu-btn nav-top-menu js-nav-menu-btn"
+                type="button"
+                aria-label="Open navigation menu"
+                aria-controls="nav-drawer"
+                aria-expanded="false"
+                hidden
+            >
+                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <path d="M4 7h16M4 12h16M4 17h16"/>
+                </svg>
+                <span class="js-nav-current">Menu</span>
+            </button>
             <button class="theme-btn nav-top-theme js-theme-btn" id="theme-btn" type="button" aria-label="Dark mode" aria-pressed="false" hidden>
                 <svg class="theme-moon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
                     <path d="M20.8 14.1A9 9 0 0 1 9.9 3.2 9 9 0 1 0 20.8 14.1Z"/>
@@ -25,14 +38,22 @@
             <li><a href="/#home" class="nav-link nav-dock-link">Home</a></li>
             <li><a href="/#about" class="nav-link nav-dock-link">About</a></li>
             <li><a href="/#projects" class="nav-link nav-dock-link">Projects</a></li>
-            <li>
-                <a href="/#photography" class="nav-link nav-dock-link">
-                    <span class="nav-label-full">Photography</span>
-                    <span class="nav-label-short" aria-hidden="true">Photos</span>
-                </a>
-            </li>
+            <li><a href="/#photography" class="nav-link nav-dock-link">Photography</a></li>
             <li><a href="/#contact" class="nav-link nav-dock-link">Contact</a></li>
         </ul>
+        <button
+            class="nav-menu-btn nav-dock-menu js-nav-menu-btn"
+            type="button"
+            aria-label="Open navigation menu"
+            aria-controls="nav-drawer"
+            aria-expanded="false"
+            hidden
+        >
+            <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M4 7h16M4 12h16M4 17h16"/>
+            </svg>
+            <span class="js-nav-current">Menu</span>
+        </button>
         <span class="nav-dock-sep" aria-hidden="true"></span>
         <button class="theme-btn nav-dock-theme js-theme-btn" type="button" aria-label="Dark mode" aria-pressed="false" hidden>
             <svg class="theme-moon" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
@@ -44,6 +65,16 @@
             </svg>
         </button>
     </nav>
+
+    <dialog class="nav-drawer" id="nav-drawer" aria-label="Site navigation">
+        <ul class="nav-drawer-list">
+            <li><a href="/#home" class="nav-link nav-drawer-link">Home</a></li>
+            <li><a href="/#about" class="nav-link nav-drawer-link">About</a></li>
+            <li><a href="/#projects" class="nav-link nav-drawer-link">Projects</a></li>
+            <li><a href="/#photography" class="nav-link nav-drawer-link">Photography</a></li>
+            <li><a href="/#contact" class="nav-link nav-drawer-link">Contact</a></li>
+        </ul>
+    </dialog>
 </div>
 
 <script is:inline>
@@ -59,7 +90,19 @@
             });
         }
 
+        let themeTransitionTimer = 0;
+
         function applyTheme(isDark) {
+            const root = document.documentElement;
+            const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            if (!reduced) {
+                root.classList.add("theme-transition");
+                window.clearTimeout(themeTransitionTimer);
+                themeTransitionTimer = window.setTimeout(() => {
+                    root.classList.remove("theme-transition");
+                    themeTransitionTimer = 0;
+                }, 340);
+            }
             window.applyTheme(isDark);
             syncThemeButtons();
         }
@@ -90,6 +133,14 @@
             }
         }
 
+        const SECTION_LABELS = {
+            "#home": "Home",
+            "#about": "About",
+            "#projects": "Projects",
+            "#photography": "Photography",
+            "#contact": "Contact",
+        };
+
         function syncActiveLink() {
             const { pathname } = window.location;
             const hash = currentHash();
@@ -100,10 +151,123 @@
                     link.removeAttribute("aria-current");
                 }
             });
+            const label = SECTION_LABELS[hash] || "Menu";
+            document.querySelectorAll(".js-nav-current").forEach((el) => {
+                el.textContent = label;
+            });
             syncDockVisibility();
         }
 
+        function setDrawerExpanded(expanded) {
+            document.querySelectorAll(".js-nav-menu-btn").forEach((btn) => {
+                btn.setAttribute("aria-expanded", String(expanded));
+            });
+        }
+
+        let closeTimer = 0;
+
+        function finishCloseDrawer(drawer) {
+            if (!drawer) return;
+            window.clearTimeout(closeTimer);
+            closeTimer = 0;
+            delete drawer.dataset.closing;
+            if (drawer.open) drawer.close();
+            setDrawerExpanded(false);
+        }
+
+        function openDrawer(trigger) {
+            const drawer = document.getElementById("nav-drawer");
+            if (!drawer) return;
+            if (drawer.dataset.closing === "true") {
+                finishCloseDrawer(drawer);
+            }
+            if (drawer.open) return;
+
+            const isDock = trigger?.classList.contains("nav-dock-menu");
+            const anchor = isDock ? document.getElementById("nav-dock") || trigger : trigger;
+            const rect = anchor?.getBoundingClientRect();
+            const gap = 8;
+            const pad = 16;
+
+            drawer.dataset.placement = isDock ? "above" : "below";
+            drawer.style.top = "";
+            drawer.style.bottom = "";
+            drawer.style.left = "";
+
+            drawer.showModal();
+            setDrawerExpanded(true);
+
+            if (rect) {
+                const menuWidth = drawer.getBoundingClientRect().width;
+                const maxLeft = Math.max(pad, window.innerWidth - menuWidth - pad);
+                if (isDock) {
+                    const centered = rect.left + rect.width / 2 - menuWidth / 2;
+                    drawer.style.left = `${Math.round(Math.min(maxLeft, Math.max(pad, centered)))}px`;
+                    drawer.style.bottom = `${Math.round(window.innerHeight - rect.top + gap)}px`;
+                    drawer.style.top = "auto";
+                } else {
+                    drawer.style.left = `${Math.round(Math.min(maxLeft, Math.max(pad, rect.left)))}px`;
+                    drawer.style.top = `${Math.round(rect.bottom + gap)}px`;
+                    drawer.style.bottom = "auto";
+                }
+            }
+        }
+
+        function closeDrawer() {
+            const drawer = document.getElementById("nav-drawer");
+            if (!drawer || !drawer.open || drawer.dataset.closing === "true") return;
+
+            const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            if (reduced) {
+                finishCloseDrawer(drawer);
+                return;
+            }
+
+            drawer.dataset.closing = "true";
+            setDrawerExpanded(false);
+            window.clearTimeout(closeTimer);
+            closeTimer = window.setTimeout(() => finishCloseDrawer(drawer), 320);
+        }
+
         function initNavbar() {
+            const navRoot = document.getElementById("nav-root");
+            if (navRoot) navRoot.classList.add("has-mobile-drawer");
+
+            document.querySelectorAll(".js-nav-menu-btn").forEach((btn) => {
+                btn.hidden = false;
+                if (btn.dataset.drawerInit) return;
+                btn.dataset.drawerInit = "true";
+                btn.addEventListener("click", () => {
+                    const drawer = document.getElementById("nav-drawer");
+                    if (drawer?.open) closeDrawer();
+                    else openDrawer(btn);
+                });
+            });
+
+            const drawer = document.getElementById("nav-drawer");
+            if (drawer && !drawer.dataset.drawerInit) {
+                drawer.dataset.drawerInit = "true";
+                drawer.addEventListener("cancel", (e) => {
+                    e.preventDefault();
+                    closeDrawer();
+                });
+                drawer.addEventListener("transitionend", (e) => {
+                    if (e.target === drawer && e.propertyName === "opacity" && drawer.dataset.closing === "true") {
+                        finishCloseDrawer(drawer);
+                    }
+                });
+                drawer.addEventListener("close", () => {
+                    delete drawer.dataset.closing;
+                    setDrawerExpanded(false);
+                });
+                drawer.addEventListener("click", (e) => {
+                    if (e.target === drawer) closeDrawer();
+                });
+                drawer.querySelectorAll(".nav-drawer-link").forEach((link) => {
+                    link.addEventListener("click", closeDrawer);
+                });
+            }
+
             syncActiveLink();
             syncThemeButtons();
 
@@ -154,7 +318,10 @@
             });
         };
         window.addEventListener("scroll", scheduleSyncActiveLink, { passive: true });
-        window.addEventListener("resize", scheduleSyncActiveLink, { passive: true });
+        window.addEventListener("resize", () => {
+            if (window.innerWidth > 576) closeDrawer();
+            scheduleSyncActiveLink();
+        }, { passive: true });
     })();
 </script>
 
@@ -321,8 +488,45 @@
         outline-offset: 2px;
     }
 
-    .nav-label-short {
+    .nav-menu-btn {
         display: none;
+        align-items: center;
+        gap: var(--space-xs);
+        min-height: 44px;
+        padding: var(--space-xs) var(--space-sm);
+        border: 0;
+        border-radius: var(--radius-pill);
+        background: transparent;
+        font-size: var(--text-sm);
+        font-weight: 500;
+        cursor: pointer;
+        white-space: nowrap;
+        transition:
+            color var(--dur-micro) var(--ease-out),
+            background-color var(--dur-micro) var(--ease-out);
+    }
+
+    .nav-top-menu {
+        color: var(--color-nav-active);
+        background: var(--color-nav-pill);
+    }
+
+    .nav-dock-menu {
+        color: var(--color-nav-ink);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        .nav-top-menu:hover {
+            background: color-mix(in oklab, var(--color-accent) 20%, transparent);
+        }
+
+        .nav-dock-menu:hover {
+            background: color-mix(in oklab, var(--color-nav-ink) 8%, transparent);
+        }
+    }
+
+    .nav-menu-btn:focus-visible {
+        outline-offset: 2px;
     }
 
     .nav-dock-sep {
@@ -408,6 +612,134 @@
         display: none;
     }
 
+    /* Compact anchored mobile navigation popover */
+    .nav-drawer {
+        position: fixed;
+        inset: auto;
+        margin: 0;
+        width: min(13.5rem, calc(100vw - var(--space-lg)));
+        padding: var(--space-xs);
+        border: 1px solid var(--color-nav-border);
+        border-radius: var(--radius-portrait);
+        background: var(--color-nav-bg);
+        backdrop-filter: blur(18px) saturate(1.35);
+        -webkit-backdrop-filter: blur(18px) saturate(1.35);
+        box-shadow: var(--shadow-nav);
+        color: var(--color-nav-ink);
+        opacity: 0;
+        transform: translateY(-8px) scale(0.97);
+        transition:
+            opacity 320ms var(--ease-in-out),
+            transform 320ms var(--ease-out),
+            overlay 320ms allow-discrete,
+            display 320ms allow-discrete;
+    }
+
+    .nav-drawer[data-placement="below"] {
+        transform-origin: top left;
+        transform: translateY(-8px) scale(0.97);
+    }
+
+    .nav-drawer[data-placement="above"] {
+        transform-origin: bottom center;
+        transform: translateY(8px) scale(0.97);
+    }
+
+    .nav-drawer[open] {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    .nav-drawer[data-closing="true"] {
+        opacity: 0;
+        pointer-events: none;
+        transition:
+            opacity 280ms var(--ease-in-out),
+            transform 280ms var(--ease-in-out);
+    }
+
+    .nav-drawer[data-closing="true"][data-placement="below"] {
+        transform: translateY(-6px) scale(0.975);
+    }
+
+    .nav-drawer[data-closing="true"][data-placement="above"] {
+        transform: translateY(6px) scale(0.975);
+    }
+
+    @starting-style {
+        .nav-drawer[open][data-placement="below"] {
+            opacity: 0;
+            transform: translateY(-8px) scale(0.97);
+        }
+
+        .nav-drawer[open][data-placement="above"] {
+            opacity: 0;
+            transform: translateY(8px) scale(0.97);
+        }
+    }
+
+    .nav-drawer::backdrop {
+        background: oklch(14% 0.015 45 / 0.16);
+        opacity: 0;
+        transition:
+            opacity 320ms var(--ease-in-out),
+            overlay 320ms allow-discrete,
+            display 320ms allow-discrete;
+    }
+
+    .nav-drawer[open]::backdrop {
+        opacity: 1;
+    }
+
+    .nav-drawer[data-closing="true"]::backdrop {
+        opacity: 0;
+        transition: opacity 280ms var(--ease-in-out);
+    }
+
+    @starting-style {
+        .nav-drawer[open]::backdrop {
+            opacity: 0;
+        }
+    }
+
+    .nav-drawer-list {
+        display: grid;
+        gap: var(--space-3xs);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .nav-drawer-link {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+        padding: var(--space-xs) var(--space-sm);
+        border-radius: var(--radius-pill);
+        font-size: var(--text-sm);
+        font-weight: 500;
+        color: var(--color-nav-muted);
+        text-decoration: none;
+        transition:
+            color var(--dur-micro) var(--ease-out),
+            background-color var(--dur-micro) var(--ease-out);
+    }
+
+    .nav-drawer-link[aria-current="location"] {
+        color: var(--color-nav-active);
+        background: var(--color-nav-pill);
+    }
+
+    .nav-drawer-link:hover {
+        color: var(--color-nav-ink);
+        background: color-mix(in oklab, var(--color-nav-ink) 8%, transparent);
+    }
+
+    .nav-drawer-link[aria-current="location"]:hover {
+        color: var(--color-nav-active);
+        background: var(--color-nav-pill);
+    }
+
     @media (max-width: 40rem) {
         .nav-top-bar {
             padding-block: var(--space-md) var(--space-2xs);
@@ -432,17 +764,14 @@
         }
     }
 
-    @media (max-width: 30rem) {
-        .nav-label-full {
+    @media (max-width: 36rem) {
+        .nav-root.has-mobile-drawer .nav-top-list,
+        .nav-root.has-mobile-drawer .nav-dock-list {
             display: none;
         }
 
-        .nav-label-short {
-            display: inline;
-        }
-
-        .nav-dock-link {
-            padding: var(--space-xs);
+        .nav-root.has-mobile-drawer .nav-menu-btn {
+            display: inline-flex;
         }
     }
 
@@ -451,6 +780,10 @@
         .nav-dock,
         .nav-dock.is-visible,
         .nav-dock-link,
+        .nav-menu-btn,
+        .nav-drawer,
+        .nav-drawer::backdrop,
+        .nav-drawer-link,
         .theme-btn,
         .theme-moon path,
         .theme-sun circle {
