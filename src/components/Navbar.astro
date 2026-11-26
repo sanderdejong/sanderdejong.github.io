@@ -66,7 +66,7 @@
         </button>
     </nav>
 
-    <dialog class="nav-drawer" id="nav-drawer" aria-label="Site navigation" tabindex="-1">
+    <nav class="nav-drawer" id="nav-drawer" aria-label="Site navigation" hidden tabindex="-1">
         <ul class="nav-drawer-list">
             <li><a href="/#home" class="nav-link nav-drawer-link">Home</a></li>
             <li><a href="/#about" class="nav-link nav-drawer-link">About</a></li>
@@ -74,7 +74,7 @@
             <li><a href="/#photography" class="nav-link nav-drawer-link">Photography</a></li>
             <li><a href="/#contact" class="nav-link nav-drawer-link">Contact</a></li>
         </ul>
-    </dialog>
+    </nav>
 </div>
 
 <script>
@@ -174,13 +174,19 @@
         }
 
         let closeTimer = 0;
+        let lastDrawerTrigger = null;
+
+        function isDrawerOpen(drawer) {
+            return Boolean(drawer && !drawer.hidden && drawer.dataset.closing !== "true");
+        }
 
         function finishCloseDrawer(drawer) {
             if (!drawer) return;
             window.clearTimeout(closeTimer);
             closeTimer = 0;
+            delete drawer.dataset.open;
             delete drawer.dataset.closing;
-            if (drawer.open) drawer.close();
+            drawer.hidden = true;
             setDrawerExpanded(false);
             if (document.documentElement.dataset.input === "pointer" && document.activeElement instanceof HTMLElement) {
                 document.activeElement.blur();
@@ -193,8 +199,9 @@
             if (drawer.dataset.closing === "true") {
                 finishCloseDrawer(drawer);
             }
-            if (drawer.open) return;
+            if (!drawer.hidden) return;
 
+            lastDrawerTrigger = trigger || null;
             const isDock = trigger?.classList.contains("nav-dock-menu");
             const anchor = isDock ? document.getElementById("nav-dock") || trigger : trigger;
             const rect = anchor?.getBoundingClientRect();
@@ -206,11 +213,8 @@
             drawer.style.bottom = "";
             drawer.style.left = "";
 
-            drawer.showModal();
+            drawer.hidden = false;
             setDrawerExpanded(true);
-            if (document.documentElement.dataset.input === "pointer") {
-                drawer.focus({ preventScroll: true });
-            }
 
             if (rect) {
                 const menuWidth = drawer.getBoundingClientRect().width;
@@ -226,11 +230,22 @@
                     drawer.style.bottom = "auto";
                 }
             }
+
+            void drawer.offsetWidth;
+            drawer.dataset.open = "true";
+
+            if (document.documentElement.dataset.input !== "pointer") {
+                drawer.querySelector(".nav-drawer-link")?.focus({ preventScroll: true });
+            }
         }
 
-        function closeDrawer() {
+        function closeDrawer(restoreFocus = false) {
             const drawer = document.getElementById("nav-drawer");
-            if (!drawer || !drawer.open || drawer.dataset.closing === "true") return;
+            if (!drawer || drawer.hidden || drawer.dataset.closing === "true") return;
+
+            if (restoreFocus && document.documentElement.dataset.input !== "pointer" && lastDrawerTrigger instanceof HTMLElement) {
+                lastDrawerTrigger.focus({ preventScroll: true });
+            }
 
             const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
             if (reduced) {
@@ -238,6 +253,7 @@
                 return;
             }
 
+            delete drawer.dataset.open;
             drawer.dataset.closing = "true";
             setDrawerExpanded(false);
             window.clearTimeout(closeTimer);
@@ -272,7 +288,7 @@
                 btn.dataset.drawerInit = "true";
                 btn.addEventListener("click", () => {
                     const drawer = document.getElementById("nav-drawer");
-                    if (drawer?.open) closeDrawer();
+                    if (isDrawerOpen(drawer)) closeDrawer();
                     else openDrawer(btn);
                 });
             });
@@ -280,24 +296,27 @@
             const drawer = document.getElementById("nav-drawer");
             if (drawer && !drawer.dataset.drawerInit) {
                 drawer.dataset.drawerInit = "true";
-                drawer.addEventListener("cancel", (e) => {
-                    e.preventDefault();
-                    closeDrawer();
-                });
                 drawer.addEventListener("transitionend", (e) => {
                     if (e.target === drawer && e.propertyName === "opacity" && drawer.dataset.closing === "true") {
                         finishCloseDrawer(drawer);
                     }
                 });
-                drawer.addEventListener("close", () => {
-                    delete drawer.dataset.closing;
-                    setDrawerExpanded(false);
-                });
-                drawer.addEventListener("click", (e) => {
-                    if (e.target === drawer) closeDrawer();
-                });
                 drawer.querySelectorAll(".nav-drawer-link").forEach((link) => {
-                    link.addEventListener("click", closeDrawer);
+                    link.addEventListener("click", () => closeDrawer());
+                });
+                document.addEventListener("pointerdown", (e) => {
+                    if (!isDrawerOpen(drawer)) return;
+                    const target = e.target;
+                    if (target instanceof Node && (drawer.contains(target) || (target instanceof Element && target.closest(".js-nav-menu-btn")))) {
+                        return;
+                    }
+                    closeDrawer();
+                });
+                document.addEventListener("keydown", (e) => {
+                    if (e.key === "Escape" && isDrawerOpen(drawer)) {
+                        e.preventDefault();
+                        closeDrawer(true);
+                    }
                 });
             }
 
@@ -350,7 +369,13 @@
                 syncActiveLink();
             });
         };
-        window.addEventListener("scroll", scheduleSyncActiveLink, { passive: true });
+        window.addEventListener("scroll", () => {
+            const drawer = document.getElementById("nav-drawer");
+            if (isDrawerOpen(drawer) && drawer.dataset.placement === "below") {
+                closeDrawer();
+            }
+            scheduleSyncActiveLink();
+        }, { passive: true });
         window.addEventListener("resize", () => {
             if (window.innerWidth > 576) closeDrawer();
             scheduleSyncActiveLink();
@@ -654,6 +679,7 @@
     .nav-drawer {
         position: fixed;
         inset: auto;
+        z-index: var(--z-modal);
         margin: 0;
         width: min(13.5rem, calc(100vw - var(--space-lg)));
         padding: 0;
@@ -665,9 +691,7 @@
         transform: translateY(-8px) scale(0.97);
         transition:
             opacity 320ms var(--ease-in-out),
-            transform 320ms var(--ease-out),
-            overlay 320ms allow-discrete,
-            display 320ms allow-discrete;
+            transform 320ms var(--ease-out);
     }
 
     .nav-drawer[data-placement="below"] {
@@ -680,7 +704,7 @@
         transform: translateY(8px) scale(0.97);
     }
 
-    .nav-drawer[open] {
+    .nav-drawer[data-open="true"] {
         opacity: 1;
         transform: translateY(0) scale(1);
     }
@@ -699,42 +723,6 @@
 
     .nav-drawer[data-closing="true"][data-placement="above"] {
         transform: translateY(6px) scale(0.975);
-    }
-
-    @starting-style {
-        .nav-drawer[open][data-placement="below"] {
-            opacity: 0;
-            transform: translateY(-8px) scale(0.97);
-        }
-
-        .nav-drawer[open][data-placement="above"] {
-            opacity: 0;
-            transform: translateY(8px) scale(0.97);
-        }
-    }
-
-    .nav-drawer::backdrop {
-        background: oklch(14% 0.015 45 / 0.16);
-        opacity: 0;
-        transition:
-            opacity 320ms var(--ease-in-out),
-            overlay 320ms allow-discrete,
-            display 320ms allow-discrete;
-    }
-
-    .nav-drawer[open]::backdrop {
-        opacity: 1;
-    }
-
-    .nav-drawer[data-closing="true"]::backdrop {
-        opacity: 0;
-        transition: opacity 280ms var(--ease-in-out);
-    }
-
-    @starting-style {
-        .nav-drawer[open]::backdrop {
-            opacity: 0;
-        }
     }
 
     .nav-drawer-list {
@@ -823,7 +811,6 @@
         .nav-dock-link,
         .nav-menu-btn,
         .nav-drawer,
-        .nav-drawer::backdrop,
         .nav-drawer-link,
         .theme-btn,
         .theme-moon path,
