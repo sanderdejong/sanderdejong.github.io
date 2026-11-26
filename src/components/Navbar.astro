@@ -682,10 +682,13 @@
         z-index: var(--z-modal);
         margin: 0;
         width: min(13.5rem, calc(100vw - var(--space-lg)));
-        padding: 0;
-        border: 0;
-        background: transparent;
-        overflow: visible;
+        padding: var(--space-xs);
+        border: 1px solid var(--color-nav-border);
+        border-radius: var(--radius-portrait);
+        background: var(--color-nav-bg);
+        -webkit-backdrop-filter: blur(18px) saturate(1.35);
+        backdrop-filter: blur(18px) saturate(1.35);
+        box-shadow: var(--shadow-nav);
         color: var(--color-nav-ink);
         opacity: 0;
         transform: translateY(-8px) scale(0.97);
@@ -729,14 +732,8 @@
         display: grid;
         gap: var(--space-3xs);
         margin: 0;
-        padding: var(--space-xs);
+        padding: 0;
         list-style: none;
-        border: 1px solid var(--color-nav-border);
-        border-radius: var(--radius-portrait);
-        background: var(--color-nav-bg);
-        -webkit-backdrop-filter: blur(18px) saturate(1.35);
-        backdrop-filter: blur(18px) saturate(1.35);
-        box-shadow: var(--shadow-nav);
     }
 
     .nav-drawer-link {
