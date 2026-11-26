@@ -5,8 +5,60 @@ import AboutSection from '../components/AboutSection.astro';
 import ProjectsSection from '../components/ProjectsSection.astro';
 import PhotographySection from '../components/PhotographySection.astro';
 import ContactSection from '../components/ContactSection.astro';
+
+const siteUrl = Astro.site?.toString() ?? 'https://sanderdejong.dev/';
+const description =
+    'Sander de Jong — Software & AWS Cloud Engineer with 6+ years of experience building cloud-native Java, AWS, distributed, and serverless systems.';
+
+const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'Person',
+            '@id': `${siteUrl}#person`,
+            name: 'Sander de Jong',
+            url: siteUrl,
+            image: new URL('/og.png', siteUrl).toString(),
+            jobTitle: 'Software & AWS Cloud Engineer',
+            description,
+            email: 'mailto:hi@sanderdejong.dev',
+            sameAs: [
+                'https://github.com/sanderdejong',
+                'https://linkedin.com/in/sanderdejong-',
+            ],
+            knowsAbout: [
+                'Java',
+                'Amazon Web Services (AWS)',
+                'Cloud-Native Development',
+                'Distributed Systems',
+                'Serverless Architecture',
+                'Container Architecture',
+                'Infrastructure as Code',
+            ],
+        },
+        {
+            '@type': 'WebSite',
+            '@id': `${siteUrl}#website`,
+            url: siteUrl,
+            name: 'Sander de Jong',
+            description,
+            inLanguage: 'en',
+            author: { '@id': `${siteUrl}#person` },
+        },
+        {
+            '@type': 'ProfilePage',
+            '@id': `${siteUrl}#webpage`,
+            url: siteUrl,
+            name: 'Sander de Jong - Software & AWS Cloud Engineer',
+            description,
+            isPartOf: { '@id': `${siteUrl}#website` },
+            mainEntity: { '@id': `${siteUrl}#person` },
+            inLanguage: 'en',
+        },
+    ],
+};
 ---
-<BaseLayout>
+<BaseLayout pageDescription={description} structuredData={structuredData}>
     <ContentWithHeading>
         <hgroup>
             <h1 class="hero-title">

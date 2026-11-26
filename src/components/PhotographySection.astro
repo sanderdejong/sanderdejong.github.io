@@ -553,7 +553,7 @@ const serializedCategories = await Promise.all(
         position: absolute;
         inset-block: 0;
         left: 50%;
-        width: 100vw;
+        width: 100dvw;
         transform: translateX(-50%);
         z-index: -1;
         pointer-events: none;
@@ -1041,7 +1041,7 @@ const serializedCategories = await Promise.all(
     .photo-thumbs {
         display: flex;
         flex-wrap: nowrap;
-        gap: 6px;
+        gap: var(--space-xs);
         justify-self: center;
         width: fit-content;
         max-width: min(100%, 494px);

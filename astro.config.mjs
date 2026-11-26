@@ -6,7 +6,6 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://sanderdejong.dev',
-  prefetch: true,
   security: {
     csp: {
       styleDirective: {
@@ -25,7 +24,7 @@ export default defineConfig({
       provider: fontProviders.fontsource(),
       name: 'Bricolage Grotesque',
       cssVariable: '--font-display',
-      weights: [600, 700],
+      weights: [600],
       styles: ['normal'],
       subsets: ['latin'],
       fallbacks: ['system-ui', 'ui-sans-serif', 'sans-serif'],
@@ -34,7 +33,7 @@ export default defineConfig({
       provider: fontProviders.fontsource(),
       name: 'DM Sans',
       cssVariable: '--font-body',
-      weights: [400, 500, 600],
+      weights: [400, 500],
       styles: ['normal'],
       subsets: ['latin'],
       fallbacks: ['system-ui', 'ui-sans-serif', 'sans-serif'],
