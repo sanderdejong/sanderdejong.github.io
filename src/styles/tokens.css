@@ -1,19 +1,18 @@
 :root {
   color-scheme: light;
-  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px; --space-4xl: 144px;
-  --text-xs: 0.8125rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.25rem; --text-xl: 1.5rem; --text-2xl: 1.875rem; --text-3xl: 2.25rem;
-  --text-display-s: clamp(2rem, 3.4vw + 0.5rem, 3.25rem); --text-display: clamp(2.4rem, 4.2vw + 0.75rem, 4.35rem);
+  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px;
+  --text-xs: 0.8125rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.25rem; --text-xl: 1.5rem; --text-2xl: 1.875rem;
+  --text-display: clamp(2.4rem, 4.2vw + 0.75rem, 4.35rem);
   --text-section: clamp(1.85rem, 2.2vw + 0.9rem, 3rem); --text-title: clamp(1.2rem, 0.7vw + 0.85rem, 1.5rem); --text-lead: clamp(1.0625rem, 0.35vw + 0.95rem, 1.3rem);
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-in: cubic-bezier(0.7, 0, 0.84, 0); --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --dur-micro: 120ms; --dur-short: 220ms; --dur-long: 420ms;
-  --container: 1440px; --gutter: 64px; --gap-columns: 32px; --section-gap-s: 120px; --section-gap: 144px; --section-gap-l: 176px;
-  --z-base: 1; --z-raised: 10; --z-dropdown: 100; --z-sticky: 200; --z-sticky-nav: 300; --z-modal: 400; --z-toast: 500; --z-tooltip: 600;
+  --container: 1440px; --gutter: 64px; --gap-columns: 32px; --section-gap-s: 120px;
+  --z-raised: 10; --z-sticky-nav: 300; --z-modal: 400;
 
   /* Fireside Studio — Light (Warm Ivory & Cozy Espresso) / Dark (Roasted Cocoa) */
   --color-paper: light-dark(oklch(98.2% 0.01 80), oklch(20.5% 0.015 45));
   --color-paper-2: light-dark(oklch(94.4% 0.016 70), oklch(24.5% 0.017 45));
-  --color-paper-3: light-dark(oklch(90.8% 0.022 65), oklch(28.5% 0.02 45));
-  --color-plate: light-dark(oklch(100% 0 0), oklch(24.5% 0.017 45));
+  --color-plate: light-dark(oklch(99.6% 0.005 80), oklch(24.5% 0.017 45));
   --color-plate-ink: light-dark(oklch(25% 0.025 45), oklch(95.2% 0.014 70));
   --color-ink: light-dark(oklch(25% 0.025 45), oklch(95.2% 0.014 70));
   --color-ink-2: light-dark(oklch(41% 0.025 45), oklch(82.5% 0.02 65));
@@ -25,7 +24,6 @@
   );
 
   --color-accent: light-dark(oklch(63% 0.155 45), oklch(75% 0.135 55));
-  --color-accent-ink: light-dark(oklch(98.2% 0.01 80), oklch(20.5% 0.015 45));
   --color-mark: light-dark(oklch(52% 0.145 43), oklch(78% 0.125 56));
   --color-accent-deep: light-dark(oklch(44% 0.13 42), oklch(84% 0.105 58));
   --color-focus: light-dark(oklch(55% 0.15 44), oklch(75% 0.135 55));
@@ -57,17 +55,13 @@
     color-mix(in oklab, var(--color-band-ink) 10%, transparent)
   );
   --color-pop: oklch(75% 0.135 55);
-  --color-pop-ink: light-dark(oklch(25% 0.025 45), oklch(20.5% 0.015 45));
 
-  --color-github: oklch(45% 0.095 148);
   --color-github-icon: light-dark(oklch(45% 0.095 148), oklch(74% 0.095 148));
   --color-github-surface: light-dark(oklch(96% 0.022 145), oklch(27.5% 0.026 146));
   --color-github-border: color-mix(in oklab, var(--color-github-icon) 39%, transparent);
-  --color-linkedin: oklch(46% 0.125 250);
   --color-linkedin-icon: light-dark(oklch(46% 0.125 250), oklch(74% 0.105 248));
   --color-linkedin-surface: light-dark(oklch(96.2% 0.022 248), oklch(27.5% 0.028 248));
   --color-linkedin-border: color-mix(in oklab, var(--color-linkedin-icon) 39%, transparent);
-  --color-instagram: oklch(50% 0.155 358);
   --color-instagram-icon: light-dark(oklch(50% 0.155 358), oklch(75% 0.13 358));
   --color-instagram-surface: light-dark(oklch(96.2% 0.024 358), oklch(27.5% 0.030 356));
   --color-instagram-border: color-mix(in oklab, var(--color-instagram-icon) 39%, transparent);
@@ -104,7 +98,6 @@
   --radius-portrait: 14px;
   --radius-pill: 8px;
   --rule-hair: 1px;
-  --rule-bar: 2px;
   --tracking-display: -0.025em;
   --display-weight: 600;
 }

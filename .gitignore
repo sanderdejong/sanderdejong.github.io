@@ -21,6 +21,8 @@ dist/
 
 # === Generated Files ===
 .astro/
+.hallmark/
+.impeccable/
 
 # === Environment Variables ===
 .env
