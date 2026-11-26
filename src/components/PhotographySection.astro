@@ -461,6 +461,13 @@ const serializedCategories = await Promise.all(
             event.preventDefault();
         }, { passive: false });
 
+        dialog.addEventListener('touchmove', (event) => {
+            if (event.touches.length > 1) return;
+            const target = event.target as HTMLElement | null;
+            if (target?.closest('[data-photo-thumbs]')) return;
+            event.preventDefault();
+        }, { passive: false });
+
         dialog.addEventListener('click', (event) => {
             const target = event.target as HTMLElement | null;
             if (target === dialog || target?.hasAttribute('data-photo-backdrop')) {
@@ -761,8 +768,9 @@ const serializedCategories = await Promise.all(
         border-radius: 0;
         background: transparent;
         color: var(--color-band-ink);
-        overflow: auto;
-        overscroll-behavior: contain;
+        overflow: hidden;
+        overscroll-behavior: none;
+        touch-action: none;
         opacity: 0;
         transform: translateY(10px) scale(0.975);
         transition:
@@ -941,7 +949,7 @@ const serializedCategories = await Promise.all(
         min-width: 0;
         min-height: 0;
         overflow: hidden;
-        touch-action: pan-y;
+        touch-action: pinch-zoom;
     }
 
     .photo-stage-media > :global(*) {
@@ -1038,6 +1046,8 @@ const serializedCategories = await Promise.all(
         width: fit-content;
         max-width: min(100%, 494px);
         overflow-x: auto;
+        overscroll-behavior-x: contain;
+        touch-action: pan-x;
         scrollbar-width: none;
         padding-block: var(--space-3xs);
     }
