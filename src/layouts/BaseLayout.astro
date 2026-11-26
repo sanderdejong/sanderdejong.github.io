@@ -137,6 +137,25 @@ const year = new Date().getFullYear();
     window.addEventListener('resize', scheduleSyncBandDotGrids, { passive: true });
     document.fonts?.ready.then(syncBandDotGrids);
 
+    // Suppress :focus-visible rings after touch/pointer interactions (including dialog open/close),
+    // while immediately restoring them on any keyboard navigation.
+    window.addEventListener(
+        'pointerdown',
+        () => {
+            document.documentElement.dataset.input = 'pointer';
+        },
+        { capture: true, passive: true },
+    );
+    window.addEventListener(
+        'keydown',
+        (event) => {
+            if (event.metaKey || event.ctrlKey || event.altKey) return;
+            if (event.key === 'Shift' || event.key === 'Control' || event.key === 'Alt' || event.key === 'Meta') return;
+            delete document.documentElement.dataset.input;
+        },
+        { capture: true },
+    );
+
     // Interactive dot-grid lens distortion across the page canvas and dark bands (fine pointers, motion-safe).
     if (
         window.matchMedia('(hover: hover) and (pointer: fine)').matches &&

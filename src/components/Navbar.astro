@@ -66,7 +66,7 @@
         </button>
     </nav>
 
-    <dialog class="nav-drawer" id="nav-drawer" aria-label="Site navigation">
+    <dialog class="nav-drawer" id="nav-drawer" aria-label="Site navigation" tabindex="-1">
         <ul class="nav-drawer-list">
             <li><a href="/#home" class="nav-link nav-drawer-link">Home</a></li>
             <li><a href="/#about" class="nav-link nav-drawer-link">About</a></li>
@@ -182,6 +182,9 @@
             delete drawer.dataset.closing;
             if (drawer.open) drawer.close();
             setDrawerExpanded(false);
+            if (document.documentElement.dataset.input === "pointer" && document.activeElement instanceof HTMLElement) {
+                document.activeElement.blur();
+            }
         }
 
         function openDrawer(trigger) {
@@ -205,6 +208,9 @@
 
             drawer.showModal();
             setDrawerExpanded(true);
+            if (document.documentElement.dataset.input === "pointer") {
+                drawer.focus({ preventScroll: true });
+            }
 
             if (rect) {
                 const menuWidth = drawer.getBoundingClientRect().width;
