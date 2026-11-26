@@ -1,7 +1,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 html, body { overflow-x: clip; }
 html:has(.photo-dialog[open]), html:has(.photo-dialog[open]) body { overflow: hidden; overscroll-behavior: none; }
-html { scrollbar-color: var(--color-muted) var(--color-paper); scrollbar-gutter: stable; scroll-padding-top: var(--space-lg); }
+html { background: var(--color-paper); scrollbar-color: var(--color-muted) var(--color-paper); scrollbar-gutter: stable; scroll-padding-top: var(--space-lg); }
 body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-family: var(--font-body); font-size: var(--text-md); line-height: 1.55; -webkit-font-smoothing: antialiased; caret-color: var(--color-accent); }
 ::selection { background: color-mix(in oklab, var(--color-accent) 35%, transparent); }
 :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
