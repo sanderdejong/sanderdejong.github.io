@@ -88,7 +88,7 @@ const serializedCategories = await Promise.all(
             </ul>
         </div>
 
-        <dialog class="photo-dialog" id="photo-dialog" aria-labelledby="photo-dialog-title">
+        <dialog class="photo-dialog" id="photo-dialog" aria-labelledby="photo-dialog-title" tabindex="-1">
             <div class="photo-dialog-inner" data-photo-backdrop>
                 <header class="photo-dialog-header">
                     <div class="photo-dialog-heading">
@@ -396,7 +396,11 @@ const serializedCategories = await Promise.all(
             renderPhoto(0);
             dialog.showModal();
             requestAnimationFrame(updateThumbFades);
-            closeBtn?.focus({ preventScroll: true });
+            if (document.documentElement.dataset.input === 'pointer') {
+                dialog.focus({ preventScroll: true });
+            } else {
+                closeBtn?.focus({ preventScroll: true });
+            }
         };
 
         document.querySelectorAll<HTMLButtonElement>('[data-photo-category]').forEach((btn) => {
@@ -512,7 +516,13 @@ const serializedCategories = await Promise.all(
         }, { passive: true });
 
         dialog.addEventListener('close', () => {
-            lastTrigger?.focus({ preventScroll: true });
+            if (document.documentElement.dataset.input === 'pointer') {
+                if (document.activeElement instanceof HTMLElement) {
+                    document.activeElement.blur();
+                }
+            } else {
+                lastTrigger?.focus({ preventScroll: true });
+            }
         });
     };
 
