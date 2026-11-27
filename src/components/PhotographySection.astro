@@ -478,6 +478,7 @@ const serializedCategories = await Promise.all(
             if (event.touches.length > 1) return;
             const target = event.target as HTMLElement | null;
             if (target?.closest('[data-photo-thumbs]')) return;
+            if (dialog.scrollHeight > dialog.clientHeight) return;
             event.preventDefault();
         }, { passive: false });
 
@@ -576,6 +577,8 @@ const serializedCategories = await Promise.all(
             radial-gradient(var(--color-band-dot) 1px, transparent 1px);
         background-size: 100% 100%, 20px 20px;
         background-position: 0 0, 50% var(--dot-offset-y, 0px);
+        box-shadow: 0 0 0 100vmax var(--color-band);
+        clip-path: inset(0 -100vmax);
     }
 
     .photo-band h2 {
@@ -781,9 +784,10 @@ const serializedCategories = await Promise.all(
         border-radius: 0;
         background: transparent;
         color: var(--color-band-ink);
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: auto;
         overscroll-behavior: none;
-        touch-action: none;
+        touch-action: pan-y;
         opacity: 0;
         transform: translateY(10px) scale(0.975);
         transition:
@@ -962,7 +966,7 @@ const serializedCategories = await Promise.all(
         min-width: 0;
         min-height: 0;
         overflow: hidden;
-        touch-action: pinch-zoom;
+        touch-action: pan-y pinch-zoom;
     }
 
     .photo-stage-media > :global(*) {

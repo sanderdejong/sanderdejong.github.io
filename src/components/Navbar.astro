@@ -393,8 +393,12 @@
             }
             scheduleSyncActiveLink();
         }, { passive: true });
+        const mobileDrawerMedia = window.matchMedia("(max-width: 36rem)");
+        mobileDrawerMedia.addEventListener("change", (e) => {
+            if (!e.matches) closeDrawer();
+        });
+
         window.addEventListener("resize", () => {
-            if (window.innerWidth > 576) closeDrawer();
             scheduleSyncActiveLink();
         }, { passive: true });
     })();
