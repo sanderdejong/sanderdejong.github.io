@@ -90,10 +90,11 @@ const serializedCategories = await Promise.all(
 
         <dialog class="photo-dialog" id="photo-dialog" aria-labelledby="photo-dialog-title" tabindex="-1">
             <div class="photo-dialog-inner" data-photo-backdrop>
+                <p class="visually-hidden" aria-live="polite" aria-atomic="true" data-photo-status></p>
                 <header class="photo-dialog-header">
                     <div class="photo-dialog-heading">
                         <h3 id="photo-dialog-title" class="photo-dialog-title"></h3>
-                        <span class="photo-dialog-counter" data-photo-counter aria-live="polite"></span>
+                        <span class="photo-dialog-counter" data-photo-counter></span>
                     </div>
                     <div class="photo-thumbs" data-photo-thumbs role="group" aria-label="Select photo"></div>
                     <button type="button" class="photo-dialog-close" data-photo-close aria-label="Close gallery">
@@ -163,6 +164,7 @@ const serializedCategories = await Promise.all(
 
         const titleEl = document.getElementById('photo-dialog-title');
         const counterEl = dialog.querySelector<HTMLElement>('[data-photo-counter]');
+        const statusEl = dialog.querySelector<HTMLElement>('[data-photo-status]');
         const mediaEl = dialog.querySelector<HTMLElement>('[data-photo-media]');
         const metaEl = dialog.querySelector<HTMLElement>('[data-photo-meta]');
         const thumbsEl = dialog.querySelector<HTMLElement>('[data-photo-thumbs]');
@@ -285,6 +287,9 @@ const serializedCategories = await Promise.all(
             const token = ++renderToken;
 
             counterEl.textContent = `${activeIndex + 1} / ${total}`;
+            if (statusEl) {
+                statusEl.textContent = `${photo.title}, photo ${activeIndex + 1} of ${total}`;
+            }
 
             if (photo.src) {
                 preloadPhoto(photo.src, photo.alt, photo.width, photo.height).then((loadedImg) => {
