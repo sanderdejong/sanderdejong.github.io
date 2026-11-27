@@ -2,8 +2,8 @@
 import ContentWithHeading from './ContentWithHeading.astro';
 ---
     <ContentWithHeading id="about">
-        <div class="about-band">
-            <h2 id="about-heading">more about me<span class="period">.</span></h2>
+        <h2 id="about-heading">more about me<span class="period">.</span></h2>
+        <div class="card-surface about-card">
             <div class="about-chunks">
                 <section class="about-chunk" aria-labelledby="about-build">
                     <h3 id="about-build">What I build</h3>
@@ -34,42 +34,13 @@ import ContentWithHeading from './ContentWithHeading.astro';
     </ContentWithHeading>
 
 <style>
-    .about-band {
-        position: relative;
-        isolation: isolate;
-        display: grid;
-        gap: var(--space-xl);
+    .about-card {
         width: 100%;
-        padding-block: var(--section-pad);
-        padding-inline: 0;
-        color: var(--color-band-ink);
-    }
-
-    .about-band::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: -1;
-        pointer-events: none;
-        background-color: var(--color-band);
-        background-image:
-            linear-gradient(to right, var(--color-band), transparent 18%, transparent 82%, var(--color-band)),
-            radial-gradient(var(--color-band-dot) 1px, transparent 1px);
-        background-size: 100% 100%, 20px 20px;
-        background-position: 0 0, 50% var(--dot-offset-y, 0px);
-        box-shadow: 0 0 0 100vmax var(--color-band);
-        clip-path: inset(0 -100vmax);
-    }
-
-    .about-band h2 {
-        font-size: min(var(--text-section), 14cqi);
-        max-width: none;
-        color: inherit;
-        text-wrap: balance;
-    }
-
-    .about-band :global(.period) {
-        color: var(--color-pop);
+        padding: clamp(var(--space-lg), 3.5vw, var(--space-xl));
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
+        color: var(--color-ink);
     }
 
     .about-chunks {
@@ -85,13 +56,11 @@ import ContentWithHeading from './ContentWithHeading.astro';
         flex-direction: column;
         gap: var(--space-sm);
         min-width: 0;
-        padding-block-start: var(--space-lg);
-        border-top: var(--rule-hair) solid color-mix(in oklab, var(--color-band-muted) 35%, transparent);
     }
 
     .about-chunk h3 {
         max-width: none;
-        color: inherit;
+        color: var(--color-ink);
         font-size: var(--text-title);
         line-height: 1.15;
         text-wrap: balance;
@@ -101,17 +70,18 @@ import ContentWithHeading from './ContentWithHeading.astro';
         max-width: 56ch;
         font-size: var(--text-md);
         line-height: 1.65;
-        color: var(--color-band-muted);
+        color: var(--color-ink-2);
     }
 
     @container (max-width: 52rem) {
         .about-chunks {
             grid-template-columns: minmax(0, 1fr);
-            row-gap: var(--space-xl);
+            row-gap: var(--space-lg);
         }
 
-        .about-chunk {
-            padding-block-start: var(--space-md);
+        .about-chunk + .about-chunk {
+            padding-block-start: var(--space-lg);
+            border-top: var(--rule-hair) solid var(--color-rule);
         }
     }
 </style>
