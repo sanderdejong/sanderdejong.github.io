@@ -128,27 +128,6 @@ const year = new Date().getFullYear();
 </footer>
 
 <script>
-    const syncBandDotGrids = () => {
-        const bodyTop = document.body.getBoundingClientRect().top;
-        document.querySelectorAll<HTMLElement>('.about-band, .photo-band').forEach((band) => {
-            const offset = band.getBoundingClientRect().top - bodyTop;
-            band.style.setProperty('--dot-offset-y', `${-offset}px`);
-        });
-    };
-
-    let resizeFrame = 0;
-    const scheduleSyncBandDotGrids = () => {
-        if (resizeFrame) return;
-        resizeFrame = requestAnimationFrame(() => {
-            resizeFrame = 0;
-            syncBandDotGrids();
-        });
-    };
-
-    syncBandDotGrids();
-    window.addEventListener('resize', scheduleSyncBandDotGrids, { passive: true });
-    document.fonts?.ready.then(syncBandDotGrids);
-
     // Suppress :focus-visible rings after touch/pointer interactions (including dialog open/close),
     // while immediately restoring them on any keyboard navigation.
     window.addEventListener(
@@ -168,7 +147,7 @@ const year = new Date().getFullYear();
         { capture: true },
     );
 
-    // Interactive dot-grid lens distortion across the page canvas and dark bands (fine pointers, motion-safe).
+    // Interactive dot-grid lens distortion across the page canvas (fine pointers, motion-safe).
     if (
         window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
         !window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -179,26 +158,16 @@ const year = new Date().getFullYear();
         const STEP = 20;
         const MAX_PUSH = 2.2;
 
-        const createLensLayer = (host: HTMLElement, isBand: boolean) => {
-            const clip = document.createElement('div');
-            clip.className = isBand ? 'band-lens-clip' : 'page-lens-clip';
-            clip.setAttribute('aria-hidden', 'true');
-            const canvas = document.createElement('canvas');
-            canvas.className = 'dot-lens-canvas';
-            canvas.style.width = `${SIZE}px`;
-            canvas.style.height = `${SIZE}px`;
-            clip.appendChild(canvas);
-            host.prepend(clip);
-            const ctx = canvas.getContext('2d');
-            return { host, clip, canvas, ctx, isBand, visible: false, left: 0, top: 0, bottom: 0, width: 0 };
-        };
-
-        const layers = [
-            createLensLayer(document.body, false),
-            ...Array.from(document.querySelectorAll<HTMLElement>('.about-band, .photo-band')).map((band) =>
-                createLensLayer(band, true),
-            ),
-        ];
+        const clip = document.createElement('div');
+        clip.className = 'page-lens-clip';
+        clip.setAttribute('aria-hidden', 'true');
+        const canvas = document.createElement('canvas');
+        canvas.className = 'dot-lens-canvas';
+        canvas.style.width = `${SIZE}px`;
+        canvas.style.height = `${SIZE}px`;
+        clip.appendChild(canvas);
+        document.body.prepend(clip);
+        const ctx = canvas.getContext('2d');
 
         // Resolve CSS tokens (including light-dark() and color-mix()) to canvas-ready colors.
         const probe = document.createElement('span');
@@ -221,191 +190,138 @@ const year = new Date().getFullYear();
         let palette = {
             paper: '',
             paperClear: '',
-            band: '',
-            bandClear: '',
             dot: '',
-            bandDot: '',
             accent: '',
-            pop: '',
-            glowPaper: '',
-            glowPaperClear: '',
-            glowBand: '',
-            glowBandClear: '',
         };
 
         const syncPalette = () => {
             const paper = resolveColor('var(--color-paper)');
-            const band = resolveColor('var(--color-band)');
-            const glowPaper = resolveColor('color-mix(in oklab, var(--color-accent) 3.5%, transparent)');
-            const glowBand = resolveColor('color-mix(in oklab, var(--color-pop) 4.5%, transparent)');
             palette = {
                 paper,
                 paperClear: zeroAlpha(paper),
-                band,
-                bandClear: zeroAlpha(band),
                 dot: resolveColor('var(--color-dot)'),
-                bandDot: resolveColor('var(--color-band-dot)'),
                 accent: resolveColor('color-mix(in oklab, var(--color-accent) 44%, transparent)'),
-                pop: resolveColor('color-mix(in oklab, var(--color-pop) 48%, transparent)'),
-                glowPaper,
-                glowPaperClear: zeroAlpha(glowPaper),
-                glowBand,
-                glowBandClear: zeroAlpha(glowBand),
             };
         };
 
         let dpr = Math.min(window.devicePixelRatio || 1, 2);
         let bodyHeight = document.body.scrollHeight;
-        const resizeCanvases = () => {
+        let pageWidth = document.body.clientWidth || window.innerWidth;
+        const resizeCanvas = () => {
             dpr = Math.min(window.devicePixelRatio || 1, 2);
-            const bodyRect = document.body.getBoundingClientRect();
             bodyHeight = document.body.scrollHeight;
-            for (const layer of layers) {
-                layer.canvas.width = Math.round(SIZE * dpr);
-                layer.canvas.height = Math.round(SIZE * dpr);
-                if (layer.isBand) {
-                    const rect = layer.host.getBoundingClientRect();
-                    layer.left = rect.left - bodyRect.left;
-                    layer.top = rect.top - bodyRect.top;
-                    layer.bottom = rect.bottom - bodyRect.top;
-                    layer.width = rect.width;
-                } else {
-                    layer.left = 0;
-                    layer.top = 0;
-                    layer.bottom = bodyHeight;
-                    layer.width = document.body.clientWidth || window.innerWidth;
-                }
-            }
+            pageWidth = document.body.clientWidth || window.innerWidth;
+            canvas.width = Math.round(SIZE * dpr);
+            canvas.height = Math.round(SIZE * dpr);
         };
 
         syncPalette();
-        resizeCanvases();
+        resizeCanvas();
 
         let clientX = -999;
         let clientY = -999;
         let pointerActive = false;
+        let visible = false;
         let frame = 0;
 
-        const edgeAlpha = (px: number, py: number, width: number, bodyHeight: number, isBand: boolean) => {
-            const xFrac = px / width;
+        const edgeAlpha = (px: number, py: number) => {
+            const xFrac = px / pageWidth;
             const horiz = Math.min(1, xFrac / 0.18, (1 - xFrac) / 0.18);
             if (horiz <= 0) return 0;
-            if (isBand) return horiz;
             const vert = Math.min(1, py / 180, (bodyHeight - py) / 180);
             return vert <= 0 ? 0 : horiz * vert;
         };
 
         const render = () => {
             frame = 0;
+            if (!ctx) return;
+
             const pageX = clientX + window.scrollX;
             const pageY = clientY + window.scrollY;
+            const inRange =
+                pointerActive &&
+                pageY >= -RADIUS &&
+                pageY <= bodyHeight + RADIUS &&
+                pageX >= -RADIUS &&
+                pageX <= pageWidth + RADIUS;
 
-            for (const layer of layers) {
-                const { ctx, canvas, isBand, left, top, bottom, width } = layer;
-                if (!ctx) continue;
-
-                const localX = pageX - left;
-                const localY = pageY - top;
-                const inRange =
-                    pointerActive &&
-                    pageY >= top - RADIUS &&
-                    pageY <= bottom + RADIUS &&
-                    localX >= -RADIUS &&
-                    localX <= width + RADIUS;
-                if (!inRange) {
-                    if (layer.visible) {
-                        layer.visible = false;
-                        canvas.classList.remove('is-active');
-                    }
-                    continue;
+            if (!inRange) {
+                if (visible) {
+                    visible = false;
+                    canvas.classList.remove('is-active');
                 }
+                return;
+            }
 
-                const originX = localX - HALF;
-                const originY = localY - HALF;
+            const originX = pageX - HALF;
+            const originY = pageY - HALF;
 
-                canvas.style.transform = `translate3d(${originX}px, ${originY}px, 0)`;
-                if (!layer.visible) {
-                    layer.visible = true;
-                    canvas.classList.add('is-active');
-                }
+            canvas.style.transform = `translate3d(${originX}px, ${originY}px, 0)`;
+            if (!visible) {
+                visible = true;
+                canvas.classList.add('is-active');
+            }
 
-                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-                ctx.clearRect(0, 0, SIZE, SIZE);
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.clearRect(0, 0, SIZE, SIZE);
 
-                // Softly cover the static base dots inside the lens so distorted dots never double up.
-                const bg = isBand ? palette.band : palette.paper;
-                const bgClear = isBand ? palette.bandClear : palette.paperClear;
-                const cover = ctx.createRadialGradient(HALF, HALF, 0, HALF, HALF, RADIUS);
-                cover.addColorStop(0, bg);
-                cover.addColorStop(0.76, bg);
-                cover.addColorStop(1, bgClear);
-                ctx.fillStyle = cover;
-                ctx.fillRect(0, 0, SIZE, SIZE);
+            // Softly cover the static base dots inside the lens so distorted dots never double up.
+            const cover = ctx.createRadialGradient(HALF, HALF, 0, HALF, HALF, RADIUS);
+            cover.addColorStop(0, palette.paper);
+            cover.addColorStop(0.76, palette.paper);
+            cover.addColorStop(1, palette.paperClear);
+            ctx.fillStyle = cover;
+            ctx.fillRect(0, 0, SIZE, SIZE);
 
-                // Whisper-subtle ambient warmth at the center of the lens (respects page edge fades).
-                const centerEdge = edgeAlpha(localX, pageY, width, bodyHeight, isBand);
-                if (centerEdge > 0.01) {
-                    const glow = ctx.createRadialGradient(HALF, HALF, 0, HALF, HALF, RADIUS * 0.85);
-                    glow.addColorStop(0, isBand ? palette.glowBand : palette.glowPaper);
-                    glow.addColorStop(1, isBand ? palette.glowBandClear : palette.glowPaperClear);
-                    ctx.globalAlpha = centerEdge;
-                    ctx.fillStyle = glow;
-                    ctx.fillRect(0, 0, SIZE, SIZE);
-                }
+            // Grid origin matches CSS `background-position: 50% 0` (20px tiles with dot center at +10px).
+            const gridOriginX = pageWidth / 2;
+            const kStart = Math.floor((pageX - RADIUS - gridOriginX) / STEP);
+            const kEnd = Math.ceil((pageX + RADIUS - gridOriginX) / STEP);
+            const mStart = Math.floor((pageY - RADIUS - 10) / STEP);
+            const mEnd = Math.ceil((pageY + RADIUS - 10) / STEP);
 
-                // Grid origin matches CSS `background-position: 50% 0` (20px tiles with dot center at +10px).
-                const gridOriginX = width / 2;
-                const kStart = Math.floor((localX - RADIUS - gridOriginX) / STEP);
-                const kEnd = Math.ceil((localX + RADIUS - gridOriginX) / STEP);
-                const mStart = Math.floor((pageY - RADIUS - 10) / STEP);
-                const mEnd = Math.ceil((pageY + RADIUS - 10) / STEP);
+            for (let k = kStart; k <= kEnd; k++) {
+                const gx = gridOriginX + k * STEP;
+                const dx = gx - pageX;
+                for (let m = mStart; m <= mEnd; m++) {
+                    const gy = 10 + m * STEP;
+                    const dy = gy - pageY;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist >= RADIUS) continue;
 
-                const baseDot = isBand ? palette.bandDot : palette.dot;
-                const accentDot = isBand ? palette.pop : palette.accent;
+                    const ea = edgeAlpha(gx, gy);
+                    if (ea <= 0.01) continue;
 
-                for (let k = kStart; k <= kEnd; k++) {
-                    const gx = gridOriginX + k * STEP;
-                    const dx = gx - localX;
-                    for (let m = mStart; m <= mEnd; m++) {
-                        const gy = 10 + m * STEP;
-                        const dy = gy - pageY;
-                        const dist = Math.hypot(dx, dy);
-                        if (dist >= RADIUS) continue;
+                    const u = 1 - dist / RADIUS; // 1 at cursor, 0 at edge
+                    const ease = u * u * (3 - 2 * u); // smoothstep
 
-                        const ea = edgeAlpha(gx, gy, width, bodyHeight, isBand);
-                        if (ea <= 0.01) continue;
+                    // Gentle convex lens displacement (0 at center & edge, peaks smoothly mid-ring).
+                    const push = dist > 0.001 ? Math.sin(Math.PI * u) * MAX_PUSH : 0;
+                    const nx = dist > 0.001 ? dx / dist : 0;
+                    const ny = dist > 0.001 ? dy / dist : 0;
 
-                        const u = 1 - dist / RADIUS; // 1 at cursor, 0 at edge
-                        const ease = u * u * (3 - 2 * u); // smoothstep
+                    const cx = gx + nx * push - originX;
+                    const cy = gy + ny * push - originY;
+                    const radius = 1 + ease * 0.45;
 
-                        // Gentle convex lens displacement (0 at center & edge, peaks smoothly mid-ring).
-                        const push = dist > 0.001 ? Math.sin(Math.PI * u) * MAX_PUSH : 0;
-                        const nx = dist > 0.001 ? dx / dist : 0;
-                        const ny = dist > 0.001 ? dy / dist : 0;
+                    // Base dot (fades cleanly at page edges just like body::before).
+                    ctx.globalAlpha = ea * (1 - ease * 0.45);
+                    ctx.fillStyle = palette.dot;
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                    ctx.fill();
 
-                        const cx = gx + nx * push - originX;
-                        const cy = gy - top + ny * push - originY;
-                        const radius = 1 + ease * 0.45;
-
-                        // Base dot (fades cleanly at page edges just like body::before / band::before).
-                        ctx.globalAlpha = ea * (1 - ease * 0.45);
-                        ctx.fillStyle = baseDot;
+                    // Warm accent highlight blended in proportionally to proximity & edge fade.
+                    if (ease > 0.02) {
+                        ctx.globalAlpha = ea * ease;
+                        ctx.fillStyle = palette.accent;
                         ctx.beginPath();
                         ctx.arc(cx, cy, radius, 0, Math.PI * 2);
                         ctx.fill();
-
-                        // Warm accent highlight blended in proportionally to proximity & edge fade.
-                        if (ease > 0.02) {
-                            ctx.globalAlpha = ea * ease;
-                            ctx.fillStyle = accentDot;
-                            ctx.beginPath();
-                            ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
                     }
                 }
-                ctx.globalAlpha = 1;
             }
+            ctx.globalAlpha = 1;
         };
 
         const scheduleRender = () => {
@@ -434,24 +350,22 @@ const year = new Date().getFullYear();
 
         document.documentElement.addEventListener('pointerleave', () => {
             pointerActive = false;
-            for (const layer of layers) {
-                layer.visible = false;
-                layer.canvas.classList.remove('is-active');
-            }
+            visible = false;
+            canvas.classList.remove('is-active');
         });
 
         window.addEventListener(
             'resize',
             () => {
-                resizeCanvases();
+                resizeCanvas();
                 if (pointerActive) scheduleRender();
             },
             { passive: true },
         );
 
-        document.fonts?.ready.then(resizeCanvases);
+        document.fonts?.ready.then(resizeCanvas);
         if ('ResizeObserver' in window) {
-            new ResizeObserver(resizeCanvases).observe(document.body);
+            new ResizeObserver(resizeCanvas).observe(document.body);
         }
 
         // Re-resolve colors when light/dark theme toggles on <html>.
@@ -490,14 +404,6 @@ const year = new Date().getFullYear();
     }
 
     .page-lens-clip {
-        position: absolute;
-        inset: 0;
-        overflow: hidden;
-        z-index: -1;
-        pointer-events: none;
-    }
-
-    .band-lens-clip {
         position: absolute;
         inset: 0;
         overflow: hidden;
