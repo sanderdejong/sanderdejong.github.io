@@ -206,10 +206,17 @@ const serializedCategories = await Promise.all(
             return promise;
         };
 
-        const warmCategory = (category: SerializedCategory, limit = category.photos.length) => {
-            for (const photo of category.photos.slice(0, limit)) {
-                if (photo.src) {
-                    preloadPhoto(photo.src, photo.alt, photo.width, photo.height);
+        const preloadAdjacent = (category: SerializedCategory, index: number) => {
+            const total = category.photos.length;
+            if (total <= 1) return;
+            const neighborIndices = new Set([
+                (index - 1 + total) % total,
+                (index + 1) % total,
+            ]);
+            for (const i of neighborIndices) {
+                const neighbor = category.photos[i];
+                if (neighbor?.src) {
+                    preloadPhoto(neighbor.src, neighbor.alt, neighbor.width, neighbor.height);
                 }
             }
         };
@@ -354,6 +361,7 @@ const serializedCategories = await Promise.all(
 
             if (prevBtn) prevBtn.disabled = total <= 1;
             if (nextBtn) nextBtn.disabled = total <= 1;
+            preloadAdjacent(activeCategory, activeIndex);
             requestAnimationFrame(updateThumbFades);
         };
 
@@ -363,7 +371,6 @@ const serializedCategories = await Promise.all(
 
             activeCategory = category;
             lastTrigger = trigger;
-            warmCategory(category);
 
             titleEl.replaceChildren(
                 document.createTextNode(category.title.toLowerCase()),
@@ -412,7 +419,8 @@ const serializedCategories = await Promise.all(
             const warm = () => {
                 const slug = btn.dataset.photoCategory;
                 const category = slug ? categories.find((item) => item.slug === slug) : null;
-                if (category) warmCategory(category, 1);
+                const first = category?.photos[0];
+                if (first?.src) preloadPhoto(first.src, first.alt, first.width, first.height);
             };
             btn.addEventListener('pointerenter', warm, { once: true });
             btn.addEventListener('focus', warm, { once: true });

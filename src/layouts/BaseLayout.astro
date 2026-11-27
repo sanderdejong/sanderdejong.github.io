@@ -255,10 +255,11 @@ const year = new Date().getFullYear();
         };
 
         let dpr = Math.min(window.devicePixelRatio || 1, 2);
+        let bodyHeight = document.body.scrollHeight;
         const resizeCanvases = () => {
             dpr = Math.min(window.devicePixelRatio || 1, 2);
             const bodyRect = document.body.getBoundingClientRect();
-            const bodyHeight = document.body.scrollHeight;
+            bodyHeight = document.body.scrollHeight;
             for (const layer of layers) {
                 layer.canvas.width = Math.round(SIZE * dpr);
                 layer.canvas.height = Math.round(SIZE * dpr);
@@ -296,7 +297,6 @@ const year = new Date().getFullYear();
             frame = 0;
             const pageX = clientX + window.scrollX;
             const pageY = clientY + window.scrollY;
-            const bodyHeight = document.body.scrollHeight;
 
             for (const layer of layers) {
                 const { ctx, canvas, isBand, top, bottom, width } = layer;
@@ -443,6 +443,9 @@ const year = new Date().getFullYear();
         );
 
         document.fonts?.ready.then(resizeCanvases);
+        if ('ResizeObserver' in window) {
+            new ResizeObserver(resizeCanvases).observe(document.body);
+        }
 
         // Re-resolve colors when light/dark theme toggles on <html>.
         new MutationObserver(() => {
@@ -505,11 +508,11 @@ const year = new Date().getFullYear();
         pointer-events: none;
         opacity: 0;
         transition: opacity 280ms var(--ease-out);
-        will-change: transform, opacity;
     }
 
     .dot-lens-canvas.is-active {
         opacity: 1;
+        will-change: transform;
     }
 </style>
 
