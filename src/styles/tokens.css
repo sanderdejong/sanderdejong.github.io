@@ -50,10 +50,6 @@
   --color-band-ink: light-dark(oklch(97% 0.012 72), oklch(95.2% 0.014 70));
   --color-band-muted: light-dark(oklch(84% 0.022 65), oklch(81.5% 0.02 65));
   --color-band-shadow: light-dark(oklch(21% 0.02 45), oklch(15% 0.014 45));
-  --color-band-card-border: light-dark(
-    color-mix(in oklab, var(--color-band-ink) 14%, transparent),
-    color-mix(in oklab, var(--color-band-ink) 10%, transparent)
-  );
   --color-pop: oklch(75% 0.135 55);
 
   --color-github-icon: light-dark(oklch(45% 0.095 148), oklch(74% 0.095 148));
@@ -78,8 +74,6 @@
   --shadow-portrait:
     0 18px 38px -12px light-dark(oklch(54% 0.13 44 / 0.28), oklch(75% 0.13 55 / 0.18)),
     0 7px 16px -6px light-dark(oklch(23% 0.02 45 / 0.12), oklch(0% 0 0 / 0.50));
-  --shadow-band-card: 0 12px 28px -10px light-dark(oklch(14% 0.02 45 / 0.42), oklch(0% 0 0 / 0.50));
-  --shadow-band-card-hover: 0 18px 36px -10px light-dark(oklch(11% 0.02 45 / 0.56), oklch(0% 0 0 / 0.64));
   --shadow-nav:
     0 14px 35px -8px light-dark(oklch(21% 0.03 45 / 0.22), oklch(0% 0 0 / 0.60)),
     0 2px 9px light-dark(oklch(21% 0.03 45 / 0.10), oklch(0% 0 0 / 0.32));
@@ -87,10 +81,6 @@
   --color-dot: light-dark(
     color-mix(in oklab, var(--color-ink) 12%, transparent),
     color-mix(in oklab, var(--color-ink) 10%, transparent)
-  );
-  --color-band-dot: light-dark(
-    color-mix(in oklab, var(--color-band-ink) 11%, transparent),
-    color-mix(in oklab, var(--color-band-ink) 10%, transparent)
   );
   --portrait-brightness: 1;
 
