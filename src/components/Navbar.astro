@@ -291,6 +291,15 @@
                     if (isDrawerOpen(drawer)) closeDrawer();
                     else openDrawer(btn);
                 });
+                btn.addEventListener("focusout", (e) => {
+                    const drawer = document.getElementById("nav-drawer");
+                    if (!isDrawerOpen(drawer)) return;
+                    const next = e.relatedTarget;
+                    if (next instanceof Node && (drawer.contains(next) || (next instanceof Element && next.closest(".js-nav-menu-btn")))) {
+                        return;
+                    }
+                    closeDrawer();
+                });
             });
 
             const drawer = document.getElementById("nav-drawer");
@@ -300,6 +309,14 @@
                     if (e.target === drawer && e.propertyName === "opacity" && drawer.dataset.closing === "true") {
                         finishCloseDrawer(drawer);
                     }
+                });
+                drawer.addEventListener("focusout", (e) => {
+                    if (!isDrawerOpen(drawer)) return;
+                    const next = e.relatedTarget;
+                    if (next instanceof Node && (drawer.contains(next) || (next instanceof Element && next.closest(".js-nav-menu-btn")))) {
+                        return;
+                    }
+                    closeDrawer();
                 });
                 drawer.querySelectorAll(".nav-drawer-link").forEach((link) => {
                     link.addEventListener("click", () => closeDrawer());
