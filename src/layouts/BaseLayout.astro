@@ -190,7 +190,7 @@ const year = new Date().getFullYear();
             clip.appendChild(canvas);
             host.prepend(clip);
             const ctx = canvas.getContext('2d');
-            return { host, clip, canvas, ctx, isBand, visible: false, top: 0, bottom: 0, width: 0 };
+            return { host, clip, canvas, ctx, isBand, visible: false, left: 0, top: 0, bottom: 0, width: 0 };
         };
 
         const layers = [
@@ -265,10 +265,12 @@ const year = new Date().getFullYear();
                 layer.canvas.height = Math.round(SIZE * dpr);
                 if (layer.isBand) {
                     const rect = layer.host.getBoundingClientRect();
+                    layer.left = rect.left - bodyRect.left;
                     layer.top = rect.top - bodyRect.top;
                     layer.bottom = rect.bottom - bodyRect.top;
-                    layer.width = layer.clip.clientWidth || window.innerWidth;
+                    layer.width = rect.width;
                 } else {
+                    layer.left = 0;
                     layer.top = 0;
                     layer.bottom = bodyHeight;
                     layer.width = document.body.clientWidth || window.innerWidth;
@@ -299,10 +301,17 @@ const year = new Date().getFullYear();
             const pageY = clientY + window.scrollY;
 
             for (const layer of layers) {
-                const { ctx, canvas, isBand, top, bottom, width } = layer;
+                const { ctx, canvas, isBand, left, top, bottom, width } = layer;
                 if (!ctx) continue;
 
-                const inRange = pointerActive && pageY >= top - RADIUS && pageY <= bottom + RADIUS;
+                const localX = pageX - left;
+                const localY = pageY - top;
+                const inRange =
+                    pointerActive &&
+                    pageY >= top - RADIUS &&
+                    pageY <= bottom + RADIUS &&
+                    localX >= -RADIUS &&
+                    localX <= width + RADIUS;
                 if (!inRange) {
                     if (layer.visible) {
                         layer.visible = false;
@@ -311,8 +320,6 @@ const year = new Date().getFullYear();
                     continue;
                 }
 
-                const localX = pageX;
-                const localY = pageY - top;
                 const originX = localX - HALF;
                 const originY = localY - HALF;
 
@@ -336,7 +343,7 @@ const year = new Date().getFullYear();
                 ctx.fillRect(0, 0, SIZE, SIZE);
 
                 // Whisper-subtle ambient warmth at the center of the lens (respects page edge fades).
-                const centerEdge = edgeAlpha(pageX, pageY, width, bodyHeight, isBand);
+                const centerEdge = edgeAlpha(localX, pageY, width, bodyHeight, isBand);
                 if (centerEdge > 0.01) {
                     const glow = ctx.createRadialGradient(HALF, HALF, 0, HALF, HALF, RADIUS * 0.85);
                     glow.addColorStop(0, isBand ? palette.glowBand : palette.glowPaper);
@@ -348,8 +355,8 @@ const year = new Date().getFullYear();
 
                 // Grid origin matches CSS `background-position: 50% 0` (20px tiles with dot center at +10px).
                 const gridOriginX = width / 2;
-                const kStart = Math.floor((pageX - RADIUS - gridOriginX) / STEP);
-                const kEnd = Math.ceil((pageX + RADIUS - gridOriginX) / STEP);
+                const kStart = Math.floor((localX - RADIUS - gridOriginX) / STEP);
+                const kEnd = Math.ceil((localX + RADIUS - gridOriginX) / STEP);
                 const mStart = Math.floor((pageY - RADIUS - 10) / STEP);
                 const mEnd = Math.ceil((pageY + RADIUS - 10) / STEP);
 
@@ -358,7 +365,7 @@ const year = new Date().getFullYear();
 
                 for (let k = kStart; k <= kEnd; k++) {
                     const gx = gridOriginX + k * STEP;
-                    const dx = gx - pageX;
+                    const dx = gx - localX;
                     for (let m = mStart; m <= mEnd; m++) {
                         const gy = 10 + m * STEP;
                         const dy = gy - pageY;
@@ -492,10 +499,7 @@ const year = new Date().getFullYear();
 
     .band-lens-clip {
         position: absolute;
-        inset-block: 0;
-        left: 50%;
-        width: 100dvw;
-        transform: translateX(-50%);
+        inset: 0;
         overflow: hidden;
         z-index: -1;
         pointer-events: none;
